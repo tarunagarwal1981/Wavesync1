@@ -1,0 +1,61 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-12);
+  border: 1px solid var(--color-border);
+  background: #fff;
+  box-shadow: var(--shadow-subtle);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); border-color: color-mix(in srgb, var(--color-primary), white 70%); }
+
+.inner { display: grid; grid-template-columns: auto 1fr; gap: var(--space-4); padding: var(--space-4); align-items: center; }
+
+.iconWrap {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.meta { display: grid; gap: 4px; }
+.title { font-size: var(--font-12); color: var(--color-text-muted); font-weight: 600; }
+.value { font-size: var(--font-24); font-weight: 800; color: var(--gray-900); }
+
+.changeRow { display: inline-flex; align-items: center; gap: 8px; font-size: var(--font-12); }
+.changeUp { color: var(--color-success); }
+.changeDown { color: var(--color-error); }
+.arrow { font-size: 14px; }
+
+/* Variant themes with soft gradients */
+.assignments { background: linear-gradient(180deg, #ffffff, color-mix(in srgb, var(--color-primary), #ffffff 92%)); }
+.assignments .iconWrap { background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary), #000 10%), var(--color-primary)); }
+
+.documents { background: linear-gradient(180deg, #ffffff, color-mix(in srgb, var(--color-warning), #ffffff 92%)); }
+.documents .iconWrap { background: linear-gradient(135deg, color-mix(in srgb, var(--color-warning), #000 10%), var(--color-warning)); }
+
+.training { background: linear-gradient(180deg, #ffffff, color-mix(in srgb, var(--color-success), #ffffff 92%)); }
+.training .iconWrap { background: linear-gradient(135deg, color-mix(in srgb, var(--color-success), #000 10%), var(--color-success)); }
+
+.tasks { background: linear-gradient(180deg, #ffffff, color-mix(in srgb, #7c3aed, #ffffff 92%)); }
+.tasks .iconWrap { background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+
+/* Skeleton */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer {
+  height: 16px; border-radius: 8px; background: var(--gray-200);
+}
+.shimmer.large { height: 24px; width: 120px; }
+.shimmer.small { height: 12px; width: 80px; }
+.skeleton::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  transform: translateX(-100%);
+  animation: shimmer 1.6s infinite;
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+

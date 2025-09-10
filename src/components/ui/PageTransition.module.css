@@ -1,0 +1,42 @@
+.container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animations for child elements */
+.container.visible > * {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.container.visible > *:nth-child(1) { animation-delay: 0.1s; }
+.container.visible > *:nth-child(2) { animation-delay: 0.2s; }
+.container.visible > *:nth-child(3) { animation-delay: 0.3s; }
+.container.visible > *:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    transition: none;
+  }
+  
+  .container.visible > * {
+    animation: none;
+  }
+}

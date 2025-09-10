@@ -1,0 +1,39 @@
+.skeleton {
+  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  display: inline-block;
+}
+
+.line {
+  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  display: block;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Variant styles */
+.text {
+  height: 1em;
+  border-radius: var(--radius-12);
+}
+
+.rectangular {
+  border-radius: var(--radius-12);
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.card {
+  border-radius: var(--radius-12);
+  padding: var(--space-4);
+  background: #fff;
+  border: 1px solid var(--color-border);
+}

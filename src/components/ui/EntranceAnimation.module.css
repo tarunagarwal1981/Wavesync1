@@ -1,0 +1,44 @@
+.container {
+  opacity: 0;
+  transition: opacity var(--animation-duration, 0.6s) ease-out, 
+              transform var(--animation-duration, 0.6s) ease-out;
+}
+
+/* Direction variants */
+.up {
+  transform: translateY(20px);
+}
+
+.down {
+  transform: translateY(-20px);
+}
+
+.left {
+  transform: translateX(20px);
+}
+
+.right {
+  transform: translateX(-20px);
+}
+
+.fade {
+  transform: none;
+}
+
+/* Visible state */
+.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    transition: none;
+  }
+  
+  .visible {
+    opacity: 1;
+    transform: none;
+  }
+}

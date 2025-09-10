@@ -1,0 +1,88 @@
+.circularContainer {
+  display: grid;
+  place-items: center;
+  gap: var(--space-2);
+}
+
+.circularSvg {
+  transform: rotate(-90deg);
+}
+
+.circularTrack {
+  opacity: 0.3;
+}
+
+.circularProgress {
+  transition: stroke-dashoffset var(--transition-normal);
+}
+
+.percentage {
+  font-weight: 700;
+  color: var(--gray-900);
+  font-size: var(--font-14);
+}
+
+.label {
+  font-size: var(--font-12);
+  color: var(--gray-600);
+  text-align: center;
+}
+
+.linearContainer {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.linearTrack {
+  background: var(--gray-200);
+  border-radius: var(--radius-12);
+  overflow: hidden;
+  position: relative;
+}
+
+.linearTrack.sm {
+  height: 4px;
+}
+
+.linearTrack.md {
+  height: 6px;
+}
+
+.linearTrack.lg {
+  height: 8px;
+}
+
+.linearProgress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), color-mix(in srgb, var(--color-primary), white 20%));
+  border-radius: var(--radius-12);
+  transition: width var(--transition-normal);
+  position: relative;
+}
+
+.linearProgress::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 640px) {
+  .percentage {
+    font-size: var(--font-13);
+  }
+  
+  .label {
+    font-size: var(--font-11);
+  }
+}

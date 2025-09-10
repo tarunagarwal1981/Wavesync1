@@ -1,0 +1,110 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.logo {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary), white 20%), var(--color-primary));
+  display: grid; place-items: center;
+  color: #fff; font-weight: 800;
+}
+
+.title { font-weight: 800; letter-spacing: 0.2px; }
+
+.nav {
+  padding: var(--space-3);
+  display: grid;
+  gap: 6px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 12px; /* Increased for touch */
+  border-radius: var(--radius-12);
+  color: var(--gray-700);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  min-height: 48px; /* Touch target size */
+}
+.item:hover { background: var(--gray-50); color: var(--gray-900); }
+.active { background: color-mix(in srgb, var(--color-primary), white 90%); color: var(--color-primary); }
+
+.icon { width: 20px; height: 20px; color: inherit; }
+.badge { font-size: var(--font-12); color: var(--gray-600); }
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+.name { font-weight: 700; color: var(--gray-800); }
+.role { font-size: var(--font-12); color: var(--gray-600); }
+
+/* Mobile collapse */
+.collapseButton {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar { 
+    position: fixed; 
+    z-index: 900; 
+    transform: translateX(-100%); 
+    transition: transform var(--transition-normal);
+    width: 280px; /* Wider on mobile */
+  }
+  .open { transform: translateX(0); }
+  .collapseButton {
+    display: inline-flex;
+    position: absolute;
+    top: 12px; right: -44px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    padding: 12px; /* Larger touch target */
+    border-radius: var(--radius-12);
+    box-shadow: var(--shadow-subtle);
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Add backdrop for mobile */
+  .sidebar::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+  .sidebar.open::before {
+    opacity: 1;
+  }
+}
+

@@ -1,0 +1,36 @@
+.card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-12);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-subtle);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); border-color: color-mix(in srgb, var(--color-primary), white 70%); }
+
+.iconWrap { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; color: #fff; }
+.iconBlue { background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary), #000 10%), var(--color-primary)); }
+.iconOrange { background: linear-gradient(135deg, color-mix(in srgb, var(--color-warning), #000 10%), var(--color-warning)); }
+.iconGreen { background: linear-gradient(135deg, color-mix(in srgb, var(--color-success), #000 10%), var(--color-success)); }
+.iconGray { background: linear-gradient(135deg, var(--gray-600), var(--gray-700)); }
+
+.content { display: grid; gap: 2px; }
+.title { font-weight: 700; color: var(--gray-900); }
+.category { font-size: var(--font-12); color: var(--color-text-muted); }
+
+.meta { display: flex; gap: var(--space-3); flex-wrap: wrap; font-size: var(--font-12); color: var(--gray-700); margin-top: 4px; }
+.status { font-weight: 700; }
+.valid { color: var(--color-success); }
+.expSoon { color: var(--color-warning); }
+.expired { color: var(--color-error); }
+
+.menu { position: relative; }
+.menuBtn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--color-border); background: #fff; border-radius: var(--radius-12); padding: 6px 10px; }
+.menuList { position: absolute; right: 0; margin-top: 8px; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-12); box-shadow: var(--shadow-medium); min-width: 180px; padding: 6px; z-index: 20; }
+.menuItem { padding: 8px 10px; border-radius: var(--radius-12); display: flex; align-items: center; gap: 8px; color: var(--gray-800); }
+.menuItem:hover { background: var(--gray-50); }
+

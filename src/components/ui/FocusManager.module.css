@@ -1,0 +1,21 @@
+.container {
+  outline: none;
+}
+
+/* Focus ring for keyboard navigation */
+.container:focus-within {
+  outline: 2px solid color-mix(in srgb, var(--color-primary), transparent 70%);
+  outline-offset: 2px;
+  border-radius: var(--radius-12);
+}
+
+/* Ensure focus is visible */
+.container *:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove default focus styles for mouse users */
+.container *:focus:not(:focus-visible) {
+  outline: none;
+}

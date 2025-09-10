@@ -1,0 +1,89 @@
+.retryContainer {
+  display: grid;
+  gap: var(--space-3);
+  place-items: center;
+  text-align: center;
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-error), white 90%);
+  border: 1px solid color-mix(in srgb, var(--color-error), white 70%);
+  border-radius: var(--radius-12);
+  color: var(--color-error);
+  font-size: var(--font-14);
+  font-weight: 600;
+}
+
+.errorIcon {
+  font-size: var(--font-16);
+}
+
+.retryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px 24px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-12);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  min-height: 44px;
+}
+
+.retryButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-primary), black 10%);
+  transform: translateY(-1px);
+}
+
+.retryButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.retryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.retryIcon {
+  font-size: var(--font-16);
+  transition: transform var(--transition-normal);
+}
+
+.retryButton:hover:not(:disabled) .retryIcon {
+  transform: rotate(180deg);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .retryButton {
+    padding: 14px 20px;
+    min-height: 48px;
+    font-size: var(--font-16);
+  }
+  
+  .errorMessage {
+    padding: var(--space-2);
+    font-size: var(--font-13);
+  }
+}

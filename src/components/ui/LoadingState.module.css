@@ -1,0 +1,25 @@
+.loadingContainer {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.errorContainer {
+  display: grid;
+  place-items: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.emptyContainer {
+  display: grid;
+  place-items: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .loadingContainer,
+  .errorContainer,
+  .emptyContainer {
+    padding: var(--space-4) var(--space-2);
+  }
+}

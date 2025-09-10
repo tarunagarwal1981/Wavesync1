@@ -1,0 +1,130 @@
+.toast {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-12);
+  box-shadow: var(--shadow-medium);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  max-width: 400px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+.toast.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast.leaving {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  font-size: var(--font-16);
+}
+
+.text {
+  display: grid;
+  gap: 4px;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--gray-900);
+  font-size: var(--font-14);
+}
+
+.description {
+  color: var(--gray-600);
+  font-size: var(--font-12);
+  line-height: 1.4;
+}
+
+.closeButton {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--gray-500);
+  font-size: var(--font-12);
+  transition: background-color var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: var(--gray-100);
+}
+
+.action {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.actionButton {
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-12);
+  font-size: var(--font-12);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.actionButton:hover {
+  background: color-mix(in srgb, var(--color-primary), black 10%);
+}
+
+/* Toast type variants */
+.success {
+  border-left: 4px solid var(--color-success);
+}
+
+.error {
+  border-left: 4px solid var(--color-error);
+}
+
+.warning {
+  border-left: 4px solid var(--color-warning);
+}
+
+.info {
+  border-left: 4px solid var(--color-primary);
+}
+
+@media (max-width: 640px) {
+  .toast {
+    max-width: calc(100vw - 32px);
+    margin-bottom: var(--space-2);
+  }
+  
+  .content {
+    gap: var(--space-2);
+  }
+  
+  .title {
+    font-size: var(--font-13);
+  }
+  
+  .description {
+    font-size: var(--font-11);
+  }
+}

@@ -1,0 +1,49 @@
+.wrapper { display: grid; gap: var(--space-2); }
+.label { display: inline-block; margin-bottom: var(--space-2); font-weight: 600; color: var(--gray-800); }
+.field {
+  display: block;
+  width: 100%;
+  padding: 12px; /* Increased for touch */
+  color: var(--color-text);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-12);
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  min-height: 44px; /* Touch target size */
+  font-size: var(--font-16); /* Prevent zoom on iOS */
+}
+.field::placeholder { color: var(--color-text-muted); }
+.field:focus { 
+  outline: none; 
+  border-color: color-mix(in srgb, var(--color-primary), black 10%); 
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary), transparent 80%); 
+}
+.field[aria-invalid="true"], .field:invalid { border-color: var(--color-error); }
+.helper-text { margin-top: var(--space-2); font-size: var(--font-12); color: var(--color-text-muted); }
+.error-text { margin-top: var(--space-2); font-size: var(--font-12); color: var(--color-error); }
+
+/* Select & checkbox/radio adjustments */
+select.field { 
+  padding-right: 32px; 
+  background-image: linear-gradient(45deg, transparent 50%, var(--gray-500) 50%), linear-gradient(135deg, var(--gray-500) 50%, transparent 50%); 
+  background-position: calc(100% - 16px) 54%, calc(100% - 12px) 54%; 
+  background-size: 6px 6px, 6px 6px; 
+  background-repeat: no-repeat; 
+}
+input[type="checkbox"], input[type="radio"] { 
+  accent-color: var(--color-primary); 
+  width: 20px; 
+  height: 20px; 
+}
+
+@media (max-width: 640px) {
+  .field { 
+    padding: 14px; 
+    min-height: 48px; 
+    font-size: var(--font-16); 
+  }
+  .label { 
+    font-size: var(--font-14); 
+  }
+}

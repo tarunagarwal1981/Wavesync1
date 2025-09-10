@@ -1,0 +1,38 @@
+.uploader { display: grid; gap: var(--space-4); }
+
+.controls { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.select, .date { display: grid; gap: 6px; }
+.label { font-size: var(--font-12); color: var(--color-text-muted); }
+
+.dropzone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-12);
+  padding: var(--space-6);
+  text-align: center;
+  background: var(--color-surface);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+.dropzone.dragOver { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary), white 96%); transform: translateY(-2px); }
+.hint { color: var(--color-text-muted); font-size: var(--font-12); margin-top: 6px; }
+
+.list { display: grid; gap: var(--space-3); }
+.item { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-3); align-items: center; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-12); padding: var(--space-3); box-shadow: var(--shadow-subtle); }
+.thumb { width: 44px; height: 44px; border-radius: 8px; background: var(--gray-100); display: grid; place-items: center; overflow: hidden; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.meta { display: grid; gap: 4px; }
+.title { font-weight: 700; color: var(--gray-900); }
+.sub { color: var(--color-text-muted); font-size: var(--font-12); }
+
+.progress { height: 8px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.bar { height: 100%; background: var(--color-primary); width: 0; transition: width var(--transition-normal); }
+
+.ai { display: inline-flex; align-items: center; gap: 8px; font-size: var(--font-12); color: var(--gray-700); }
+.dot { width: 8px; height: 8px; border-radius: 999px; background: var(--color-primary); animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+.error { color: var(--color-error); font-size: var(--font-12); }
+.actions { display: inline-flex; gap: 8px; }
+
+@media (max-width: 720px) { .controls { grid-template-columns: 1fr; } }
+
