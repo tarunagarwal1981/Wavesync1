@@ -1,102 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useNavigation } from "../../hooks/useNavigation";
+import { useAuth } from "../../contexts/AuthContext";
 import { NavigationItem } from "../../utils/nav";
+import styles from "./Layout.module.css";
 
 interface LayoutProps {
   title: string;
   navItems: NavigationItem[];
-  user: { name: string; role: string };
   children?: React.ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ title, navItems, user, children }) => {
+export const Layout: React.FC<LayoutProps> = ({ title, navItems, children }) => {
   const { mobileOpen, setMobileOpen } = useNavigation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const getUserDisplayName = () => {
+    if (!user) return 'User';
+    return `${user.firstName} ${user.lastName}`;
+  };
+
+  const getUserRole = () => {
+    if (!user) return 'User';
+    return user.role.replace('_', ' ').toUpperCase();
+  };
+
+  const getUserInitials = () => {
+    if (!user) return 'U';
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+  };
 
   return (
-    <div style={{ 
-      display: 'grid', 
-      gridTemplateColumns: '260px 1fr', 
-      minHeight: '100vh',
-      background: '#f9fafb'
-    }}>
+    <div className={styles.layout}>
       {/* Sidebar */}
-      <aside style={{
-        background: '#fff',
-        borderRight: '1px solid #e5e7eb',
-        padding: '16px',
-        position: 'sticky',
-        top: 0,
-        height: '100vh',
-        overflowY: 'auto'
-      }}>
+      <aside className={styles.sidebar}>
         {/* Logo */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '12px', 
-          marginBottom: '24px',
-          paddingBottom: '16px',
-          borderBottom: '1px solid #e5e7eb'
-        }}>
-          <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '6px',
-            background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-            display: 'grid',
-            placeItems: 'center',
-            color: '#fff',
-            fontWeight: '800',
-            fontSize: '14px'
-          }}>
-            W
-          </div>
-          <span style={{ fontWeight: '800', letterSpacing: '0.2px' }}>WaveSync</span>
+        <div className={styles.logo}>
+          <div className={styles.logoIcon}>🌊</div>
+          <span className={styles.logoText}>WaveSync</span>
         </div>
 
         {/* Navigation */}
-        <nav style={{ display: 'grid', gap: '6px' }}>
+        <nav className={styles.navigation}>
           {navItems.map((item) => (
             <a
               key={item.key}
               href={item.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '12px',
-                borderRadius: '12px',
-                color: '#374151',
-                textDecoration: 'none',
-                transition: 'background-color 0.15s ease, color 0.15s ease',
-                position: 'relative'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = '#f3f4f6';
-                e.currentTarget.style.color = '#111827';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#374151';
-              }}
+              className={styles.navItem}
             >
               <item.icon size={20} />
               <span>{item.label}</span>
               {item.badge && (
-                <span style={{
-                  position: 'absolute',
-                  right: '12px',
-                  background: '#ef4444',
-                  color: '#fff',
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '12px',
-                  fontWeight: '600'
-                }}>
+                <span className={styles.badge}>
                   {item.badge}
                 </span>
               )}
@@ -105,119 +67,125 @@ export const Layout: React.FC<LayoutProps> = ({ title, navItems, user, children 
         </nav>
 
         {/* User Profile */}
-        <div style={{
-          marginTop: 'auto',
-          paddingTop: '16px',
-          borderTop: '1px solid #e5e7eb',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: '#e5e7eb',
-            display: 'grid',
-            placeItems: 'center',
-            fontSize: '14px',
-            fontWeight: '600',
-            color: '#6b7280'
-          }}>
-            {user.name.split(' ').map(n => n[0]).join('')}
+        <div className={styles.userProfile}>
+          <div className={styles.userAvatar}>
+            {getUserInitials()}
           </div>
-          <div>
-            <div style={{ fontWeight: '700', color: '#111827', fontSize: '14px' }}>
-              {user.name}
+          <div className={styles.userInfo}>
+            <div className={styles.userName}>
+              {getUserDisplayName()}
             </div>
-            <div style={{ fontSize: '12px', color: '#6b7280' }}>
-              {user.role}
+            <div className={styles.userRole}>
+              {getUserRole()}
             </div>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main style={{ 
-        display: 'grid', 
-        gridTemplateRows: 'auto 1fr',
-        background: '#f9fafb'
-      }}>
+      <main className={styles.mainContent}>
         {/* Header */}
-        <header style={{
-          background: '#fff',
-          borderBottom: '1px solid #e5e7eb',
-          padding: '12px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100
-        }}>
-          <h1 style={{ 
-            fontSize: '20px', 
-            fontWeight: '800', 
-            color: '#111827',
-            margin: 0
-          }}>
+        <header className={styles.header}>
+          <h1 className={styles.pageTitle}>
             {title}
           </h1>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className={styles.headerActions}>
             {/* Search */}
             <input
               type="text"
               placeholder="Search crew, vessels, tasks..."
-              style={{
-                padding: '8px 12px',
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                fontSize: '14px',
-                minWidth: '240px',
-                background: '#f9fafb'
-              }}
+              className={styles.searchInput}
             />
             
             {/* Notifications */}
-            <button style={{
-              width: '36px',
-              height: '36px',
-              border: '1px solid #e5e7eb',
-              borderRadius: '12px',
-              background: '#fff',
-              display: 'grid',
-              placeItems: 'center',
-              cursor: 'pointer',
-              position: 'relative'
-            }}>
+            <button className={styles.notificationButton}>
               🔔
-              <span style={{
-                position: 'absolute',
-                top: '-4px',
-                right: '-4px',
-                background: '#ef4444',
-                color: '#fff',
-                borderRadius: '50%',
-                width: '16px',
-                height: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '10px',
-                fontWeight: '600'
-              }}>
-                3
-              </span>
+              <span className={styles.notificationBadge}>3</span>
             </button>
+
+            {/* User Menu */}
+            <div className={styles.userMenuContainer}>
+              <button 
+                className={styles.userMenuButton}
+                onClick={() => setShowUserMenu(!showUserMenu)}
+              >
+                <div className={styles.userMenuAvatar}>
+                  {getUserInitials()}
+                </div>
+                <span className={styles.userMenuName}>
+                  {getUserDisplayName()}
+                </span>
+                <span className={styles.userMenuArrow}>
+                  {showUserMenu ? '▲' : '▼'}
+                </span>
+              </button>
+
+              {showUserMenu && (
+                <div className={styles.userMenuDropdown}>
+                  <div className={styles.userMenuHeader}>
+                    <div className={styles.userMenuInfo}>
+                      <div className={styles.userMenuFullName}>
+                        {getUserDisplayName()}
+                      </div>
+                      <div className={styles.userMenuEmail}>
+                        {user?.email}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.userMenuDivider}></div>
+                  
+                  <div className={styles.userMenuItems}>
+                    <button 
+                      className={styles.userMenuItem}
+                      onClick={() => navigate('/profile')}
+                    >
+                      👤 Profile Settings
+                    </button>
+                    <button 
+                      className={styles.userMenuItem}
+                      onClick={() => navigate('/settings')}
+                    >
+                      ⚙️ Preferences
+                    </button>
+                    <button 
+                      className={styles.userMenuItem}
+                      onClick={() => navigate('/help')}
+                    >
+                      ❓ Help & Support
+                    </button>
+                  </div>
+                  
+                  <div className={styles.userMenuDivider}></div>
+                  
+                  <div className={styles.userMenuItems}>
+                    <button 
+                      className={`${styles.userMenuItem} ${styles.logoutButton}`}
+                      onClick={handleLogout}
+                    >
+                      🚪 Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <div style={{ padding: '24px' }}>
+        <div className={styles.pageContent}>
           {children}
         </div>
       </main>
+
+      {/* Mobile Menu Overlay */}
+      {mobileOpen && (
+        <div 
+          className={styles.mobileOverlay}
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
     </div>
   );
 };

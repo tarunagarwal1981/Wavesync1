@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./LoadingState.module.css";
-import { Skeleton, EmptyState, RetryButton } from "../components/ui";
+import { Skeleton, EmptyState, RetryButton } from "./";
 
 export interface LoadingStateProps {
   isLoading: boolean;

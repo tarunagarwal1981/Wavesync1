@@ -1,5 +1,4 @@
 import React from "react";
-import { ErrorBoundary } from "../components/ui";
 
 interface ErrorBoundaryState {
   hasError: boolean;

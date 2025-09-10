@@ -1,16 +1,32 @@
 import React from "react";
 import styles from "./Badge.module.css";
 
-type BadgeVariant = "primary" | "success" | "warning" | "danger" | "neutral";
+type BadgeVariant = "default" | "success" | "warning" | "danger" | "info";
+type BadgeSize = "small" | "medium" | "large";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
+  size?: BadgeSize;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ variant = "neutral", leftIcon, rightIcon, className, children, ...props }) => {
-  const classes = [styles.badge, styles[variant], className].filter(Boolean).join(" ");
+export const Badge: React.FC<BadgeProps> = ({ 
+  variant = "default", 
+  size = "medium",
+  leftIcon, 
+  rightIcon, 
+  className, 
+  children, 
+  ...props 
+}) => {
+  const classes = [
+    styles.badge, 
+    styles[variant], 
+    styles[size], 
+    className
+  ].filter(Boolean).join(" ");
+  
   return (
     <span className={classes} {...props}>
       {leftIcon}

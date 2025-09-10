@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./FormSubmissionHandler.module.css";
-import { SuccessAnimation } from "../components/ui";
-import { useToast } from "../hooks/useToast";
+import { SuccessAnimation } from "./SuccessAnimation";
+import { useToast } from "../../hooks/useToast";
 
 export interface FormSubmissionHandlerProps {
   onSubmit: (data: any) => Promise<void> | void;

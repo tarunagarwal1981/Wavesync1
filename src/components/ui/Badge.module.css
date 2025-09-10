@@ -9,11 +9,56 @@
   color: var(--gray-700);
   font-size: var(--font-12);
   font-weight: 600;
+  transition: all 0.15s ease;
 }
 
-.primary { background: color-mix(in srgb, var(--color-primary), white 88%); color: var(--color-primary); border-color: color-mix(in srgb, var(--color-primary), white 70%); }
-.success { background: color-mix(in srgb, var(--color-success), white 88%); color: var(--color-success); border-color: color-mix(in srgb, var(--color-success), white 70%); }
-.warning { background: color-mix(in srgb, var(--color-warning), white 88%); color: #8a5a04; border-color: color-mix(in srgb, var(--color-warning), white 70%); }
-.danger { background: color-mix(in srgb, var(--color-error), white 88%); color: var(--color-error); border-color: color-mix(in srgb, var(--color-error), white 70%); }
-.neutral { background: var(--gray-100); color: var(--gray-700); }
+/* Variants */
+.default { 
+  background: var(--gray-100); 
+  color: var(--gray-700); 
+  border-color: var(--gray-200);
+}
+
+.success { 
+  background: color-mix(in srgb, var(--color-success), white 88%); 
+  color: var(--color-success); 
+  border-color: color-mix(in srgb, var(--color-success), white 70%); 
+}
+
+.warning { 
+  background: color-mix(in srgb, var(--color-warning), white 88%); 
+  color: #8a5a04; 
+  border-color: color-mix(in srgb, var(--color-warning), white 70%); 
+}
+
+.danger { 
+  background: color-mix(in srgb, var(--color-error), white 88%); 
+  color: var(--color-error); 
+  border-color: color-mix(in srgb, var(--color-error), white 70%); 
+}
+
+.info { 
+  background: color-mix(in srgb, var(--color-primary), white 88%); 
+  color: var(--color-primary); 
+  border-color: color-mix(in srgb, var(--color-primary), white 70%); 
+}
+
+/* Sizes */
+.small {
+  padding: 2px 6px;
+  font-size: 10px;
+  gap: 4px;
+}
+
+.medium {
+  padding: 4px 10px;
+  font-size: var(--font-12);
+  gap: 6px;
+}
+
+.large {
+  padding: 6px 12px;
+  font-size: var(--font-14);
+  gap: 8px;
+}
 
