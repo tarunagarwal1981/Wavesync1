@@ -8,6 +8,7 @@ node_modules/
 
 # Production
 /build
+/dist
 
 # Misc
 .DS_Store
@@ -41,3 +42,6 @@ pids
 
 # OS generated files
 Thumbs.db
+
+# Netlify
+.netlify/
