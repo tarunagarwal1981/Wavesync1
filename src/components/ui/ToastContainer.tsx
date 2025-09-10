@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./ToastContainer.module.css";
 import Toast, { Toast as ToastType } from "./Toast";
 
 export interface ToastContainerProps {
@@ -15,10 +14,38 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
 }) => {
   if (toasts.length === 0) return null;
 
+  const getPositionStyles = () => {
+    const baseStyles = {
+      position: 'fixed' as const,
+      zIndex: 9999,
+      pointerEvents: 'none' as const,
+      padding: '16px',
+    };
+
+    switch (position) {
+      case "top-right":
+        return { ...baseStyles, top: 0, right: 0 };
+      case "top-left":
+        return { ...baseStyles, top: 0, left: 0 };
+      case "bottom-right":
+        return { ...baseStyles, bottom: 0, right: 0 };
+      case "bottom-left":
+        return { ...baseStyles, bottom: 0, left: 0 };
+      case "top-center":
+        return { ...baseStyles, top: 0, left: '50%', transform: 'translateX(-50%)' };
+      case "bottom-center":
+        return { ...baseStyles, bottom: 0, left: '50%', transform: 'translateX(-50%)' };
+      default:
+        return { ...baseStyles, top: 0, right: 0 };
+    }
+  };
+
   return (
-    <div className={[styles.container, styles[position]].filter(Boolean).join(" ")}>
+    <div style={getPositionStyles()}>
       {toasts.map((toast) => (
-        <Toast key={toast.id} toast={toast} onRemove={onRemove} />
+        <div key={toast.id} style={{ pointerEvents: 'auto' }}>
+          <Toast toast={toast} onRemove={onRemove} />
+        </div>
       ))}
     </div>
   );

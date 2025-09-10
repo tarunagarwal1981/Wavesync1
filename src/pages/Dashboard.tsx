@@ -1,226 +1,225 @@
 import React from "react";
-import styles from "./Dashboard.module.css";
-import { Card, Button, Spinner, Badge, StatsCard, LoadingState, Skeleton, EmptyState, PageTransition, EntranceAnimation, BrandedSpinner } from "../components/ui";
-import { ClipboardList, FileText, GraduationCap, CheckSquare } from "lucide-react";
-import { useToast } from "../hooks/useToast";
-
-interface Stats {
-  pendingAssignments: number;
-  activeContracts: number;
-  expiringDocuments: number;
-  trainingDue: number;
-}
-
-const useDashboardData = () => {
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-  const [stats, setStats] = React.useState<Stats | null>(null);
-  const [activities, setActivities] = React.useState<Array<{ id: string; title: string; meta: string }>>([]);
-  const [tasks, setTasks] = React.useState<Array<{ id: string; title: string; due: string }>>([]);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        setStats({ pendingAssignments: 3, activeContracts: 6, expiringDocuments: 2, trainingDue: 1 });
-        setActivities([
-          { id: "1", title: "Signed contract for MV Ocean Star", meta: "2h ago" },
-          { id: "2", title: "Uploaded Medical Certificate", meta: "4h ago" },
-          { id: "3", title: "Assignment proposed for MV Blue Horizon", meta: "Yesterday" },
-        ]);
-        setTasks([
-          { id: "1", title: "Submit Seaman Book copy", due: "Today" },
-          { id: "2", title: "Complete Basic Safety Training", due: "In 3 days" },
-        ]);
-      } catch (e) {
-        setError("Failed to load dashboard data.");
-      } finally {
-        setLoading(false);
-      }
-    }, 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const retry = () => {
-    setLoading(true);
-    setError(null);
-    setTimeout(() => {
-      try {
-        setStats({ pendingAssignments: 3, activeContracts: 6, expiringDocuments: 2, trainingDue: 1 });
-        setActivities([
-          { id: "1", title: "Signed contract for MV Ocean Star", meta: "2h ago" },
-          { id: "2", title: "Uploaded Medical Certificate", meta: "4h ago" },
-          { id: "3", title: "Assignment proposed for MV Blue Horizon", meta: "Yesterday" },
-        ]);
-        setTasks([
-          { id: "1", title: "Submit Seaman Book copy", due: "Today" },
-          { id: "2", title: "Complete Basic Safety Training", due: "In 3 days" },
-        ]);
-      } catch (e) {
-        setError("Failed to load dashboard data.");
-      } finally {
-        setLoading(false);
-      }
-    }, 600);
-  };
-
-  return { loading, error, stats, activities, tasks, retry };
-};
 
 export const Dashboard: React.FC = () => {
-  const userName = "Captain Nemo";
-  const userStatus = "Online";
-  const { loading, error, stats, activities, tasks, retry } = useDashboardData();
-  const { success } = useToast();
-
-  React.useEffect(() => {
-    if (!loading && !error) {
-      success("Dashboard loaded successfully");
-    }
-  }, [loading, error, success]);
-
   return (
-    <PageTransition>
-      <div className={styles.grid}>
-        {/* Welcome section */}
-        <EntranceAnimation delay={100}>
-          <Card header={<div className={styles.welcome}>
-            <div>
-              <div className={styles.title}>Welcome back, {userName}</div>
-              <div className={styles.subtitle}>Status: <Badge variant="success">{userStatus}</Badge></div>
-            </div>
-            <div>
-              <Button variant="primary">Create Assignment</Button>
-            </div>
-          </div>} />
-        </EntranceAnimation>
+    <div style={{
+      display: 'grid',
+      gap: '24px',
+      maxWidth: '1200px',
+      margin: '0 auto'
+    }}>
+      {/* Welcome Section */}
+      <div style={{
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: '12px',
+        padding: '24px',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <div>
+            <h1 style={{ 
+              fontSize: '24px', 
+              fontWeight: '800', 
+              color: '#111827',
+              marginBottom: '8px'
+            }}>
+              Welcome back, Captain Nemo!
+            </h1>
+            <p style={{ color: '#6b7280', margin: 0 }}>
+              Here's what's happening with your assignments and documents.
+            </p>
+          </div>
+          <button style={{
+            padding: '12px 24px',
+            background: '#3b82f6',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}>
+            Create Assignment
+          </button>
+        </div>
+      </div>
 
-        {/* Statistics */}
-        <div className={styles.stats}>
-          <LoadingState
-            isLoading={loading}
-            error={error}
-            onRetry={retry}
-            skeleton={
-              <>
-                {[0,1,2,3].map(i => (
-                  <EntranceAnimation key={i} delay={200 + i * 100}>
-                    <StatsCard title="Loading" loading variant="assignments" />
-                  </EntranceAnimation>
-                ))}
-              </>
-            )}
-          >
-            {stats ? (
-              <>
-                <EntranceAnimation delay={200}>
-                  <StatsCard title="Pending assignments" value={stats.pendingAssignments} percentChange={6} variant="assignments" icon={<ClipboardList size={18} />} />
-                </EntranceAnimation>
-                <EntranceAnimation delay={300}>
-                  <StatsCard title="Active contracts" value={stats.activeContracts} percentChange={-2} variant="tasks" icon={<CheckSquare size={18} />} />
-                </EntranceAnimation>
-                <EntranceAnimation delay={400}>
-                  <StatsCard title="Expiring documents" value={stats.expiringDocuments} percentChange={1} variant="documents" icon={<FileText size={18} />} />
-                </EntranceAnimation>
-                <EntranceAnimation delay={500}>
-                  <StatsCard title="Training due" value={stats.trainingDue} percentChange={0} variant="training" icon={<GraduationCap size={18} />} />
-                </EntranceAnimation>
-              </>
-            ) : (
-              <>
-                <StatsCard title="Pending assignments" value="—" variant="assignments" />
-                <StatsCard title="Active contracts" value="—" variant="assignments" />
-                <StatsCard title="Expiring documents" value="—" variant="documents" />
-                <StatsCard title="Training due" value="—" variant="training" />
-              </>
-            )}
-          </LoadingState>
+      {/* Stats Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '16px'
+      }}>
+        {[
+          { title: 'Pending Assignments', value: '3', change: '+12%', color: '#3b82f6' },
+          { title: 'Active Contracts', value: '1', change: '+5%', color: '#10b981' },
+          { title: 'Documents Expiring', value: '2', change: '-8%', color: '#f59e0b' },
+          { title: 'Training Due', value: '4', change: '+20%', color: '#8b5cf6' }
+        ].map((stat, index) => (
+          <div key={index} style={{
+            background: '#fff',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            padding: '20px',
+            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '12px'
+            }}>
+              <h3 style={{ 
+                fontSize: '14px', 
+                fontWeight: '600', 
+                color: '#6b7280',
+                margin: 0
+              }}>
+                {stat.title}
+              </h3>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                background: `${stat.color}20`,
+                display: 'grid',
+                placeItems: 'center',
+                color: stat.color,
+                fontSize: '16px'
+              }}>
+                📊
+              </div>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '8px'
+            }}>
+              <span style={{
+                fontSize: '32px',
+                fontWeight: '800',
+                color: '#111827'
+              }}>
+                {stat.value}
+              </span>
+              <span style={{
+                fontSize: '14px',
+                fontWeight: '600',
+                color: stat.change.startsWith('+') ? '#10b981' : '#ef4444'
+              }}>
+                {stat.change}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Content Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '24px'
+      }}>
+        {/* Quick Actions */}
+        <div style={{
+          background: '#fff',
+          border: '1px solid #e5e7eb',
+          borderRadius: '12px',
+          padding: '24px',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+        }}>
+          <h2 style={{ 
+            fontSize: '18px', 
+            fontWeight: '700', 
+            color: '#111827',
+            marginBottom: '16px'
+          }}>
+            Quick Actions
+          </h2>
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {[
+              { label: 'New Assignment', icon: '📋' },
+              { label: 'Upload Document', icon: '📄' },
+              { label: 'Invite Seafarer', icon: '👥' }
+            ].map((action, index) => (
+              <button key={index} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px',
+                background: '#fff',
+                cursor: 'pointer',
+                transition: 'background-color 0.15s ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = '#f9fafb'}
+              onMouseOut={(e) => e.currentTarget.style.background = '#fff'}
+              >
+                <span style={{ fontSize: '16px' }}>{action.icon}</span>
+                <span style={{ fontWeight: '600', color: '#111827' }}>
+                  {action.label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className={styles.columns}>
-          {/* Left column: Quick actions + Recent activity */}
-          <div className={styles.columnLeft}>
-            <EntranceAnimation delay={600}>
-              <Card header={<div className={styles.sectionHeader}>Quick actions</div>}>
-                <div className={styles.cardBody}>
-                  <div className={styles.actions}>
-                    <Button variant="primary">New Assignment</Button>
-                    <Button variant="secondary">Upload Document</Button>
-                    <Button variant="ghost">Invite Seafarer</Button>
+        {/* Recent Activity */}
+        <div style={{
+          background: '#fff',
+          border: '1px solid #e5e7eb',
+          borderRadius: '12px',
+          padding: '24px',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+        }}>
+          <h2 style={{ 
+            fontSize: '18px', 
+            fontWeight: '700', 
+            color: '#111827',
+            marginBottom: '16px'
+          }}>
+            Recent Activity
+          </h2>
+          <div style={{ display: 'grid', gap: '12px' }}>
+            {[
+              { title: 'Signed contract for MV Ocean Star', time: '2h ago' },
+              { title: 'Uploaded Medical Certificate', time: '4h ago' },
+              { title: 'Assignment proposed for MV Blue Horizon', time: 'Yesterday' }
+            ].map((activity, index) => (
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px',
+                border: '1px solid #f3f4f6',
+                borderRadius: '12px',
+                background: '#f9fafb'
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#3b82f6'
+                }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>
+                    {activity.title}
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                    {activity.time}
                   </div>
                 </div>
-              </Card>
-            </EntranceAnimation>
-
-            <EntranceAnimation delay={700}>
-              <Card header={<div className={styles.sectionHeader}>Recent activity</div>}>
-                <div className={styles.cardBody}>
-                  <LoadingState
-                    isLoading={loading}
-                    error={error}
-                    onRetry={retry}
-                    isEmpty={activities.length === 0}
-                    skeleton={<BrandedSpinner size="md" label="Loading activity..." />}
-                    emptyState={
-                      <EmptyState
-                        icon="📊"
-                        title="No recent activity"
-                        description="Your recent activities will appear here."
-                      />
-                    }
-                  >
-                    <div className={styles.activityList}>
-                      {activities.map((a, index) => (
-                        <EntranceAnimation key={a.id} delay={800 + index * 100}>
-                          <div className={styles.row}>
-                            <div className={styles.itemTitle}>{a.title}</div>
-                            <div className={styles.itemMeta}>{a.meta}</div>
-                          </div>
-                        </EntranceAnimation>
-                      ))}
-                    </div>
-                  </LoadingState>
-                </div>
-              </Card>
-            </EntranceAnimation>
-          </div>
-
-          {/* Right column: Upcoming tasks */}
-          <div className={styles.columnRight}>
-            <EntranceAnimation delay={800}>
-              <Card header={<div className={styles.sectionHeader}>Upcoming tasks</div>}>
-                <div className={styles.cardBody}>
-                  <LoadingState
-                    isLoading={loading}
-                    error={error}
-                    onRetry={retry}
-                    isEmpty={tasks.length === 0}
-                    skeleton={<BrandedSpinner size="md" label="Loading tasks..." />}
-                    emptyState={
-                      <EmptyState
-                        icon="✅"
-                        title="No upcoming tasks"
-                        description="You're all caught up! New tasks will appear here."
-                      />
-                    }
-                  >
-                    <div className={styles.tasksList}>
-                      {tasks.map((t, index) => (
-                        <EntranceAnimation key={t.id} delay={900 + index * 100}>
-                          <div className={styles.row}>
-                            <div className={styles.itemTitle}>{t.title}</div>
-                            <div className={styles.itemMeta}>{t.due}</div>
-                          </div>
-                        </EntranceAnimation>
-                      ))}
-                    </div>
-                  </LoadingState>
-                </div>
-              </Card>
-            </EntranceAnimation>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </PageTransition>
+    </div>
   );
 };
 

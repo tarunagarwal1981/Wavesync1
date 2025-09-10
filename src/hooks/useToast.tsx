@@ -1,5 +1,16 @@
 import React from "react";
-import { Toast, ToastType } from "./Toast";
+
+interface Toast {
+  id: string;
+  type: "success" | "error" | "warning" | "info";
+  title: string;
+  description?: string;
+  duration?: number;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+}
 
 interface ToastContextType {
   toasts: Toast[];
@@ -38,7 +49,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
 
-  const createToastMethod = React.useCallback((type: ToastType) => {
+  const createToastMethod = React.useCallback((type: Toast["type"]) => {
     return (title: string, description?: string, options?: Partial<Toast>) => {
       addToast({ type, title, description, ...options });
     };

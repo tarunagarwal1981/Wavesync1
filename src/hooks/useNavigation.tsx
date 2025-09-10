@@ -1,27 +1,46 @@
 import React from "react";
-import { NavItemDef, NAV_ITEMS } from "../utils/nav";
 
-interface NavigationContextValue {
-  items: NavItemDef[];
-  activeKey?: string;
-  setActiveKey: (key?: string) => void;
+interface NavigationItem {
+  key: string;
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ size?: number }>;
+  badge?: number;
+}
+
+interface NavigationContextType {
+  activeKey: string;
+  setActiveKey: (key: string) => void;
   mobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
 }
 
-const NavigationContext = React.createContext<NavigationContextValue | undefined>(undefined);
+const NavigationContext = React.createContext<NavigationContextType | undefined>(undefined);
 
-export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeKey, setActiveKey] = React.useState<string | undefined>(undefined);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const value = React.useMemo(() => ({ items: NAV_ITEMS, activeKey, setActiveKey, mobileOpen, setMobileOpen }), [activeKey, mobileOpen]);
-  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
+export const useNavigation = () => {
+  const context = React.useContext(NavigationContext);
+  if (!context) {
+    throw new Error("useNavigation must be used within a NavigationProvider");
+  }
+  return context;
 };
 
-export function useNavigation(): NavigationContextValue {
-  const ctx = React.useContext(NavigationContext);
-  if (!ctx) throw new Error("useNavigation must be used within NavigationProvider");
-  return ctx;
-}
+export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [activeKey, setActiveKey] = React.useState("dashboard");
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const value: NavigationContextType = {
+    activeKey,
+    setActiveKey,
+    mobileOpen,
+    setMobileOpen,
+  };
+
+  return (
+    <NavigationContext.Provider value={value}>
+      {children}
+    </NavigationContext.Provider>
+  );
+};
+
+export default NavigationProvider;
