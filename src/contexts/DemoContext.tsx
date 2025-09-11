@@ -48,11 +48,13 @@ export const DemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (Math.random() > 0.7) {
       const newNotification: Notification = {
         id: `notif_${Date.now()}`,
+        userId: 'demo-user',
         title: "New Assignment Available",
         message: "A new Chief Officer position has been posted for MV ATLANTIC STAR",
         type: "assignment" as any,
         priority: "medium" as any,
         timestamp: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         read: false,
         actionUrl: "/assignments",
         metadata: {
@@ -100,11 +102,13 @@ export const DemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (assignment) {
       const successNotification: Notification = {
         id: `notif_${Date.now()}`,
+        userId: 'demo-user',
         title: "Assignment Accepted",
         message: `You have successfully accepted the ${assignment.position} position on ${assignment.vessel.name}`,
         type: "success" as any,
         priority: "medium" as any,
         timestamp: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         read: false,
         actionUrl: `/assignments/${assignmentId}`,
         metadata: {
@@ -150,18 +154,21 @@ export const DemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     const newDocument: Document = {
       id: `doc_${Date.now()}`,
+      userId: 'demo-user',
       type: document.type || "certificate" as any,
       title: document.title || "New Document",
       description: document.description || "",
       fileName: document.fileName || "document.pdf",
+      fileUrl: document.fileUrl || "/documents/document.pdf",
       fileSize: document.fileSize || 1024000,
       mimeType: document.mimeType || "application/pdf",
+      category: document.category || "certificate",
       uploadDate: new Date().toISOString(),
+      uploadedAt: new Date().toISOString(),
       expiryDate: document.expiryDate,
       status: DocumentStatus.VALID,
       issuingAuthority: document.issuingAuthority || "Maritime Authority",
       documentNumber: document.documentNumber || `DOC-${Date.now()}`,
-      category: document.category || "certificate",
       tags: document.tags || [],
       metadata: document.metadata || {},
       createdAt: new Date().toISOString(),
@@ -173,11 +180,13 @@ export const DemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Add success notification
     const successNotification: Notification = {
       id: `notif_${Date.now()}`,
+      userId: 'demo-user',
       title: "Document Uploaded",
       message: `${newDocument.title} has been successfully uploaded and verified`,
       type: "success" as any,
       priority: "low" as any,
       timestamp: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       read: false,
       actionUrl: "/documents",
       metadata: {
@@ -243,11 +252,13 @@ export const DemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const addNotification = async (notification: Partial<Notification>): Promise<void> => {
     const newNotification: Notification = {
       id: `notif_${Date.now()}`,
+      userId: 'demo-user',
       title: notification.title || "New Notification",
       message: notification.message || "",
       type: notification.type || "info" as any,
       priority: notification.priority || "medium" as any,
       timestamp: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       read: false,
       actionUrl: notification.actionUrl,
       metadata: notification.metadata || {}

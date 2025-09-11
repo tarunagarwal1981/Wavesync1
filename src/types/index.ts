@@ -236,6 +236,15 @@ export type User = (Seafarer | CompanyUser | Admin) & {
   seamanBookNumber?: string;
   // Additional flexible properties for demo data
   [key: string]: any;
+} | {
+  // Flexible user type for demo data
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  role: UserRole;
+  [key: string]: any;
 };
 
 export interface EmergencyContact {

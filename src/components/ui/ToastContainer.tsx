@@ -1,5 +1,13 @@
 import React from "react";
-import Toast, { Toast as ToastType } from "./Toast";
+import Toast from "./Toast";
+
+export interface ToastType {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  message?: string;
+  duration?: number;
+}
 
 export interface ToastContainerProps {
   toasts: ToastType[];
