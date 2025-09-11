@@ -39,13 +39,25 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
     const isExpanded = expandedItems.has(item.id);
     const IconComponent = item.icon;
 
+    // Custom active logic for travel items to prevent overlapping highlights
+    const isActive = ({ isActive: routeActive }: { isActive: boolean }) => {
+      if (!routeActive) return false;
+      
+      // For travel route, only highlight the first travel item to prevent overlap
+      if (item.href === '/travel') {
+        return item.dataSection === 'plans' || item.dataSection === 'planning';
+      }
+      
+      return routeActive;
+    };
+
     return (
       <li key={item.id} className={styles.navItem}>
         <div className={styles.navItemContainer}>
           <NavLink
             to={item.href}
             className={({ isActive }) => 
-              `${styles.navLink} ${isActive ? styles.active : ''} ${level > 0 ? styles.nested : ''}`
+              `${styles.navLink} ${isActive({ isActive }) ? styles.active : ''} ${level > 0 ? styles.nested : ''}`
             }
             onClick={onClose}
             title={isCollapsed ? item.title : undefined}

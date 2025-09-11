@@ -39,6 +39,7 @@ export interface NavigationItem {
   permissions: UserRole[];
   children?: NavigationItem[];
   description?: string;
+  dataSection?: string; // For handling multiple items pointing to same route
 }
 
 export interface NavigationSection {
@@ -123,7 +124,8 @@ export const seafarerNavigation: NavigationSection[] = [
         icon: Plane,
         href: "/travel",
         permissions: [UserRole.SEAFARER],
-        description: "View travel arrangements"
+        description: "View travel arrangements",
+        dataSection: "plans"
       },
       {
         id: "travel-documents",
@@ -131,7 +133,8 @@ export const seafarerNavigation: NavigationSection[] = [
         icon: FileCheck,
         href: "/travel",
         permissions: [UserRole.SEAFARER],
-        description: "View and download travel documents"
+        description: "View and download travel documents",
+        dataSection: "documents"
       },
       {
         id: "vessel-info",
@@ -269,7 +272,8 @@ export const companyNavigation: NavigationSection[] = [
         href: "/travel",
         badge: 4,
         permissions: [UserRole.COMPANY_USER],
-        description: "Plan crew travel"
+        description: "Plan crew travel",
+        dataSection: "planning"
       },
       {
         id: "travel-documents",
@@ -278,7 +282,8 @@ export const companyNavigation: NavigationSection[] = [
         href: "/travel",
         badge: 6,
         permissions: [UserRole.COMPANY_USER],
-        description: "Upload and manage travel documents"
+        description: "Upload and manage travel documents",
+        dataSection: "documents"
       },
       {
         id: "budget-expenses",
