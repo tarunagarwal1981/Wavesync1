@@ -1,4 +1,5 @@
 import React from "react";
+import { NAV_ITEMS } from "../utils/nav";
 
 interface NavigationItem {
   key: string;
@@ -9,6 +10,7 @@ interface NavigationItem {
 }
 
 interface NavigationContextType {
+  items: NavigationItem[];
   activeKey: string;
   setActiveKey: (key: string) => void;
   mobileOpen: boolean;
@@ -32,6 +34,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const value: NavigationContextType = {
+    items: NAV_ITEMS,
     activeKey,
     setActiveKey,
     mobileOpen,
@@ -41,7 +44,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   console.log('🧭 NavigationProvider - about to return JSX');
   return (
     <NavigationContext.Provider value={value}>
-      {console.log('🧭 NavigationProvider - rendering children')}
+      {(() => { console.log('🧭 NavigationProvider - rendering children'); return null; })()}
       {children}
     </NavigationContext.Provider>
   );

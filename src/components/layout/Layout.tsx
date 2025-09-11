@@ -38,7 +38,7 @@ export const Layout: React.FC<LayoutProps> = ({ title, navItems, children }) => 
 
         {/* Page Content */}
         <div className={styles.pageContent}>
-          {console.log('🏗️ Layout - rendering children:', children)}
+          {(() => { console.log('🏗️ Layout - rendering children:', children); return null; })()}
           {children}
         </div>
       </main>

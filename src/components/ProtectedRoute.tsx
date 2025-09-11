@@ -26,7 +26,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingContent}>
-          <Spinner size="large" />
+          <Spinner />
           <p className={styles.loadingText}>Authenticating...</p>
         </div>
       </div>

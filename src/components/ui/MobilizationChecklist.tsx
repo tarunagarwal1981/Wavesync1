@@ -80,7 +80,7 @@ export const MobilizationChecklist: React.FC<MobilizationChecklistProps> = ({ ti
                   {step.description && <div className={styles.muted}>{step.description}</div>}
                 </div>
                 <Due iso={step.due} />
-                <Badge variant={step.status === "Completed" ? "success" : step.status === "Waived" ? "neutral" : "warning"}>{step.status}</Badge>
+                <Badge variant={step.status === "Completed" ? "success" : step.status === "Waived" ? "info" : "warning"}>{step.status}</Badge>
               </button>
 
               <div id={`step-${step.id}`} className={styles.content}>

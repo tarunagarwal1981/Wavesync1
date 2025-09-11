@@ -223,6 +223,9 @@ export interface Admin extends BaseUser {
   accessLevel: 'read' | 'write' | 'admin' | 'super_admin';
 }
 
+// Union type for all user types
+export type User = Seafarer | CompanyUser | Admin;
+
 export interface EmergencyContact {
   name: string;
   relationship: string;
@@ -826,82 +829,4 @@ export interface DocumentUploadForm {
   documentNumber?: string;
 }
 
-// ============================================================================
-// EXPORT ALL TYPES
-// ============================================================================
-
-export type {
-  // Core Types
-  BaseUser,
-  Seafarer,
-  CompanyUser,
-  Admin,
-  EmergencyContact,
-  Address,
-  BankDetails,
-  NextOfKin,
-  MedicalHistory,
-  EmploymentRecord,
-  
-  // Vessel Types
-  Vessel,
-  EngineDetails,
-  VesselLocation,
-  PortInfo,
-  VesselSpecifications,
-  
-  // Assignment Types
-  Assignment,
-  RequiredDocument,
-  MobilizationStep,
-  ContractTerms,
-  Benefits,
-  AssignmentResponse,
-  
-  // Document Types
-  Document,
-  DocumentMetadata,
-  
-  // Task Types
-  Task,
-  Subtask,
-  TaskComment,
-  MobilizationChecklist,
-  
-  // Training Types
-  Course,
-  CourseModule,
-  Instructor,
-  Certification,
-  
-  // Notification Types
-  Notification,
-  NotificationMetadata,
-  
-  // Company Types
-  Company,
-  
-  // Port Types
-  Port,
-  PortFacility,
-  PortFee,
-  
-  // Weather & Safety Types
-  WeatherAlert,
-  SafetyIncident,
-  
-  // API Types
-  PaginationParams,
-  PaginatedResponse,
-  ApiError,
-  SearchFilters,
-  DashboardStats,
-  ActivityItem,
-  
-  // Form Types
-  LoginForm,
-  RegisterForm,
-  ProfileUpdateForm,
-  AssignmentResponseForm,
-  DocumentUploadForm
-};
+// All types are already exported as interfaces above

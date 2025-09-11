@@ -22,7 +22,7 @@ export const Navigation: React.FC = () => {
           <Link key={item.key} to={item.href} className={linkClass} aria-current={isActive ? "page" : undefined}>
             <span className={styles.icon} aria-hidden>{item.icon}</span>
             <span>{item.label}</span>
-            {item.badge != null && <span className={styles.badge}><Badge variant="neutral">{item.badge}</Badge></span>}
+            {item.badge != null && <span className={styles.badge}><Badge variant="info">{item.badge}</Badge></span>}
           </Link>
         );
       })}

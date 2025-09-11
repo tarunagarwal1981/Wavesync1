@@ -59,8 +59,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         <div className={styles.meta}>
           <span>Duration: {duration}</span>
           <span>Level: {difficulty}</span>
-          {completed ? <Badge variant="success">Completed</Badge> : pct > 0 ? <Badge variant="primary">In progress</Badge> : null}
-          {hasCertificate && completed && <Badge variant="neutral">Certificate</Badge>}
+          {completed ? <Badge variant="success">Completed</Badge> : pct > 0 ? <Badge variant="info">In progress</Badge> : null}
+          {hasCertificate && completed && <Badge variant="success">Certificate</Badge>}
         </div>
 
         {pct > 0 && (
