@@ -156,7 +156,7 @@ export const Login: React.FC = () => {
           <Button
             type="submit"
             variant="primary"
-            size="large"
+            size="lg"
             disabled={isLoading}
             className={styles.loginButton}
           >

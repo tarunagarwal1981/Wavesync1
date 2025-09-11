@@ -10,7 +10,7 @@ export const Navigation: React.FC = () => {
 
   React.useEffect(() => {
     const match = items.find(i => i.href === location.pathname);
-    setActiveKey(match?.key);
+    setActiveKey(match?.key || '');
   }, [location.pathname, items, setActiveKey]);
 
   return (
@@ -20,7 +20,7 @@ export const Navigation: React.FC = () => {
         const linkClass = [styles.link, isActive ? styles.active : undefined].filter(Boolean).join(" ");
         return (
           <Link key={item.key} to={item.href} className={linkClass} aria-current={isActive ? "page" : undefined}>
-            <span className={styles.icon} aria-hidden>{item.icon}</span>
+            <span className={styles.icon} aria-hidden>{React.createElement(item.icon, { size: 16 })}</span>
             <span>{item.label}</span>
             {item.badge != null && <span className={styles.badge}><Badge variant="info">{item.badge}</Badge></span>}
           </Link>

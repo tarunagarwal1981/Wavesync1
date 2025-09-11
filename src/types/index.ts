@@ -223,8 +223,18 @@ export interface Admin extends BaseUser {
   accessLevel: 'read' | 'write' | 'admin' | 'super_admin';
 }
 
-// Union type for all user types
-export type User = Seafarer | CompanyUser | Admin;
+// Union type for all user types with optional properties
+export type User = (Seafarer | CompanyUser | Admin) & {
+  // Make all user-specific properties optional for type safety
+  rank?: string;
+  seafarerId?: string;
+  department?: string;
+  experience?: number;
+  dateOfBirth?: string;
+  nationality?: string;
+  passportNumber?: string;
+  seamanBookNumber?: string;
+};
 
 export interface EmergencyContact {
   name: string;

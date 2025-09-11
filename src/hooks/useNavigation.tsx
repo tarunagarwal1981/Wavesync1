@@ -5,7 +5,7 @@ interface NavigationItem {
   key: string;
   label: string;
   href: string;
-  icon: React.ComponentType<{ size?: number }>;
+  icon: React.ComponentType<any>;
   badge?: number;
 }
 
