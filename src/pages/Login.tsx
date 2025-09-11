@@ -91,6 +91,10 @@ export const Login: React.FC = () => {
           <div className={styles.logo}>
             <div className={styles.logoIcon}>🌊</div>
             <h1 className={styles.logoText}>WaveSync</h1>
+            <div className={styles.aiBadge}>
+              <span className={styles.aiSparkle}>✨</span>
+              <span className={styles.aiText}>AI-Powered</span>
+            </div>
           </div>
           <p className={styles.subtitle}>Maritime Crew Management Platform</p>
         </div>

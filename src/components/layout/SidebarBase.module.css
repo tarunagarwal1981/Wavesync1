@@ -195,6 +195,38 @@
   border-radius: 0 var(--radius-6) var(--radius-6) 0;
 }
 
+/* AI Assignment Special Styling */
+.navLink.active[data-ai="true"] {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
+  position: relative;
+}
+
+.navLink.active[data-ai="true"]::before {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.navLink.active[data-ai="true"]::after {
+  content: '✨';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  animation: aiSparkle 2s ease-in-out infinite;
+}
+
+@keyframes aiSparkle {
+  0%, 100% { 
+    transform: translateY(-50%) scale(1) rotate(0deg); 
+    opacity: 0.8; 
+  }
+  50% { 
+    transform: translateY(-50%) scale(1.2) rotate(180deg); 
+    opacity: 1; 
+  }
+}
+
 .navIcon {
   flex-shrink: 0;
   transition: transform var(--transition-base);

@@ -5,36 +5,54 @@ import styles from './AIAssignmentPage.module.css';
 const AIAssignmentPage: React.FC = () => {
   return (
     <div className={styles.aiAssignmentPage}>
+      {/* Modern Header */}
       <div className={styles.pageHeader}>
         <div className={styles.headerContent}>
-          <h1 className={styles.pageTitle}>
-            AI-Powered Assignment Matching
-          </h1>
-          <p className={styles.pageSubtitle}>
-            Intelligent seafarer matching system that analyzes qualifications, experience, 
-            availability, and performance to find the perfect candidates for your assignments.
-          </p>
-        </div>
-        <div className={styles.aiFeatures}>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>🎯</div>
-            <h3>Smart Scoring</h3>
-            <p>AI analyzes multiple factors to score and rank candidates</p>
+          <div className={styles.titleSection}>
+            <div className={styles.titleWrapper}>
+              <h1 className={styles.pageTitle}>
+                AI Assignment Matching
+              </h1>
+              <div className={styles.aiIndicator}>
+                <div className={styles.aiDot}></div>
+                <span>Powered by AI</span>
+              </div>
+            </div>
+            <p className={styles.pageSubtitle}>
+              Intelligent seafarer matching with advanced analytics and predictive insights
+            </p>
           </div>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>⚡</div>
-            <h3>Real-time Matching</h3>
-            <p>Instant results with live AI processing and insights</p>
-          </div>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>📊</div>
-            <h3>Predictive Analytics</h3>
-            <p>Success probability and response time predictions</p>
+          
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>🎯</div>
+              <div className={styles.statContent}>
+                <span className={styles.statValue}>95%</span>
+                <span className={styles.statLabel}>Accuracy</span>
+              </div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>⚡</div>
+              <div className={styles.statContent}>
+                <span className={styles.statValue}>1.2s</span>
+                <span className={styles.statLabel}>Processing</span>
+              </div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>📊</div>
+              <div className={styles.statContent}>
+                <span className={styles.statValue}>15</span>
+                <span className={styles.statLabel}>Factors</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       
-      <SmartAssignmentCreation />
+      {/* Main Content */}
+      <div className={styles.mainContent}>
+        <SmartAssignmentCreation />
+      </div>
     </div>
   );
 };

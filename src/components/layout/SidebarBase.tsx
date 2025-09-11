@@ -57,6 +57,7 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
             }}
             onClick={onClose}
             title={isCollapsed ? item.title : undefined}
+            data-ai={item.href === '/ai-assignments' ? 'true' : undefined}
           >
             <IconComponent size={20} className={styles.navIcon} />
             {!isCollapsed && (
