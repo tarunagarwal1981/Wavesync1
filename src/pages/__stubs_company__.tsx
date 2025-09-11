@@ -1,8 +1,8 @@
 // Company User stub pages
 import React from 'react';
-import { CrewDirectoryPage } from '../components/CrewDirectory';
+import CrewManagement from '../components/CrewManagement';
 
-export { CrewDirectoryPage };
+export const CrewDirectoryPage = CrewManagement;
 
 export const FleetManagementPage: React.FC = () => {
   const fleetData = [
