@@ -13,7 +13,42 @@ import Training from "../pages/Training";
 import Profile from "../pages/Profile";
 import Notifications from "../pages/Notifications";
 import TravelModule from "../components/TravelModule";
-import { MessagesPage, SettingsPage } from "../pages/__stubs__";
+import { 
+  MessagesPage, 
+  SettingsPage, 
+  VesselInfoPage, 
+  PortInfoPage, 
+  EmergencyContactPage, 
+  HelpSupportPage 
+} from "../pages/__stubs__";
+import { 
+  CrewDirectoryPage, 
+  FleetManagementPage, 
+  AnalyticsPage, 
+  BudgetPage, 
+  SchedulingPage, 
+  CommunicationsPage, 
+  CompanySettingsPage, 
+  CompliancePage, 
+  UserManagementPage 
+} from "../pages/__stubs_company__";
+import { 
+  AdminAnalyticsPage, 
+  PerformanceMonitorPage, 
+  SystemAlertsPage, 
+  AllUsersPage, 
+  CompanyManagementPage, 
+  PermissionsRolesPage, 
+  UserAnalyticsPage, 
+  SystemSettingsPage, 
+  ConfigurationPage, 
+  AuditLogsPage, 
+  SecuritySettingsPage, 
+  ReportsExportsPage, 
+  SupportTicketsPage, 
+  DocumentationPage, 
+  SystemUpdatesPage 
+} from "../pages/__stubs_admin__";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -105,6 +140,215 @@ export const AppRouter: React.FC = () => {
           <ProtectedRoute>
             <Layout title="Settings">
               <PageTransition><SettingsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Seafarer specific routes */}
+        <Route path="/vessel" element={
+          <ProtectedRoute>
+            <Layout title="Vessel Information">
+              <PageTransition><VesselInfoPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/ports" element={
+          <ProtectedRoute>
+            <Layout title="Port Information">
+              <PageTransition><PortInfoPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/emergency" element={
+          <ProtectedRoute>
+            <Layout title="Emergency Contact">
+              <PageTransition><EmergencyContactPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/support" element={
+          <ProtectedRoute>
+            <Layout title="Help & Support">
+              <PageTransition><HelpSupportPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Company User specific routes */}
+        <Route path="/crew" element={
+          <ProtectedRoute>
+            <Layout title="Crew Directory">
+              <PageTransition><CrewDirectoryPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/fleet" element={
+          <ProtectedRoute>
+            <Layout title="Fleet Management">
+              <PageTransition><FleetManagementPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/analytics" element={
+          <ProtectedRoute>
+            <Layout title="Analytics & Reports">
+              <PageTransition><AnalyticsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/budget" element={
+          <ProtectedRoute>
+            <Layout title="Budget & Expenses">
+              <PageTransition><BudgetPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/schedule" element={
+          <ProtectedRoute>
+            <Layout title="Scheduling">
+              <PageTransition><SchedulingPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/communications" element={
+          <ProtectedRoute>
+            <Layout title="Communications">
+              <PageTransition><CommunicationsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/company/settings" element={
+          <ProtectedRoute>
+            <Layout title="Company Settings">
+              <PageTransition><CompanySettingsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/compliance" element={
+          <ProtectedRoute>
+            <Layout title="Compliance">
+              <PageTransition><CompliancePage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/users" element={
+          <ProtectedRoute>
+            <Layout title="User Management">
+              <PageTransition><UserManagementPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Admin specific routes */}
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <Layout title="Admin Dashboard">
+              <PageTransition><DashboardRouter /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/analytics" element={
+          <ProtectedRoute>
+            <Layout title="System Analytics">
+              <PageTransition><AdminAnalyticsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/performance" element={
+          <ProtectedRoute>
+            <Layout title="Performance Monitor">
+              <PageTransition><PerformanceMonitorPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/alerts" element={
+          <ProtectedRoute>
+            <Layout title="System Alerts">
+              <PageTransition><SystemAlertsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/users" element={
+          <ProtectedRoute>
+            <Layout title="All Users">
+              <PageTransition><AllUsersPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/companies" element={
+          <ProtectedRoute>
+            <Layout title="Company Management">
+              <PageTransition><CompanyManagementPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/permissions" element={
+          <ProtectedRoute>
+            <Layout title="Permissions & Roles">
+              <PageTransition><PermissionsRolesPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/user-analytics" element={
+          <ProtectedRoute>
+            <Layout title="User Analytics">
+              <PageTransition><UserAnalyticsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/settings" element={
+          <ProtectedRoute>
+            <Layout title="System Settings">
+              <PageTransition><SystemSettingsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/config" element={
+          <ProtectedRoute>
+            <Layout title="Configuration">
+              <PageTransition><ConfigurationPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/audit" element={
+          <ProtectedRoute>
+            <Layout title="Audit Logs">
+              <PageTransition><AuditLogsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/security" element={
+          <ProtectedRoute>
+            <Layout title="Security Settings">
+              <PageTransition><SecuritySettingsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/reports" element={
+          <ProtectedRoute>
+            <Layout title="Reports & Exports">
+              <PageTransition><ReportsExportsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/support" element={
+          <ProtectedRoute>
+            <Layout title="Support Tickets">
+              <PageTransition><SupportTicketsPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/docs" element={
+          <ProtectedRoute>
+            <Layout title="Documentation">
+              <PageTransition><DocumentationPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/updates" element={
+          <ProtectedRoute>
+            <Layout title="System Updates">
+              <PageTransition><SystemUpdatesPage /></PageTransition>
             </Layout>
           </ProtectedRoute>
         } />

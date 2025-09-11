@@ -1,10 +1,9 @@
-import React from "react";
-
-export const Assignments: React.FC = () => {
+// Admin stub pages
+export const AdminAnalyticsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Assignments
+        System Analytics
       </h1>
       <div style={{
         background: '#fff',
@@ -13,17 +12,17 @@ export const Assignments: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Assignments page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>System Analytics page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const Tasks: React.FC = () => {
+export const PerformanceMonitorPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Tasks
+        Performance Monitor
       </h1>
       <div style={{
         background: '#fff',
@@ -32,17 +31,17 @@ export const Tasks: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Tasks page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Performance Monitor page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const Documents: React.FC = () => {
+export const SystemAlertsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Documents
+        System Alerts
       </h1>
       <div style={{
         background: '#fff',
@@ -51,17 +50,17 @@ export const Documents: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Documents page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>System Alerts page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const Training: React.FC = () => {
+export const AllUsersPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Training
+        All Users
       </h1>
       <div style={{
         background: '#fff',
@@ -70,17 +69,17 @@ export const Training: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Training page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>All Users page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const Profile: React.FC = () => {
+export const CompanyManagementPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Profile
+        Company Management
       </h1>
       <div style={{
         background: '#fff',
@@ -89,17 +88,17 @@ export const Profile: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Profile page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Company Management page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const MessagesPage: React.FC = () => {
+export const PermissionsRolesPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Messages
+        Permissions & Roles
       </h1>
       <div style={{
         background: '#fff',
@@ -108,17 +107,17 @@ export const MessagesPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Messages page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Permissions & Roles page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const TravelPage: React.FC = () => {
+export const UserAnalyticsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Travel
+        User Analytics
       </h1>
       <div style={{
         background: '#fff',
@@ -127,17 +126,17 @@ export const TravelPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Travel page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>User Analytics page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const SettingsPage: React.FC = () => {
+export const SystemSettingsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Settings
+        System Settings
       </h1>
       <div style={{
         background: '#fff',
@@ -146,18 +145,17 @@ export const SettingsPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Settings page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>System Settings page coming soon...</p>
       </div>
     </div>
   );
 };
 
-// Additional stub pages for navigation
-export const VesselInfoPage: React.FC = () => {
+export const ConfigurationPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Vessel Information
+        Configuration
       </h1>
       <div style={{
         background: '#fff',
@@ -166,17 +164,17 @@ export const VesselInfoPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Vessel Information page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Configuration page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const PortInfoPage: React.FC = () => {
+export const AuditLogsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Port Information
+        Audit Logs
       </h1>
       <div style={{
         background: '#fff',
@@ -185,17 +183,17 @@ export const PortInfoPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Port Information page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Audit Logs page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const EmergencyContactPage: React.FC = () => {
+export const SecuritySettingsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Emergency Contact
+        Security Settings
       </h1>
       <div style={{
         background: '#fff',
@@ -204,17 +202,17 @@ export const EmergencyContactPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Emergency Contact page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Security Settings page coming soon...</p>
       </div>
     </div>
   );
 };
 
-export const HelpSupportPage: React.FC = () => {
+export const ReportsExportsPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
-        Help & Support
+        Reports & Exports
       </h1>
       <div style={{
         background: '#fff',
@@ -223,7 +221,64 @@ export const HelpSupportPage: React.FC = () => {
         padding: '24px',
         textAlign: 'center'
       }}>
-        <p style={{ color: '#6b7280' }}>Help & Support page coming soon...</p>
+        <p style={{ color: '#6b7280' }}>Reports & Exports page coming soon...</p>
+      </div>
+    </div>
+  );
+};
+
+export const SupportTicketsPage: React.FC = () => {
+  return (
+    <div style={{ padding: '24px' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
+        Support Tickets
+      </h1>
+      <div style={{
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: '12px',
+        padding: '24px',
+        textAlign: 'center'
+      }}>
+        <p style={{ color: '#6b7280' }}>Support Tickets page coming soon...</p>
+      </div>
+    </div>
+  );
+};
+
+export const DocumentationPage: React.FC = () => {
+  return (
+    <div style={{ padding: '24px' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
+        Documentation
+      </h1>
+      <div style={{
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: '12px',
+        padding: '24px',
+        textAlign: 'center'
+      }}>
+        <p style={{ color: '#6b7280' }}>Documentation page coming soon...</p>
+      </div>
+    </div>
+  );
+};
+
+export const SystemUpdatesPage: React.FC = () => {
+  return (
+    <div style={{ padding: '24px' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '24px' }}>
+        System Updates
+      </h1>
+      <div style={{
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: '12px',
+        padding: '24px',
+        textAlign: 'center'
+      }}>
+        <p style={{ color: '#6b7280' }}>System Updates page coming soon...</p>
       </div>
     </div>
   );
