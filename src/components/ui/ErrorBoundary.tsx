@@ -26,7 +26,9 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public render() {
+    console.log('🛡️ ErrorBoundary rendering, hasError:', this.state.hasError);
     if (this.state.hasError) {
+      console.log('🛡️ ErrorBoundary showing error fallback');
       return this.props.fallback || (
         <div style={{ 
           padding: '20px', 
@@ -62,6 +64,7 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    console.log('🛡️ ErrorBoundary rendering children normally');
     return this.props.children;
   }
 }

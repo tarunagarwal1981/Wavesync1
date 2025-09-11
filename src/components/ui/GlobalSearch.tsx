@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./GlobalSearch.module.css";
 import { Input, Button } from "./index";
-import { ClipboardList, FileText, CheckSquare, GraduationCap, Ship } from "lucide-react";
+import { ClipboardList, FileText, CheckSquare, GraduationCap, Anchor } from "lucide-react";
 
 export type SearchResultType = "assignment" | "document" | "task" | "training" | "vessel";
 
@@ -30,7 +30,7 @@ function TypeIcon({ type }: { type: SearchResultType }) {
     document: <FileText size={16} />,
     task: <CheckSquare size={16} />,
     training: <GraduationCap size={16} />,
-    vessel: <Ship size={16} />,
+    vessel: <Anchor size={16} />,
   }[type];
   const className = {
     assignment: styles.iconAssignment,

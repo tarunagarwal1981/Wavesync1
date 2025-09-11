@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./DocumentCard.module.css";
-import { FileText, ShieldPlus, Stethoscope, Plane, FileCheck, Download, Eye, RefreshCw, Trash2 } from "lucide-react";
+import { FileText, Shield, Heart, Plane, CheckCircle, Download, Eye, RefreshCw, Trash2 } from "lucide-react";
 
 type DocStatus = "valid" | "expiring" | "expired";
 type DocCategory = "Medical" | "STCW" | "Visa" | "Company" | "Other";
@@ -19,10 +19,10 @@ export interface DocumentCardProps extends React.HTMLAttributes<HTMLDivElement> 
 
 function Icon({ category }: { category: DocCategory }) {
   const icon = {
-    Medical: <Stethoscope size={18} />,
-    STCW: <ShieldPlus size={18} />,
+    Medical: <Heart size={18} />,
+    STCW: <Shield size={18} />,
     Visa: <Plane size={18} />,
-    Company: <FileCheck size={18} />,
+    Company: <CheckCircle size={18} />,
     Other: <FileText size={18} />,
   }[category];
   const wrapClass = {

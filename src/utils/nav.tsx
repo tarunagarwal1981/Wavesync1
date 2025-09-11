@@ -8,7 +8,8 @@ import {
   User, 
   MessageSquare, 
   Plane, 
-  Settings 
+  Settings,
+  Bell
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -57,6 +58,13 @@ export const NAV_ITEMS: NavigationItem[] = [
     label: "Profile",
     href: "/profile",
     icon: User,
+  },
+  {
+    key: "notifications",
+    label: "Notifications",
+    href: "/notifications",
+    icon: Bell,
+    badge: 2,
   },
   {
     key: "messages",

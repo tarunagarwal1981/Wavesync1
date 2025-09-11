@@ -18,8 +18,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
+  console.log('ProtectedRoute - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading, 'user:', user);
+
   // Show loading spinner while checking authentication
   if (isLoading) {
+    console.log('ProtectedRoute - showing loading spinner');
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingContent}>
@@ -32,11 +35,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
+    console.log('ProtectedRoute - redirecting to login');
     return <Navigate to={fallbackPath} state={{ from: location }} replace />;
   }
 
   // Check role-based access if required
   if (requiredRole && user?.role !== requiredRole) {
+    console.log('ProtectedRoute - access denied for role:', user?.role, 'required:', requiredRole);
     return (
       <div className={styles.accessDeniedContainer}>
         <div className={styles.accessDeniedContent}>
@@ -59,6 +64,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
+  console.log('ProtectedRoute - rendering children');
   return <>{children}</>;
 };
 

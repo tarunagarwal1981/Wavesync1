@@ -12,6 +12,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ title, navItems, children }) => {
+  console.log('🏗️ Layout rendering with title:', title, 'children:', children);
   const { mobileOpen, setMobileOpen } = useNavigation();
 
   const handleMenuClick = () => {
@@ -37,6 +38,7 @@ export const Layout: React.FC<LayoutProps> = ({ title, navItems, children }) => 
 
         {/* Page Content */}
         <div className={styles.pageContent}>
+          {console.log('🏗️ Layout - rendering children:', children)}
           {children}
         </div>
       </main>

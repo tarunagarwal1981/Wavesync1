@@ -26,6 +26,8 @@ export const useNavigation = () => {
 };
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  console.log('🧭 NavigationProvider rendering');
+  console.log('🧭 NavigationProvider timestamp:', new Date().toISOString());
   const [activeKey, setActiveKey] = React.useState("dashboard");
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -36,8 +38,10 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setMobileOpen,
   };
 
+  console.log('🧭 NavigationProvider - about to return JSX');
   return (
     <NavigationContext.Provider value={value}>
+      {console.log('🧭 NavigationProvider - rendering children')}
       {children}
     </NavigationContext.Provider>
   );
