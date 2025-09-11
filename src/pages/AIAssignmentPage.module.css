@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 
-/* Modern 3D Header */
+/* Modern Compact 3D Header */
 .pageHeader {
   background: linear-gradient(135deg, 
     #1a1a2e 0%, 
@@ -13,17 +13,17 @@
     #533483 75%, 
     #7209b7 100%);
   color: white;
-  padding: 32px;
+  padding: 24px;
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
-  margin-bottom: 32px;
+  border-radius: 20px;
+  margin-bottom: 24px;
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 16px 32px rgba(0, 0, 0, 0.3),
+    0 6px 12px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: perspective(1000px) rotateX(2deg);
+  transform: perspective(1000px) rotateX(1.5deg);
 }
 
 .pageHeader::before {
@@ -66,7 +66,7 @@
 }
 
 .titleSection {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   position: relative;
   z-index: 2;
 }
@@ -74,12 +74,12 @@
 .titleWrapper {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .pageTitle {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
   margin: 0;
   background: linear-gradient(135deg, 
@@ -148,12 +148,12 @@
   font-weight: 500;
 }
 
-/* Modern 3D Stats Grid */
+/* Modern Compact 3D Stats Grid */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  max-width: 500px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  max-width: 420px;
   position: relative;
   z-index: 2;
 }
@@ -164,18 +164,18 @@
     rgba(255, 255, 255, 0.05) 100%);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 6px 24px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform: perspective(1000px) rotateX(5deg);
+  transform: perspective(1000px) rotateX(4deg);
 }
 
 .statCard::before {

@@ -85,9 +85,9 @@ export const Login: React.FC = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <div className={styles.loginCard}>
-        {/* Header */}
-        <div className={styles.header}>
+      {/* Left Side - Branding */}
+      <div className={styles.brandingSection}>
+        <div className={styles.brandingContent}>
           <div className={styles.logo}>
             <div className={styles.logoIcon}>🌊</div>
             <h1 className={styles.logoText}>WaveSync</h1>
@@ -96,8 +96,42 @@ export const Login: React.FC = () => {
               <span className={styles.aiText}>AI-Powered</span>
             </div>
           </div>
-          <p className={styles.subtitle}>Maritime Crew Management Platform</p>
+          <h2 className={styles.brandingTitle}>Maritime Crew Management Platform</h2>
+          <p className={styles.brandingSubtitle}>
+            Streamline your maritime operations with AI-powered crew management, 
+            intelligent assignment matching, and comprehensive fleet oversight.
+          </p>
+          <div className={styles.features}>
+            <div className={styles.feature}>
+              <span className={styles.featureIcon}>🤖</span>
+              <span className={styles.featureText}>AI-Powered Matching</span>
+            </div>
+            <div className={styles.feature}>
+              <span className={styles.featureIcon}>📊</span>
+              <span className={styles.featureText}>Real-time Analytics</span>
+            </div>
+            <div className={styles.feature}>
+              <span className={styles.featureIcon}>⚓</span>
+              <span className={styles.featureText}>Crew Management</span>
+            </div>
+          </div>
         </div>
+        <div className={styles.backgroundElements}>
+          <div className={styles.wave1}></div>
+          <div className={styles.wave2}></div>
+          <div className={styles.wave3}></div>
+          <div className={styles.ship}></div>
+        </div>
+      </div>
+
+      {/* Right Side - Login Card */}
+      <div className={styles.loginSection}>
+        <div className={styles.loginCard}>
+          {/* Header */}
+          <div className={styles.header}>
+            <h3 className={styles.loginTitle}>Welcome Back</h3>
+            <p className={styles.loginSubtitle}>Sign in to your account</p>
+          </div>
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -236,14 +270,7 @@ export const Login: React.FC = () => {
             💡 Demo accounts have full access to all features without requiring passwords
           </p>
         </div>
-      </div>
-
-      {/* Background Elements */}
-      <div className={styles.backgroundElements}>
-        <div className={styles.wave1}></div>
-        <div className={styles.wave2}></div>
-        <div className={styles.wave3}></div>
-        <div className={styles.ship}></div>
+        </div>
       </div>
     </div>
   );
