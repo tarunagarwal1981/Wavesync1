@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDemo } from '../../contexts/DemoContext';
-import { Notification } from '../../types';
+import { Notification, NotificationType, NotificationPriority } from '../../types';
 import { formatDistanceToNow } from 'date-fns';
 import styles from './NotificationSystem.module.css';
 
@@ -81,6 +81,8 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({ classNam
     
     addNotification({
       ...randomNotification,
+      type: randomNotification.type as NotificationType,
+      priority: randomNotification.priority as NotificationPriority,
       actionUrl: `/${randomNotification.type}s`
     });
   };
@@ -148,7 +150,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({ classNam
                       {notification.message}
                     </div>
                     <div className={styles.notificationTime}>
-                      {formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}
+                      {formatDistanceToNow(new Date(notification.timestamp || notification.createdAt), { addSuffix: true })}
                     </div>
                   </div>
 

@@ -85,7 +85,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                       key={n.id}
                       {...n}
                       onMarkRead={onMarkRead}
-                      onAction={(id) => {/* navigate to relevant page */}}
+                      onAction={() => {/* navigate to relevant page */}}
                     />
                   ))}
                 </div>

@@ -44,7 +44,14 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
     <div style={getPositionStyles()}>
       {toasts.map((toast) => (
         <div key={toast.id} style={{ pointerEvents: 'auto' }}>
-          <Toast toast={toast} onRemove={onRemove} />
+          <Toast 
+            id={toast.id}
+            type={toast.type}
+            title={toast.title}
+            message={toast.message}
+            duration={toast.duration}
+            onClose={onRemove}
+          />
         </div>
       ))}
     </div>

@@ -234,6 +234,8 @@ export type User = (Seafarer | CompanyUser | Admin) & {
   nationality?: string;
   passportNumber?: string;
   seamanBookNumber?: string;
+  // Additional flexible properties for demo data
+  [key: string]: any;
 };
 
 export interface EmergencyContact {
@@ -466,6 +468,10 @@ export interface Document {
   verifiedBy?: string;
   rejectionReason?: string;
   metadata?: DocumentMetadata;
+  // Additional properties for demo data
+  uploadDate?: string;
+  tags?: string[];
+  [key: string]: any;
 }
 
 export interface DocumentMetadata {
@@ -619,6 +625,9 @@ export interface Notification {
   expiresAt?: string;
   createdAt: string;
   readAt?: string;
+  // Additional properties for demo data
+  timestamp?: string;
+  [key: string]: any;
 }
 
 export interface NotificationMetadata {
@@ -630,6 +639,12 @@ export interface NotificationMetadata {
   entityType?: string;
   entityId?: string;
   customData?: Record<string, any>;
+  // Additional properties for demo data
+  vesselName?: string;
+  position?: string;
+  company?: string;
+  documentType?: string;
+  [key: string]: any;
 }
 
 // ============================================================================

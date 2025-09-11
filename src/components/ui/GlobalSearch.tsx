@@ -161,7 +161,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
                   <div key={type} className={styles.group}>
                     <div className={styles.groupHeader}>{typeLabels[type as SearchResultType]} ({items.length})</div>
                     <div className={styles.groupItems}>
-                      {items.map((result, i) => {
+                      {items.map((result) => {
                         const globalIndex = recentSearches.length + results.indexOf(result);
                         return (
                           <div
