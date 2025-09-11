@@ -26,12 +26,7 @@ import {
   FileBarChart,
   HelpCircle,
   Phone,
-  MapPin,
-  Upload,
-  Download,
-  Eye,
-  Edit,
-  Plus
+  MapPin
 } from "lucide-react";
 import { UserRole } from "../types";
 
@@ -126,31 +121,15 @@ export const seafarerNavigation: NavigationSection[] = [
         id: "travel-plans",
         title: "Travel Plans",
         icon: Plane,
-        href: "/travel/plans",
+        href: "/travel",
         permissions: [UserRole.SEAFARER],
-        description: "View travel arrangements",
-        children: [
-          {
-            id: "travel-view",
-            title: "View Plans",
-            icon: Eye,
-            href: "/travel/plans/view",
-            permissions: [UserRole.SEAFARER]
-          },
-          {
-            id: "travel-download",
-            title: "Download Documents",
-            icon: Download,
-            href: "/travel/plans/download",
-            permissions: [UserRole.SEAFARER]
-          }
-        ]
+        description: "View travel arrangements"
       },
       {
         id: "travel-documents",
         title: "Travel Documents",
         icon: FileCheck,
-        href: "/travel/documents",
+        href: "/travel",
         permissions: [UserRole.SEAFARER],
         description: "View and download travel documents"
       },
@@ -290,48 +269,16 @@ export const companyNavigation: NavigationSection[] = [
         href: "/travel",
         badge: 4,
         permissions: [UserRole.COMPANY_USER],
-        description: "Plan crew travel",
-        children: [
-          {
-            id: "travel-create",
-            title: "Create Plans",
-            icon: Plus,
-            href: "/travel/create",
-            permissions: [UserRole.COMPANY_USER]
-          },
-          {
-            id: "travel-edit",
-            title: "Edit Plans",
-            icon: Edit,
-            href: "/travel/edit",
-            permissions: [UserRole.COMPANY_USER]
-          }
-        ]
+        description: "Plan crew travel"
       },
       {
         id: "travel-documents",
         title: "Travel Documents",
         icon: FileCheck,
-        href: "/travel/documents",
+        href: "/travel",
         badge: 6,
         permissions: [UserRole.COMPANY_USER],
-        description: "Upload and manage travel documents",
-        children: [
-          {
-            id: "travel-upload",
-            title: "Upload Documents",
-            icon: Upload,
-            href: "/travel/documents/upload",
-            permissions: [UserRole.COMPANY_USER]
-          },
-          {
-            id: "travel-manage",
-            title: "Manage Documents",
-            icon: Settings,
-            href: "/travel/documents/manage",
-            permissions: [UserRole.COMPANY_USER]
-          }
-        ]
+        description: "Upload and manage travel documents"
       },
       {
         id: "budget-expenses",
