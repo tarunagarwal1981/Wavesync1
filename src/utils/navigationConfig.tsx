@@ -26,7 +26,8 @@ import {
   FileBarChart,
   HelpCircle,
   Phone,
-  MapPin
+  MapPin,
+  Brain
 } from "lucide-react";
 import { UserRole } from "../types";
 
@@ -197,6 +198,15 @@ export const companyNavigation: NavigationSection[] = [
         href: "/",
         permissions: [UserRole.COMPANY_USER],
         description: "Overview of crew and operations"
+      },
+      {
+        id: "ai-assignments",
+        title: "AI Assignments",
+        icon: Brain,
+        href: "/ai-assignments",
+        badge: "NEW",
+        permissions: [UserRole.COMPANY_USER],
+        description: "AI-powered assignment matching"
       },
       {
         id: "crew-directory",

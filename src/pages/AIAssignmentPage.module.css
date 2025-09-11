@@ -1,0 +1,107 @@
+/* AI Assignment Page Styles */
+.aiAssignmentPage {
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  background: linear-gradient(135deg, #1e40af, #3b82f6, #8b5cf6);
+  color: white;
+  padding: 48px 24px;
+  margin-bottom: 32px;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pageTitle {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  background: linear-gradient(135deg, #ffffff, #e0f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pageSubtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  margin: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.aiFeatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+}
+
+.featureIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.featureCard h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.featureCard p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: 32px 16px;
+  }
+  
+  .pageTitle {
+    font-size: 32px;
+  }
+  
+  .pageSubtitle {
+    font-size: 16px;
+  }
+  
+  .aiFeatures {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .featureCard {
+    padding: 20px;
+  }
+  
+  .featureIcon {
+    font-size: 36px;
+  }
+}

@@ -1,0 +1,533 @@
+/* Smart Assignment Creation Styles */
+.smartAssignmentCreation {
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.assignmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.assignmentHeader h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+/* Template Selection */
+.templateSection {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.templateSection h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.templateCard {
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.templateCard:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.templateCardSelected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+}
+
+.templateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.templateHeader h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.templatePriority {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.templatePriority[data-priority="high"] {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.templatePriority[data-priority="medium"] {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.templatePriority[data-priority="low"] {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.templateDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Assignment Form */
+.assignmentForm {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formField label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.formField input,
+.formField select {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.formField input:focus,
+.formField select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Certifications Section */
+.certificationsSection {
+  margin-top: 24px;
+}
+
+.certificationsSection label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.certificationsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.certificationCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.certificationCheckbox:hover {
+  background: #f3f4f6;
+}
+
+.certificationCheckbox input[type="checkbox"] {
+  margin: 0;
+}
+
+.certificationCheckbox input[type="checkbox"]:checked + span {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* AI Match Results */
+.aiMatchResults {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.resultsHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.matchList {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.matchCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.matchCard:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.matchRank {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.rankNumber {
+  font-size: 24px;
+  font-weight: 800;
+  color: #3b82f6;
+}
+
+.seafarerInfo {
+  margin-bottom: 16px;
+}
+
+.seafarerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.seafarerHeader h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.seafarerRank {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.seafarerDetails {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.seafarerStats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.matchScore {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.matchActions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btnPrimary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnPrimary:hover {
+  background: #2563eb;
+}
+
+.btnSecondary {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* AI Insights Panel */
+.aiInsightsPanel {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  border-left: 4px solid #3b82f6;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aiInsightsPanel h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.scoringFactors {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.factorRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.factorName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  min-width: 120px;
+}
+
+.factorBar {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.factorFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  animation: factorFill 1s ease-out;
+}
+
+@keyframes factorFill {
+  from { width: 0%; }
+}
+
+.factorScore {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 50px;
+  text-align: right;
+}
+
+.compatibilityNotes,
+.riskFactors {
+  margin-top: 12px;
+}
+
+.compatibilityNotes h6,
+.riskFactors h6 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.compatibilityNotes ul,
+.riskFactors ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.compatibilityNotes li {
+  color: #059669;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.riskFactors li {
+  color: #dc2626;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+/* AI Recommendations */
+.aiRecommendations {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.recommendationHeader h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.recommendationCards {
+  display: grid;
+  gap: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .formGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .templateGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .seafarerDetails {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .matchActions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .smartAssignmentCreation {
+    padding: 16px;
+  }
+  
+  .assignmentHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .resultsHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .seafarerHeader {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .factorRow {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .factorName {
+    min-width: auto;
+  }
+  
+  .factorBar {
+    width: 100%;
+  }
+}

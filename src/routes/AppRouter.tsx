@@ -49,6 +49,7 @@ import {
   DocumentationPage, 
   SystemUpdatesPage 
 } from "../pages/__stubs_admin__";
+import AIAssignmentPage from "../pages/AIAssignmentPage";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -179,6 +180,13 @@ export const AppRouter: React.FC = () => {
           <ProtectedRoute>
             <Layout title="Crew Directory">
               <PageTransition><CrewDirectoryPage /></PageTransition>
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/ai-assignments" element={
+          <ProtectedRoute>
+            <Layout title="AI Assignments">
+              <PageTransition><AIAssignmentPage /></PageTransition>
             </Layout>
           </ProtectedRoute>
         } />
