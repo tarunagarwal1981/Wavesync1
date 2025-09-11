@@ -156,7 +156,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
             </div>
             <div className={styles.userInfo}>
               <span className={styles.userName}>{user?.firstName} {user?.lastName}</span>
-              <span className={styles.userRole}>{user?.rank}</span>
+              <span className={styles.userRole}>{user?.rank || user?.position}</span>
             </div>
             <ChevronDown size={16} className={styles.chevron} />
           </button>
@@ -175,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
                 <div className={styles.userDropdownInfo}>
                   <h3>{user?.firstName} {user?.lastName}</h3>
                   <p>{user?.email}</p>
-                  <span className={styles.userDropdownRole}>{user?.rank}</span>
+                  <span className={styles.userDropdownRole}>{user?.rank || user?.position}</span>
                 </div>
               </div>
               <div className={styles.userDropdownMenu}>

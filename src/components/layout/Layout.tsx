@@ -1,31 +1,28 @@
 import React from 'react';
-import { useNavigation } from '../../hooks/useNavigation';
-import { NavigationItem } from '../../utils/nav';
-import { Sidebar } from './Sidebar';
+import { useResponsive } from '../../hooks/useResponsive';
+import { RoleBasedSidebar } from './RoleBasedSidebar';
 import { Header } from './Header';
 import styles from './Layout.module.css';
 
 interface LayoutProps {
   title: string;
-  navItems: NavigationItem[];
   children?: React.ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ title, navItems, children }) => {
+export const Layout: React.FC<LayoutProps> = ({ title, children }) => {
   console.log('🏗️ Layout rendering with title:', title, 'children:', children);
-  const { mobileOpen, setMobileOpen } = useNavigation();
+  const { isMobile, sidebarOpen, toggleSidebar, closeSidebar } = useResponsive();
 
   const handleMenuClick = () => {
-    setMobileOpen(!mobileOpen);
+    toggleSidebar();
   };
 
   return (
     <div className={styles.layout}>
-      {/* Sidebar */}
-      <Sidebar 
-        navItems={navItems} 
-        isOpen={mobileOpen} 
-        onClose={() => setMobileOpen(false)} 
+      {/* Role-Based Sidebar */}
+      <RoleBasedSidebar 
+        isOpen={isMobile ? sidebarOpen : true}
+        onClose={closeSidebar}
       />
 
       {/* Main Content */}

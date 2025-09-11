@@ -1,4 +1,4 @@
-/* Sidebar Styles with Glassmorphism */
+/* Sidebar Base Styles with Enhanced Responsive Design */
 .sidebar {
   position: fixed;
   top: 0;
@@ -9,7 +9,7 @@
   backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   transform: translateX(-100%);
-  transition: transform var(--transition-slow);
+  transition: transform var(--transition-slow), width var(--transition-slow);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -19,6 +19,10 @@
 
 .sidebar.open {
   transform: translateX(0);
+}
+
+.sidebar.collapsed {
+  width: 80px;
 }
 
 .overlay {
@@ -46,6 +50,9 @@
   background: var(--gradient-maritime);
   position: relative;
   overflow: hidden;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 .branding::before {
@@ -65,6 +72,12 @@
   gap: 12px;
   position: relative;
   z-index: 1;
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar.collapsed .logo {
+  justify-content: center;
 }
 
 .logoIcon {
@@ -78,11 +91,13 @@
   color: white;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
 }
 
 .logoText {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .brandName {
@@ -103,6 +118,7 @@
 .navigation {
   flex: 1;
   padding: 20px 0;
+  overflow-y: auto;
 }
 
 .navSection {
@@ -128,6 +144,12 @@
   margin: 0;
 }
 
+.navItemContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .navLink {
   display: flex;
   align-items: center;
@@ -140,6 +162,13 @@
   font-weight: var(--font-medium);
   border-radius: 0 var(--radius-12) var(--radius-12) 0;
   margin-right: 12px;
+  flex: 1;
+  min-height: 44px; /* Touch-friendly minimum */
+}
+
+.navLink.nested {
+  padding-left: 40px;
+  font-size: 13px;
 }
 
 .navLink:hover {
@@ -178,6 +207,9 @@
 .navLabel {
   flex: 1;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge {
@@ -190,30 +222,35 @@
   min-width: 18px;
   text-align: center;
   box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
 }
 
-/* Quick Actions */
-.quickAction {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  color: var(--text-secondary);
+.expandButton {
   background: none;
   border: none;
-  width: 100%;
-  text-align: left;
+  color: var(--text-muted);
   cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-6);
   transition: all var(--transition-base);
-  font-weight: var(--font-medium);
-  border-radius: 0 var(--radius-12) var(--radius-12) 0;
-  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
 }
 
-.quickAction:hover {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--color-success);
-  transform: translateX(4px);
+.expandButton:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-primary);
+}
+
+.nestedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-8);
+  margin: 4px 12px 8px 20px;
 }
 
 /* Maritime Footer */
@@ -228,6 +265,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: center;
+}
+
+.sidebar.collapsed .footerContent {
+  justify-content: center;
 }
 
 .footerIcon {
@@ -241,11 +283,13 @@
   color: var(--color-primary);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(59, 130, 246, 0.3);
+  flex-shrink: 0;
 }
 
 .footerText {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .footerTitle {
@@ -270,8 +314,35 @@
     height: 100vh;
   }
   
+  .sidebar.collapsed {
+    width: 80px;
+  }
+  
   .overlay {
     display: none;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    width: 280px;
+  }
+  
+  .sidebar.collapsed {
+    width: 80px;
+  }
+  
+  .branding {
+    padding: 20px 16px;
+  }
+  
+  .navLink {
+    padding: 12px 16px;
+  }
+  
+  .footer {
+    padding: 16px;
   }
 }
 
@@ -287,13 +358,85 @@
   
   .navLink {
     padding: 12px 16px;
-  }
-  
-  .quickAction {
-    padding: 12px 16px;
+    min-height: 48px; /* Larger touch targets on mobile */
   }
   
   .footer {
     padding: 16px;
+  }
+  
+  .sectionTitle {
+    margin-left: 16px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+  }
+  
+  .branding {
+    padding: 16px;
+  }
+  
+  .navLink {
+    padding: 16px;
+    min-height: 52px;
+  }
+  
+  .footer {
+    padding: 12px;
+  }
+}
+
+/* Collapsed State Styles */
+.sidebar.collapsed .sectionTitle {
+  display: none;
+}
+
+.sidebar.collapsed .navLink {
+  justify-content: center;
+  padding: 12px;
+  margin-right: 0;
+}
+
+.sidebar.collapsed .navLabel {
+  display: none;
+}
+
+.sidebar.collapsed .badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 10px;
+  padding: 1px 4px;
+  min-width: 16px;
+}
+
+.sidebar.collapsed .expandButton {
+  display: none;
+}
+
+.sidebar.collapsed .nestedList {
+  display: none;
+}
+
+/* Smooth transitions */
+.sidebar * {
+  box-sizing: border-box;
+}
+
+/* Focus management for accessibility */
+.navLink:focus,
+.expandButton:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .sidebar {
+    display: none;
   }
 }

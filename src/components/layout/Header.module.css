@@ -421,6 +421,21 @@
   margin: 8px 0;
 }
 
+/* Tablet Responsive */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .searchSection {
+    max-width: 300px;
+  }
+  
+  .searchInput {
+    font-size: 13px;
+  }
+  
+  .userName {
+    max-width: 100px;
+  }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .header {

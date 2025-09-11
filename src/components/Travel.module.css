@@ -1,0 +1,370 @@
+/* Travel Module Styles */
+.travelContainer {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+}
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.createBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Plans Grid */
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.planCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.planCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.planInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.vesselName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.route,
+.seafarerName,
+.companyName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #64748b;
+  margin: 4px 0;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.confirmed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status.completed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.planDetails {
+  margin-bottom: 20px;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.documents {
+  margin-bottom: 20px;
+}
+
+.documentsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.documentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.documentItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.documentTitle {
+  flex: 1;
+  font-size: 13px;
+  color: #374151;
+}
+
+.documentActions {
+  display: flex;
+  gap: 4px;
+}
+
+.planActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.viewBtn,
+.editBtn,
+.downloadBtn,
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.viewBtn {
+  background: #f0f9ff;
+  color: #0ea5e9;
+  border: 1px solid #bae6fd;
+}
+
+.viewBtn:hover {
+  background: #e0f2fe;
+}
+
+.editBtn {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.editBtn:hover {
+  background: #fde68a;
+}
+
+.downloadBtn {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.downloadBtn:hover {
+  background: #dcfce7;
+}
+
+.uploadBtn {
+  background: #f3e8ff;
+  color: #9333ea;
+  border: 1px solid #d8b4fe;
+}
+
+.uploadBtn:hover {
+  background: #e9d5ff;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .plansGrid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .travelContainer {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  
+  .plansGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .planCard {
+    padding: 20px;
+  }
+  
+  .planActions {
+    flex-direction: column;
+  }
+  
+  .viewBtn,
+  .editBtn,
+  .downloadBtn,
+  .uploadBtn {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .travelContainer {
+    padding: 12px;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .statCard {
+    padding: 20px;
+  }
+  
+  .planCard {
+    padding: 16px;
+  }
+  
+  .vesselName {
+    font-size: 16px;
+  }
+  
+  .planHeader {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .status {
+    align-self: flex-start;
+  }
+}

@@ -1,8 +1,9 @@
 /* Layout Styles */
 .layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background: #f8fafc;
+  overflow: hidden;
 }
 
 .mainContent {
@@ -11,6 +12,7 @@
   flex-direction: column;
   margin-left: 0;
   transition: margin-left 0.3s ease;
+  height: 100vh;
 }
 
 .pageContent {
