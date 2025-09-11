@@ -438,10 +438,11 @@
 
 /* Compact AI Recommendations */
 .aiRecommendations {
-  background: white;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .recommendationHeader {
@@ -460,7 +461,101 @@
 
 .recommendationCards {
   display: grid;
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* Modern Recommendation Card */
+.recommendationCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), rgba(59, 130, 246, 0.01));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.recommendationCard:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.recommendationCard:hover::before {
+  opacity: 1;
+}
+
+.recommendationIcon {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.recommendationContent {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.recommendationTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.recommendationDescription {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.priorityIndicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  border-radius: 0 10px 10px 0;
+}
+
+.priorityHigh {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.priorityMedium {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.priorityLow {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
 }
 
 /* Responsive Design */
