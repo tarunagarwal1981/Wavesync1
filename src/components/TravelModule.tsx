@@ -69,10 +69,119 @@ const mockTravelPlans: TravelPlan[] = [
         fileUrl: '/documents/visa.pdf',
         uploadedAt: '2024-01-18',
         uploadedBy: 'Sarah Johnson'
+      },
+      {
+        id: 'td-003',
+        type: 'medical',
+        title: 'COVID-19 Vaccination Certificate',
+        fileUrl: '/documents/vaccination.pdf',
+        uploadedAt: '2024-01-22',
+        uploadedBy: 'Sarah Johnson'
       }
     ],
     createdBy: 'Sarah Johnson',
     createdAt: '2024-01-15'
+  },
+  {
+    id: 'tp-002',
+    seafarerId: 'sf-002',
+    seafarerName: 'Marcus Rodriguez',
+    vesselName: 'MV Atlantic Star',
+    departureDate: '2024-02-28',
+    arrivalDate: '2024-03-05',
+    departurePort: 'Rotterdam, Netherlands',
+    arrivalPort: 'New York, USA',
+    status: 'pending',
+    documents: [
+      {
+        id: 'td-004',
+        type: 'ticket',
+        title: 'Flight Ticket - KLM 6447',
+        fileUrl: '/documents/flight-klm.pdf',
+        uploadedAt: '2024-02-10',
+        uploadedBy: 'Sarah Johnson'
+      },
+      {
+        id: 'td-005',
+        type: 'visa',
+        title: 'US B1/B2 Visa',
+        fileUrl: '/documents/us-visa.pdf',
+        uploadedAt: '2024-02-08',
+        uploadedBy: 'Sarah Johnson'
+      }
+    ],
+    createdBy: 'Sarah Johnson',
+    createdAt: '2024-02-05'
+  },
+  {
+    id: 'tp-003',
+    seafarerId: 'sf-003',
+    seafarerName: 'Elena Kowalski',
+    vesselName: 'MV Pacific Explorer',
+    departureDate: '2024-03-10',
+    arrivalDate: '2024-03-15',
+    departurePort: 'Singapore',
+    arrivalPort: 'Tokyo, Japan',
+    status: 'completed',
+    documents: [
+      {
+        id: 'td-006',
+        type: 'ticket',
+        title: 'Flight Ticket - SQ 12',
+        fileUrl: '/documents/flight-sq.pdf',
+        uploadedAt: '2024-02-25',
+        uploadedBy: 'Sarah Johnson'
+      },
+      {
+        id: 'td-007',
+        type: 'visa',
+        title: 'Japan Tourist Visa',
+        fileUrl: '/documents/japan-visa.pdf',
+        uploadedAt: '2024-02-20',
+        uploadedBy: 'Sarah Johnson'
+      },
+      {
+        id: 'td-008',
+        type: 'medical',
+        title: 'Yellow Fever Certificate',
+        fileUrl: '/documents/yellow-fever.pdf',
+        uploadedAt: '2024-02-22',
+        uploadedBy: 'Sarah Johnson'
+      }
+    ],
+    createdBy: 'Sarah Johnson',
+    createdAt: '2024-02-15'
+  },
+  {
+    id: 'tp-004',
+    seafarerId: 'sf-004',
+    seafarerName: 'James Mitchell',
+    vesselName: 'MV Mediterranean Queen',
+    departureDate: '2024-03-20',
+    arrivalDate: '2024-03-25',
+    departurePort: 'Barcelona, Spain',
+    arrivalPort: 'Istanbul, Turkey',
+    status: 'confirmed',
+    documents: [
+      {
+        id: 'td-009',
+        type: 'ticket',
+        title: 'Flight Ticket - TK 1856',
+        fileUrl: '/documents/flight-tk.pdf',
+        uploadedAt: '2024-03-05',
+        uploadedBy: 'Sarah Johnson'
+      },
+      {
+        id: 'td-010',
+        type: 'visa',
+        title: 'Turkey eVisa',
+        fileUrl: '/documents/turkey-visa.pdf',
+        uploadedAt: '2024-03-03',
+        uploadedBy: 'Sarah Johnson'
+      }
+    ],
+    createdBy: 'Sarah Johnson',
+    createdAt: '2024-02-28'
   }
 ];
 
@@ -232,7 +341,7 @@ export const TravelModule: React.FC = () => {
             <Plane size={24} />
           </div>
           <div className={styles.statContent}>
-            <h3 className={styles.statNumber}>24</h3>
+            <h3 className={styles.statNumber}>{travelPlans.length}</h3>
             <p className={styles.statLabel}>Active Travel Plans</p>
           </div>
         </div>
@@ -241,7 +350,7 @@ export const TravelModule: React.FC = () => {
             <CheckCircle size={24} />
           </div>
           <div className={styles.statContent}>
-            <h3 className={styles.statNumber}>18</h3>
+            <h3 className={styles.statNumber}>{travelPlans.filter(p => p.status === 'completed').length}</h3>
             <p className={styles.statLabel}>Completed This Month</p>
           </div>
         </div>
@@ -250,7 +359,7 @@ export const TravelModule: React.FC = () => {
             <AlertCircle size={24} />
           </div>
           <div className={styles.statContent}>
-            <h3 className={styles.statNumber}>3</h3>
+            <h3 className={styles.statNumber}>{travelPlans.filter(p => p.status === 'pending').length}</h3>
             <p className={styles.statLabel}>Pending Approval</p>
           </div>
         </div>
@@ -259,7 +368,7 @@ export const TravelModule: React.FC = () => {
             <Building size={24} />
           </div>
           <div className={styles.statContent}>
-            <h3 className={styles.statNumber}>12</h3>
+            <h3 className={styles.statNumber}>3</h3>
             <p className={styles.statLabel}>Companies Using Travel</p>
           </div>
         </div>
