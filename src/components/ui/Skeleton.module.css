@@ -1,20 +1,75 @@
 .skeleton {
-  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background: linear-gradient(90deg, 
+    var(--gray-200) 0%, 
+    var(--gray-100) 25%, 
+    var(--gray-200) 50%, 
+    var(--gray-100) 75%, 
+    var(--gray-200) 100%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 100%);
+  animation: shimmer-overlay 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .line {
-  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background: linear-gradient(90deg, 
+    var(--gray-200) 0%, 
+    var(--gray-100) 25%, 
+    var(--gray-200) 50%, 
+    var(--gray-100) 75%, 
+    var(--gray-200) 100%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 100%);
+  animation: shimmer-overlay 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% { 
+    background-position: -200% 0; 
+  }
+  100% { 
+    background-position: 200% 0; 
+  }
+}
+
+@keyframes shimmer-overlay {
+  0% { 
+    transform: translateX(-100%); 
+  }
+  100% { 
+    transform: translateX(100%); 
+  }
 }
 
 /* Variant styles */
@@ -32,8 +87,24 @@
 }
 
 .card {
-  border-radius: var(--radius-12);
-  padding: var(--space-4);
-  background: #fff;
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  padding: var(--space-6);
+  background: var(--gradient-surface);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .line,
+  .skeleton::before,
+  .line::before {
+    animation: none;
+  }
+  
+  .skeleton,
+  .line {
+    background: var(--gray-200);
+  }
 }

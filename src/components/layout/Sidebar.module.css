@@ -1,18 +1,20 @@
-/* Sidebar Styles */
+/* Sidebar Styles with Glassmorphism */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 280px;
   height: 100vh;
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  border-right: 1px solid #334155;
+  background: var(--gradient-glass);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
+  transition: transform var(--transition-slow);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  box-shadow: var(--shadow-xl);
 }
 
 .sidebar.open {
@@ -25,7 +27,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   z-index: 999;
   display: none;
 }
@@ -36,28 +39,45 @@
   }
 }
 
-/* Maritime Branding */
+/* Maritime Branding with Enhanced Gradient */
 .branding {
   padding: 24px 20px;
-  border-bottom: 1px solid #334155;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--gradient-maritime);
+  position: relative;
+  overflow: hidden;
+}
+
+.branding::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .logoIcon {
   width: 40px;
   height: 40px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: var(--radius-12);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .logoText {
@@ -67,15 +87,16 @@
 
 .brandName {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   color: white;
   line-height: 1;
+  letter-spacing: var(--letter-tight);
 }
 
 .brandTagline {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.8);
-  font-weight: 400;
+  font-weight: var(--font-medium);
 }
 
 /* Navigation */
@@ -90,8 +111,8 @@
 
 .sectionTitle {
   font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
+  font-weight: var(--font-semibold);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0 0 12px 20px;
@@ -112,36 +133,46 @@
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
   position: relative;
-  font-weight: 500;
+  font-weight: var(--font-medium);
+  border-radius: 0 var(--radius-12) var(--radius-12) 0;
+  margin-right: 12px;
 }
 
 .navLink:hover {
   background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  color: var(--color-primary);
+  transform: translateX(4px);
 }
 
 .navLink.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border-right: 3px solid #3b82f6;
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+  transform: translateX(4px);
 }
 
 .navLink.active::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: -12px;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+  width: 4px;
+  background: var(--gradient-primary);
+  border-radius: 0 var(--radius-6) var(--radius-6) 0;
 }
 
 .navIcon {
   flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.navLink:hover .navIcon {
+  transform: scale(1.1);
 }
 
 .navLabel {
@@ -150,14 +181,15 @@
 }
 
 .badge {
-  background: #ef4444;
+  background: var(--color-error);
   color: white;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   padding: 2px 6px;
   border-radius: 10px;
   min-width: 18px;
   text-align: center;
+  box-shadow: var(--shadow-xs);
 }
 
 /* Quick Actions */
@@ -166,26 +198,30 @@
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   background: none;
   border: none;
   width: 100%;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
+  transition: all var(--transition-base);
+  font-weight: var(--font-medium);
+  border-radius: 0 var(--radius-12) var(--radius-12) 0;
+  margin-right: 12px;
 }
 
 .quickAction:hover {
   background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: var(--color-success);
+  transform: translateX(4px);
 }
 
 /* Maritime Footer */
 .footer {
   padding: 20px;
-  border-top: 1px solid #334155;
-  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 .footerContent {
@@ -198,11 +234,13 @@
   width: 32px;
   height: 32px;
   background: rgba(59, 130, 246, 0.2);
-  border-radius: 6px;
+  border-radius: var(--radius-8);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3b82f6;
+  color: var(--color-primary);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .footerText {
@@ -212,15 +250,15 @@
 
 .footerTitle {
   font-size: 14px;
-  font-weight: 600;
-  color: #e2e8f0;
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .footerSubtitle {
   font-size: 11px;
-  color: #64748b;
-  font-weight: 400;
+  color: var(--text-muted);
+  font-weight: var(--font-regular);
 }
 
 /* Desktop Styles */

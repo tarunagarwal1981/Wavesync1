@@ -1,13 +1,91 @@
 .spinner {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 3px solid var(--gray-200);
+  border: 3px solid var(--border-light);
   border-top-color: var(--color-primary);
-  animation: spin 0.9s linear infinite;
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  position: relative;
+}
+
+.spinner::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: rgba(59, 130, 246, 0.3);
+  animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+/* Size variants */
+.spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.spinner.small::before {
+  border-width: 2px;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+}
+
+.spinner.large {
+  width: 48px;
+  height: 48px;
+  border-width: 4px;
+}
+
+.spinner.large::before {
+  border-width: 4px;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+}
+
+/* Color variants */
+.spinner.success {
+  border-top-color: var(--color-success);
+}
+
+.spinner.success::before {
+  border-top-color: rgba(16, 185, 129, 0.3);
+}
+
+.spinner.warning {
+  border-top-color: var(--color-warning);
+}
+
+.spinner.warning::before {
+  border-top-color: rgba(245, 158, 11, 0.3);
+}
+
+.spinner.error {
+  border-top-color: var(--color-error);
+}
+
+.spinner.error::before {
+  border-top-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .spinner::before {
+    animation: none;
+  }
 }
 
