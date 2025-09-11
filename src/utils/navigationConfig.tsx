@@ -9,8 +9,6 @@ import {
   MessageSquare, 
   Plane, 
   Settings,
-  Anchor,
-  Waves,
   Users,
   Ship,
   ClipboardList,
@@ -33,11 +31,7 @@ import {
   Download,
   Eye,
   Edit,
-  Trash2,
-  Plus,
-  Search,
-  Filter,
-  MoreHorizontal
+  Plus
 } from "lucide-react";
 import { UserRole } from "../types";
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Plane, 
   Download, 
@@ -79,7 +79,6 @@ const mockTravelPlans: TravelPlan[] = [
 export const TravelModule: React.FC = () => {
   const { user } = useAuth();
   const [travelPlans] = useState<TravelPlan[]>(mockTravelPlans);
-  const [selectedPlan, setSelectedPlan] = useState<TravelPlan | null>(null);
 
   const isSeafarer = user?.role === 'seafarer';
   const isCompanyUser = user?.role === 'company_user';
@@ -135,10 +134,7 @@ export const TravelModule: React.FC = () => {
             </div>
 
             <div className={styles.planActions}>
-              <button 
-                className={styles.viewBtn}
-                onClick={() => setSelectedPlan(plan)}
-              >
+              <button className={styles.viewBtn}>
                 <Eye size={16} />
                 View Details
               </button>
