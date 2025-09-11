@@ -13,7 +13,7 @@ export const Login: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +60,19 @@ export const Login: React.FC = () => {
       navigate('/dashboard');
     } catch (error) {
       setErrors({ general: 'Invalid email or password. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async (role: 'seafarer' | 'company_user' | 'admin') => {
+    setIsLoading(true);
+    
+    try {
+      await demoLogin(role);
+      navigate('/dashboard');
+    } catch (error) {
+      setErrors({ general: 'Demo login failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -165,6 +178,58 @@ export const Login: React.FC = () => {
             <button className={styles.signupLink}>
               Contact your administrator
             </button>
+          </p>
+        </div>
+
+        {/* Demo Login Section */}
+        <div className={styles.demoSection}>
+          <div className={styles.demoDivider}>
+            <span className={styles.demoDividerText}>DEMO MODE</span>
+          </div>
+          
+          <div className={styles.demoButtons}>
+            <button
+              onClick={() => handleDemoLogin('seafarer')}
+              disabled={isLoading}
+              className={styles.demoButton}
+              title="Login as a Seafarer to view assignments, tasks, and documents"
+            >
+              <span className={styles.demoIcon}>⚓</span>
+              <div className={styles.demoButtonContent}>
+                <span className={styles.demoButtonTitle}>Seafarer</span>
+                <span className={styles.demoButtonSubtitle}>View assignments & tasks</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleDemoLogin('company_user')}
+              disabled={isLoading}
+              className={styles.demoButton}
+              title="Login as a Company User to manage crew and vessels"
+            >
+              <span className={styles.demoIcon}>🏢</span>
+              <div className={styles.demoButtonContent}>
+                <span className={styles.demoButtonTitle}>Company User</span>
+                <span className={styles.demoButtonSubtitle}>Manage crew & vessels</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleDemoLogin('admin')}
+              disabled={isLoading}
+              className={styles.demoButton}
+              title="Login as an Admin to access all features"
+            >
+              <span className={styles.demoIcon}>👨‍💼</span>
+              <div className={styles.demoButtonContent}>
+                <span className={styles.demoButtonTitle}>Admin</span>
+                <span className={styles.demoButtonSubtitle}>Full system access</span>
+              </div>
+            </button>
+          </div>
+
+          <p className={styles.demoNote}>
+            💡 Demo accounts have full access to all features without requiring passwords
           </p>
         </div>
       </div>

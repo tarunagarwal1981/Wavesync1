@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { NavigationProvider } from "../hooks/useNavigation";
 import Layout from "../components/layout/Layout";
+import { PageTransition, ErrorBoundary } from "../components/ui";
 import { NAV_ITEMS } from "../utils/nav";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
@@ -22,19 +23,21 @@ export const AppRouter: React.FC = () => {
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         
+        {/* Root route redirect */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout title="WaveSync" navItems={navItems} />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="assignments" element={<Assignments />} />
-            <Route path="tasks" element={<Tasks />} />
-            <Route path="documents" element={<Documents />} />
-            <Route path="training" element={<Training />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="messages" element={<MessagesPage />} />
-            <Route path="travel" element={<TravelPage />} />
-            <Route path="settings" element={<SettingsPage />} />
+            <Route path="dashboard" element={<PageTransition><ErrorBoundary><Dashboard /></ErrorBoundary></PageTransition>} />
+            <Route path="assignments" element={<PageTransition><Assignments /></PageTransition>} />
+            <Route path="tasks" element={<PageTransition><Tasks /></PageTransition>} />
+            <Route path="documents" element={<PageTransition><Documents /></PageTransition>} />
+            <Route path="training" element={<PageTransition><Training /></PageTransition>} />
+            <Route path="profile" element={<PageTransition><Profile /></PageTransition>} />
+            <Route path="messages" element={<PageTransition><MessagesPage /></PageTransition>} />
+            <Route path="travel" element={<PageTransition><TravelPage /></PageTransition>} />
+            <Route path="settings" element={<PageTransition><SettingsPage /></PageTransition>} />
           </Route>
         </Route>
         

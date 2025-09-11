@@ -1,22 +1,34 @@
-import React from "react";
-import styles from "./PageTransition.module.css";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import styles from './PageTransition.module.css';
 
-export interface PageTransitionProps {
+interface PageTransitionProps {
   children: React.ReactNode;
-  className?: string;
 }
 
-export const PageTransition: React.FC<PageTransitionProps> = ({ children, className }) => {
-  const [isVisible, setIsVisible] = React.useState(false);
+export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
+  const location = useLocation();
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayLocation, setDisplayLocation] = useState(location);
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+    if (location !== displayLocation) {
+      setIsTransitioning(true);
+      
+      const timer = setTimeout(() => {
+        setDisplayLocation(location);
+        setIsTransitioning(false);
+      }, 150);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location, displayLocation]);
 
   return (
-    <div className={[styles.container, isVisible ? styles.visible : "", className].filter(Boolean).join(" ")}>
-      {children}
+    <div className={`${styles.pageTransition} ${isTransitioning ? styles.transitioning : ''}`}>
+      <div className={styles.pageContent}>
+        {children}
+      </div>
     </div>
   );
 };

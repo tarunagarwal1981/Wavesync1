@@ -1,60 +1,201 @@
-import React from "react";
-import styles from "./Header.module.css";
-import { Avatar, Badge, Button, Input } from "../ui";
-import { useNavigation } from "../../hooks/useNavigation";
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { 
+  Search, 
+  Bell, 
+  User, 
+  LogOut, 
+  Settings, 
+  Menu,
+  ChevronDown,
+  Anchor,
+  Waves,
+  FileText,
+  GraduationCap
+} from 'lucide-react';
+import styles from './Header.module.css';
 
-export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
+interface HeaderProps {
+  onMenuClick: () => void;
   title: string;
-  notificationsCount?: number;
-  onOpenSidebar?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, notificationsCount = 0, onOpenSidebar, className, ...props }) => {
-  const { mobileOpen, setMobileOpen } = useNavigation();
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const menuRef = React.useRef<HTMLDivElement | null>(null);
+export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
+  const { user, logout, isDemoMode } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  React.useEffect(() => {
-    function onDoc(e: MouseEvent) {
-      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+  };
+
+  const notifications = [
+    {
+      id: 1,
+      title: 'New Assignment Available',
+      message: 'MV Ocean Pioneer - Chief Officer position',
+      time: '2 hours ago',
+      unread: true,
+      type: 'assignment'
+    },
+    {
+      id: 2,
+      title: 'Document Expiring Soon',
+      message: 'Medical Certificate expires in 15 days',
+      time: '1 day ago',
+      unread: true,
+      type: 'document'
+    },
+    {
+      id: 3,
+      title: 'Training Completed',
+      message: 'Basic Safety Training certificate issued',
+      time: '3 days ago',
+      unread: false,
+      type: 'training'
     }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
+  ];
+
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
-    <header className={[styles.header, className].filter(Boolean).join(" ")} {...props}>
-      <button 
-        className={styles.mobileMenuButton} 
-        onClick={() => setMobileOpen(true)}
-        aria-label="Open menu"
-      >
-        ☰
+    <header className={styles.header}>
+      {/* Mobile Menu Button */}
+      <button className={styles.mobileMenuButton} onClick={onMenuClick}>
+        <Menu size={24} />
       </button>
-      <div className={styles.title}>{title}</div>
 
-      <div className={styles.search}>
-        <Input placeholder="Search crew, vessels, tasks..." aria-label="Search" />
+      {/* Page Title */}
+      <div className={styles.titleSection}>
+        <h1 className={styles.pageTitle}>{title}</h1>
+        {isDemoMode && (
+          <div className={styles.demoBadge}>
+            <Waves size={14} />
+            <span>Demo Mode</span>
+          </div>
+        )}
       </div>
 
-      <div className={styles.actions}>
-        <button className={styles.bell} aria-label="Notifications">
-          <span aria-hidden>🔔</span>
-          {notificationsCount > 0 && (
-            <span className={styles.badge}><Badge variant="primary">{notificationsCount}</Badge></span>
-          )}
-        </button>
+      {/* Search Bar */}
+      <div className={styles.searchSection}>
+        <div className={styles.searchContainer}>
+          <Search size={20} className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search assignments, documents, training..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+      </div>
 
-        <div className={styles.menu} ref={menuRef}>
-          <button className={styles.menuButton} onClick={() => setMenuOpen(v => !v)} aria-expanded={menuOpen} aria-haspopup="menu">
-            <Avatar name="Officer" />
-            <span>Account</span>
+      {/* Header Actions */}
+      <div className={styles.actionsSection}>
+        {/* Notifications */}
+        <div className={styles.notificationContainer}>
+          <button 
+            className={styles.notificationButton}
+            onClick={() => setShowNotifications(!showNotifications)}
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className={styles.notificationBadge}>{unreadCount}</span>
+            )}
           </button>
-          {menuOpen && (
-            <div role="menu" className={styles.menuList}>
-              <a className={styles.menuItem} role="menuitem" href="#profile">Profile</a>
-              <a className={styles.menuItem} role="menuitem" href="#settings">Settings</a>
-              <a className={styles.menuItem} role="menuitem" href="#logout">Logout</a>
+
+          {/* Notifications Dropdown */}
+          {showNotifications && (
+            <div className={styles.notificationDropdown}>
+              <div className={styles.notificationHeader}>
+                <h3>Notifications</h3>
+                <button 
+                  className={styles.markAllRead}
+                  onClick={() => setShowNotifications(false)}
+                >
+                  Mark all read
+                </button>
+              </div>
+              <div className={styles.notificationList}>
+                {notifications.map((notification) => (
+                  <div 
+                    key={notification.id} 
+                    className={`${styles.notificationItem} ${notification.unread ? styles.unread : ''}`}
+                  >
+                    <div className={styles.notificationIcon}>
+                      {notification.type === 'assignment' && <Anchor size={16} />}
+                      {notification.type === 'document' && <FileText size={16} />}
+                      {notification.type === 'training' && <GraduationCap size={16} />}
+                    </div>
+                    <div className={styles.notificationContent}>
+                      <h4 className={styles.notificationTitle}>{notification.title}</h4>
+                      <p className={styles.notificationMessage}>{notification.message}</p>
+                      <span className={styles.notificationTime}>{notification.time}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* User Profile */}
+        <div className={styles.userContainer}>
+          <button 
+            className={styles.userButton}
+            onClick={() => setShowUserMenu(!showUserMenu)}
+          >
+            <div className={styles.userAvatar}>
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.firstName} />
+              ) : (
+                <User size={20} />
+              )}
+            </div>
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>{user?.firstName} {user?.lastName}</span>
+              <span className={styles.userRole}>{user?.rank}</span>
+            </div>
+            <ChevronDown size={16} className={styles.chevron} />
+          </button>
+
+          {/* User Menu Dropdown */}
+          {showUserMenu && (
+            <div className={styles.userDropdown}>
+              <div className={styles.userDropdownHeader}>
+                <div className={styles.userDropdownAvatar}>
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={user.firstName} />
+                  ) : (
+                    <User size={24} />
+                  )}
+                </div>
+                <div className={styles.userDropdownInfo}>
+                  <h3>{user?.firstName} {user?.lastName}</h3>
+                  <p>{user?.email}</p>
+                  <span className={styles.userDropdownRole}>{user?.rank}</span>
+                </div>
+              </div>
+              <div className={styles.userDropdownMenu}>
+                <button className={styles.userDropdownItem}>
+                  <User size={16} />
+                  <span>Profile</span>
+                </button>
+                <button className={styles.userDropdownItem}>
+                  <Settings size={16} />
+                  <span>Settings</span>
+                </button>
+                <hr className={styles.userDropdownDivider} />
+                <button 
+                  className={styles.userDropdownItem}
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -64,4 +205,3 @@ export const Header: React.FC<HeaderProps> = ({ title, notificationsCount = 0, o
 };
 
 export default Header;
-

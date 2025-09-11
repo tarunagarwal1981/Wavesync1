@@ -1,4 +1,46 @@
-.page { display: grid; gap: var(--space-6); }
+.container { display: grid; gap: var(--space-6); }
+
+.processingIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-radius: var(--radius-12);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+.processingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.processingText {
+  font-size: var(--font-14);
+  font-weight: 600;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .toolbar { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); align-items: center; }
 .filters { display: inline-flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }

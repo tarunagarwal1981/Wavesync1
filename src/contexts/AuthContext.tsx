@@ -5,7 +5,9 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isDemoMode: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  demoLogin: (role: 'seafarer' | 'company_user' | 'admin') => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
 }
@@ -18,6 +20,116 @@ interface AuthProviderProps {
 
 // Mock user data for demo purposes
 const mockUsers: Record<string, User> = {
+  // Demo users
+  'demo-seafarer@wavesync.com': {
+    id: 'demo-seafarer',
+    email: 'demo-seafarer@wavesync.com',
+    firstName: 'Alistair',
+    lastName: 'Thomson',
+    phone: '+44-20-7946-0958',
+    role: 'seafarer' as any,
+    status: 'active' as any,
+    avatar: undefined,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+    lastLoginAt: new Date().toISOString(),
+    seafarerId: 'SF-DEMO-001',
+    dateOfBirth: '1985-06-15',
+    nationality: 'British',
+    passportNumber: 'GB123456789',
+    passportExpiry: '2030-06-15',
+    seamanBookNumber: 'SB987654321',
+    seamanBookExpiry: '2029-06-15',
+    rank: 'chief_officer' as any,
+    department: 'deck' as any,
+    experience: 12,
+    certifications: ['STCW', 'GMDSS', 'ARPA', 'ECDIS'],
+    languages: ['English', 'Spanish'],
+    emergencyContact: {
+      name: 'Sarah Thomson',
+      relationship: 'Spouse',
+      phone: '+44-20-7946-0959',
+      email: 'sarah.thomson@email.com'
+    },
+    address: {
+      street: '123 Maritime Street',
+      city: 'Southampton',
+      state: 'Hampshire',
+      country: 'United Kingdom',
+      postalCode: 'SO14 2AR'
+    },
+    bankDetails: {
+      bankName: 'Lloyds Bank',
+      accountNumber: '12345678',
+      routingNumber: '30-00-00',
+      swiftCode: 'LOYDGB2L'
+    },
+    nextOfKin: {
+      name: 'Robert Thomson',
+      relationship: 'Father',
+      phone: '+44-20-7946-0960',
+      address: {
+        street: '456 Ocean View',
+        city: 'Portsmouth',
+        state: 'Hampshire',
+        country: 'United Kingdom',
+        postalCode: 'PO1 3AX'
+      }
+    },
+    medicalHistory: {
+      bloodType: 'O+',
+      allergies: ['Shellfish'],
+      medications: [],
+      conditions: [],
+      lastMedicalCheck: '2024-01-15'
+    },
+    employmentHistory: [
+      {
+        vesselName: 'MV OCEAN PIONEER',
+        vesselType: 'container' as any,
+        rank: 'chief_officer' as any,
+        startDate: '2022-01-01',
+        endDate: '2023-12-31',
+        duration: 24,
+        company: 'Ocean Logistics Ltd',
+        reasonForLeaving: 'Contract completion'
+      }
+    ]
+  },
+  'demo-company_user@wavesync.com': {
+    id: 'demo-company',
+    email: 'demo-company_user@wavesync.com',
+    firstName: 'Sarah',
+    lastName: 'Johnson',
+    phone: '+44-20-7946-0961',
+    role: 'company_user' as any,
+    status: 'active' as any,
+    avatar: undefined,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+    lastLoginAt: new Date().toISOString(),
+    companyId: 'COMP-DEMO-001',
+    companyName: 'Ocean Logistics Ltd',
+    position: 'Crew Manager',
+    department: 'Operations',
+    permissions: ['view_assignments', 'create_assignments', 'manage_crew']
+  },
+  'demo-admin@wavesync.com': {
+    id: 'demo-admin',
+    email: 'demo-admin@wavesync.com',
+    firstName: 'Michael',
+    lastName: 'Brown',
+    phone: '+44-20-7946-0962',
+    role: 'admin' as any,
+    status: 'active' as any,
+    avatar: undefined,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+    lastLoginAt: new Date().toISOString(),
+    permissions: ['all'],
+    accessLevel: 'admin' as any
+  },
+  // Regular users (for non-demo login)
   'seafarer@wavesync.com': {
     id: '1',
     email: 'seafarer@wavesync.com',
@@ -131,6 +243,7 @@ const mockUsers: Record<string, User> = {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -142,11 +255,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (token && userData) {
           const parsedUser = JSON.parse(userData);
           setUser(parsedUser);
+          
+          // Check if we're in demo mode (check both localStorage and sessionStorage)
+          const demoMode = localStorage.getItem('isDemoMode') === 'true' || sessionStorage.getItem('isDemoMode') === 'true';
+          setIsDemoMode(demoMode);
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
         localStorage.removeItem('authToken');
         localStorage.removeItem('userData');
+        localStorage.removeItem('isDemoMode');
       } finally {
         setIsLoading(false);
       }
@@ -189,13 +307,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const demoLogin = async (role: 'seafarer' | 'company_user' | 'admin'): Promise<void> => {
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Get demo user based on role
+      const demoEmail = `demo-${role}@wavesync.com`;
+      const user = mockUsers[demoEmail];
+      
+      if (!user) {
+        throw new Error(`Demo user for role ${role} not found`);
+      }
+      
+      // Generate mock token
+      const token = `demo_token_${Date.now()}`;
+      
+      // Store authentication data in localStorage for demo persistence
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userData', JSON.stringify(user));
+      localStorage.setItem('isDemoMode', 'true');
+      
+      setIsDemoMode(true);
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     // Clear all storage
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
+    localStorage.removeItem('isDemoMode');
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('userData');
+    sessionStorage.removeItem('isDemoMode');
     
+    setIsDemoMode(false);
     setUser(null);
   };
 
@@ -214,7 +367,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     isLoading,
     isAuthenticated: !!user,
+    isDemoMode,
     login,
+    demoLogin,
     logout,
     updateUser
   };

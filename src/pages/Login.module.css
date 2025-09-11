@@ -182,6 +182,113 @@
   color: #1e40af;
 }
 
+/* Demo Section */
+.demoSection {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--gray-200);
+}
+
+.demoDivider {
+  position: relative;
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.demoDivider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gray-200);
+}
+
+.demoDividerText {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 var(--space-3);
+  font-size: var(--font-12);
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.demoButtons {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.demoButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: var(--radius-12);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.demoButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.demoButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.demoButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.demoIcon {
+  font-size: var(--font-20);
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.demoButtonContent {
+  flex: 1;
+}
+
+.demoButtonTitle {
+  display: block;
+  font-size: var(--font-16);
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.demoButtonSubtitle {
+  display: block;
+  font-size: var(--font-12);
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.demoNote {
+  text-align: center;
+  font-size: var(--font-12);
+  color: var(--gray-600);
+  margin: 0;
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-primary), white 95%);
+  border-radius: var(--radius-8);
+  border: 1px solid color-mix(in srgb, var(--color-primary), white 90%);
+}
+
 /* Background Elements */
 .backgroundElements {
   position: absolute;

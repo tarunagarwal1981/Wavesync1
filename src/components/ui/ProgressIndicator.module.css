@@ -1,0 +1,143 @@
+.progressContainer {
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-14);
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: var(--space-2);
+}
+
+.progressWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: var(--radius-4);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: var(--radius-4);
+  transition: width 0.8s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.percentage {
+  font-size: var(--font-12);
+  font-weight: 600;
+  color: var(--gray-600);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Variants */
+.default {
+  background: linear-gradient(90deg, var(--color-primary), #4f46e5);
+}
+
+.success {
+  background: linear-gradient(90deg, var(--color-success), #059669);
+}
+
+.warning {
+  background: linear-gradient(90deg, var(--color-warning), #d97706);
+}
+
+.danger {
+  background: linear-gradient(90deg, var(--color-error), #dc2626);
+}
+
+/* Sizes */
+.small {
+  .progressBar {
+    height: 4px;
+  }
+  
+  .label {
+    font-size: var(--font-12);
+  }
+  
+  .percentage {
+    font-size: var(--font-10);
+  }
+}
+
+.medium {
+  .progressBar {
+    height: 8px;
+  }
+}
+
+.large {
+  .progressBar {
+    height: 12px;
+  }
+  
+  .label {
+    font-size: var(--font-16);
+  }
+  
+  .percentage {
+    font-size: var(--font-14);
+  }
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .progressWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+  
+  .percentage {
+    text-align: left;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+  
+  .progressFill::after {
+    animation: none;
+  }
+}
