@@ -4,6 +4,7 @@ import { ToastProvider } from "../hooks/useToast";
 import { ToastContainer } from "../components/ui";
 import { useToast } from "../hooks/useToast";
 import { useAuth } from "../contexts/AuthContext";
+import { SupabaseAuthProvider } from "../contexts/SupabaseAuthContext";
 
 const AppContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { toasts, removeToast } = useToast();
@@ -23,9 +24,11 @@ const AppContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary>
-      <ToastProvider>
-        <AppContent>{children}</AppContent>
-      </ToastProvider>
+      <SupabaseAuthProvider>
+        <ToastProvider>
+          <AppContent>{children}</AppContent>
+        </ToastProvider>
+      </SupabaseAuthProvider>
     </ErrorBoundary>
   );
 };

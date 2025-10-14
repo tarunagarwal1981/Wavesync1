@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { NavigationProvider } from "../hooks/useNavigation";
 import Layout from "../components/layout/Layout";
 import { PageTransition, ErrorBoundary } from "../components/ui";
-import ProtectedRoute from "../components/ProtectedRoute";
+import { SupabaseProtectedRoute } from "../components/SupabaseProtectedRoute";
 import Login from "../pages/Login";
 import DashboardRouter from "../components/DashboardRouter";
 import Assignments from "../pages/Assignments";
@@ -72,293 +72,293 @@ export const AppRouter: React.FC = () => {
         
         {/* Protected Routes */}
         <Route path="/dashboard" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="WaveSync">
               {(() => {
                 console.log('🛣️ Dashboard route matched - rendering DashboardRouter');
                 return <PageTransition><ErrorBoundary><DashboardRouter /></ErrorBoundary></PageTransition>;
               })()}
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/assignments" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Assignments">
               <PageTransition><Assignments /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/tasks" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Tasks">
               <PageTransition><Tasks /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/documents" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Documents">
               <PageTransition><Documents /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/training" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Training">
               <PageTransition><Training /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/profile" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Profile">
               <PageTransition><Profile /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/notifications" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Notifications">
               <PageTransition><Notifications /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/messages" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Messages">
               <PageTransition><MessagesPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/travel" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Travel">
               <PageTransition><TravelModule /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/settings" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Settings">
               <PageTransition><SettingsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         
         {/* Seafarer specific routes */}
         <Route path="/vessel" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Vessel Information">
               <PageTransition><VesselInfoPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/ports" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Port Information">
               <PageTransition><PortInfoPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/emergency" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Emergency Contact">
               <PageTransition><EmergencyContactPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/support" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Help & Support">
               <PageTransition><HelpSupportPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         
         {/* Company User specific routes */}
         <Route path="/crew" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Crew Directory">
               <PageTransition><CrewDirectoryPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/ai-assignments" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="AI Assignments">
               <PageTransition><AIAssignmentPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/fleet" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Fleet Management">
               <PageTransition><FleetManagementPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/analytics" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Analytics & Reports">
               <PageTransition><AnalyticsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/budget" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Budget & Expenses">
               <PageTransition><BudgetPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/schedule" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Scheduling">
               <PageTransition><SchedulingPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/communications" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Communications">
               <PageTransition><CommunicationsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/company/settings" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Company Settings">
               <PageTransition><CompanySettingsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/compliance" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Compliance">
               <PageTransition><CompliancePage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/users" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="User Management">
               <PageTransition><UserManagementPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         
         {/* Admin specific routes */}
         <Route path="/admin" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Admin Dashboard">
               <PageTransition><DashboardRouter /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/analytics" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="System Analytics">
               <PageTransition><AdminAnalyticsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/performance" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Performance Monitor">
               <PageTransition><PerformanceMonitorPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/alerts" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="System Alerts">
               <PageTransition><SystemAlertsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/users" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="All Users">
               <PageTransition><AllUsersPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/companies" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Company Management">
               <PageTransition><CompanyManagementPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/permissions" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Permissions & Roles">
               <PageTransition><PermissionsRolesPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/user-analytics" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="User Analytics">
               <PageTransition><UserAnalyticsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/settings" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="System Settings">
               <PageTransition><SystemSettingsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/config" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Configuration">
               <PageTransition><ConfigurationPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/audit" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Audit Logs">
               <PageTransition><AuditLogsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/security" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Security Settings">
               <PageTransition><SecuritySettingsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/reports" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Reports & Exports">
               <PageTransition><ReportsExportsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/support" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Support Tickets">
               <PageTransition><SupportTicketsPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/docs" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="Documentation">
               <PageTransition><DocumentationPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         <Route path="/admin/updates" element={
-          <ProtectedRoute>
+          <SupabaseProtectedRoute>
             <Layout title="System Updates">
               <PageTransition><SystemUpdatesPage /></PageTransition>
             </Layout>
-          </ProtectedRoute>
+          </SupabaseProtectedRoute>
         } />
         
         {/* Catch all route */}
