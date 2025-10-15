@@ -37,7 +37,6 @@ import {
   PerformanceMonitorPage, 
   SystemAlertsPage, 
   AllUsersPage, 
-  CompanyManagementPage, 
   PermissionsRolesPage, 
   UserAnalyticsPage, 
   SystemSettingsPage, 
@@ -50,6 +49,10 @@ import {
   SystemUpdatesPage 
 } from "../pages/__stubs_admin__";
 import AIAssignmentPage from "../pages/AIAssignmentPage";
+import CompanyManagement from "../components/CompanyManagement";
+import UserManagement from "../components/UserManagement";
+import VesselManagement from "../components/VesselManagement";
+import AssignmentManagement from "../components/AssignmentManagement";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -278,15 +281,30 @@ export const AppRouter: React.FC = () => {
         } />
         <Route path="/admin/users" element={
           <SupabaseProtectedRoute>
-            <Layout title="All Users">
-              <PageTransition><AllUsersPage /></PageTransition>
+            <Layout title="User Management">
+              <PageTransition><UserManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
         <Route path="/admin/companies" element={
           <SupabaseProtectedRoute>
             <Layout title="Company Management">
-              <PageTransition><CompanyManagementPage /></PageTransition>
+              <PageTransition><CompanyManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        <Route path="/admin/vessels" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Vessel Management">
+              <PageTransition><VesselManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Company area routes */}
+        <Route path="/assignments" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Assignment Management">
+              <PageTransition><AssignmentManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />

@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null
   profile: UserProfile | null
   loading: boolean
-  signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<{ error: AuthError | null }>
+  signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<{ error: any | null }>
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<{ error: AuthError | null }>
   updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>
@@ -34,13 +34,18 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    console.log('🚀 SupabaseAuthProvider: Initializing...')
+    
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('📋 Initial session check:', session ? 'Found session' : 'No session')
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
+        console.log('👤 User found in session:', session.user.email)
         fetchUserProfile(session.user.id)
       } else {
+        console.log('❌ No user in session, setting loading to false')
         setLoading(false)
       }
     })
@@ -49,12 +54,15 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔄 Auth state change:', event, session ? 'Session exists' : 'No session')
       setSession(session)
       setUser(session?.user ?? null)
       
       if (session?.user) {
+        console.log('👤 User in auth change:', session.user.email)
         await fetchUserProfile(session.user.id)
       } else {
+        console.log('❌ No user in auth change, clearing profile and setting loading to false')
         setProfile(null)
         setLoading(false)
       }
@@ -65,22 +73,36 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      console.log('🔍 Fetching user profile for:', userId)
+      
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 10000)
+      )
+      
+      const fetchPromise = supabase
         .from('user_profiles')
         .select('*')
         .eq('id', userId)
         .single()
 
+      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any
+
       if (error) {
-        console.error('Error fetching user profile:', error)
+        console.error('❌ Error fetching user profile:', error)
+        console.error('❌ Error details:', JSON.stringify(error, null, 2))
         setProfile(null)
       } else {
+        console.log('✅ User profile loaded:', data)
         setProfile(data)
       }
     } catch (error) {
-      console.error('Error fetching user profile:', error)
+      console.error('❌ Error fetching user profile:', error)
+      console.error('❌ Error type:', typeof error)
+      console.error('❌ Error message:', error instanceof Error ? error.message : 'Unknown error')
       setProfile(null)
     } finally {
+      console.log('🔄 Setting loading to false')
       setLoading(false)
     }
   }
@@ -120,9 +142,10 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
             .from('seafarer_profiles')
             .insert({
               user_id: data.user.id,
-              rank: userData.rank || 'Cadet',
-              certificate_number: userData.certificate_number,
-              experience_years: userData.experience_years || 0,
+              // For Partial<UserProfile>, these fields are not defined; use safe defaults or omit
+              rank: 'Cadet',
+              certificate_number: null,
+              experience_years: 0,
             })
 
           if (seafarerError) {
@@ -139,12 +162,21 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('🔐 Attempting sign in for:', email)
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
-      return { error }
+      
+      if (error) {
+        console.log('❌ Sign in error:', error.message)
+        return { error }
+      } else {
+        console.log('✅ Sign in successful for:', data.user?.email)
+        return { error: null }
+      }
     } catch (error) {
+      console.log('💥 Sign in exception:', error)
       return { error: error as AuthError }
     }
   }

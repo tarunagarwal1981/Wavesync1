@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Vite provides import.meta.env at runtime; for type-safety in TS, extend ImportMetaEnv in global.d.ts.
+// At build time, treat these as strings.
+const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL as string
+const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY as string
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')

@@ -1,21 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AppProviders } from './providers/AppProviders';
-import { AuthProvider } from './contexts/AuthContext';
+// Remove legacy mock AuthProvider; use Supabase in AppProviders
 import { DemoProvider } from './contexts/DemoContext';
 import { AppProvider } from './contexts/AppContext';
 import AppRouter from './routes/AppRouter';
 import { ToastContainer } from './components/ui';
 // import InteractiveFeatures from './components/InteractiveFeatures'; // Removed - causing rendering issues
 import { useApp } from './contexts/AppContext';
-import { useAuth } from './contexts/AuthContext';
+// import { useAuth } from './contexts/AuthContext';
 
 const AppContent: React.FC = () => {
   console.log('AppContent rendering');
   console.log('AppContent timestamp:', new Date().toISOString());
   const { state, clearMessages } = useApp();
-  const { isAuthenticated } = useAuth();
-  console.log('AppContent - isAuthenticated:', isAuthenticated, 'state:', state);
+  // Using Supabase auth; legacy isAuthenticated removed
   
   const [toasts, setToasts] = React.useState<Array<{
     id: string;
@@ -61,19 +60,16 @@ const AppContent: React.FC = () => {
   return (
     <>
       {console.log('AppContent - rendering AppRouter now')}
-        <AppRouter key={isAuthenticated ? 'authenticated' : 'unauthenticated'} />
+        <AppRouter />
       {/* Only show toast notifications when authenticated */}
-      {isAuthenticated && (
-        <ToastContainer toasts={toasts} onRemove={handleToastClose} />
-      )}
+      <ToastContainer toasts={toasts} onRemove={handleToastClose} />
     </>
   );
 };
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <DemoProvider>
+    <DemoProvider>
         <AppProvider>
           <AppProviders>
             <Router>
@@ -82,7 +78,6 @@ const App: React.FC = () => {
           </AppProviders>
         </AppProvider>
       </DemoProvider>
-    </AuthProvider>
   );
 };
 

@@ -21,7 +21,20 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
-  const { user, profile, signOut } = useAuth();
+  // Safely get auth context with fallback
+  let user, profile, signOut;
+  try {
+    const authContext = useAuth();
+    user = authContext.user;
+    profile = authContext.profile;
+    signOut = authContext.signOut;
+  } catch (error) {
+    // If useAuth fails, provide fallback values
+    console.warn('Header: useAuth not available, using fallback values');
+    user = null;
+    profile = null;
+    signOut = () => Promise.resolve();
+  }
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

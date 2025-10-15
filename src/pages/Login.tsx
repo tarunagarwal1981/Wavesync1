@@ -45,9 +45,9 @@ export const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Side - Login Test */}
+      {/* Right Side - Login */}
       <div className={styles.loginSection}>
-        <SimpleLoginTest />
+        <SupabaseLogin />
       </div>
     </div>
   );

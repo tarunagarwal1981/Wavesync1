@@ -419,6 +419,24 @@ export const adminNavigation: NavigationSection[] = [
         description: "Manage companies and organizations"
       },
       {
+        id: "vessel-management",
+        title: "Vessel Management",
+        icon: Ship,
+        href: "/admin/vessels",
+        badge: 12,
+        permissions: [UserRole.ADMIN],
+        description: "Manage vessels and fleet"
+      },
+      {
+        id: "assignment-management",
+        title: "Assignment Management",
+        icon: ClipboardList,
+        href: "/admin/assignments",
+        badge: 24,
+        permissions: [UserRole.ADMIN],
+        description: "Manage seafarer assignments to vessels"
+      },
+      {
         id: "permissions-roles",
         title: "Permissions & Roles",
         icon: Key,

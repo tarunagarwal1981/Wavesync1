@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/SupabaseAuthContext'
 import { useToast } from '../hooks/useToast'
 import styles from './SupabaseLogin.module.css'
@@ -18,6 +19,7 @@ interface LoginFormData {
 export const SupabaseLogin: React.FC = () => {
   const { signIn, signUp, loading } = useAuth()
   const { addToast } = useToast()
+  const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -41,9 +43,11 @@ export const SupabaseLogin: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('📝 Form submitted, isSignUp:', isSignUp)
     
     if (isSignUp) {
       // Handle sign up
+      console.log('📝 Processing sign up...')
       const userData = {
         full_name: formData.fullName,
         user_type: formData.userType,
@@ -56,28 +60,39 @@ export const SupabaseLogin: React.FC = () => {
       const { error } = await signUp(formData.email, formData.password, userData)
       
       if (error) {
+        console.log('❌ Sign up failed:', error)
         addToast({
           type: 'error',
-          message: `Sign up failed: ${error.message}`,
+          title: 'Sign up failed',
+          description: error.message,
           duration: 5000
         })
       } else {
+        console.log('✅ Sign up successful')
         addToast({
           type: 'success',
-          message: 'Account created successfully! Please check your email to verify your account.',
+          title: 'Account created successfully!',
+          description: 'Please check your email to verify your account.',
           duration: 5000
         })
       }
     } else {
       // Handle sign in
+      console.log('🔐 Processing sign in...')
       const { error } = await signIn(formData.email, formData.password)
       
       if (error) {
+        console.log('❌ Sign in failed:', error)
         addToast({
           type: 'error',
-          message: `Sign in failed: ${error.message}`,
+          title: 'Sign in failed',
+          description: error.message,
           duration: 5000
         })
+      } else {
+        console.log('✅ Sign in successful, navigating to dashboard')
+        // Navigate to dashboard on successful sign-in
+        navigate('/dashboard', { replace: true })
       }
     }
   }
