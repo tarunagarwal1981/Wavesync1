@@ -46,7 +46,7 @@ const MyAssignments: React.FC = () => {
         .from('assignments')
         .select(`
           *,
-          vessel:vessels(name, type),
+          vessel:vessels(name, vessel_type),
           company:companies(name)
         `)
         .eq('seafarer_id', profile.id)
@@ -57,7 +57,7 @@ const MyAssignments: React.FC = () => {
       const transformedData = data?.map(item => ({
         ...item,
         vessel_name: item.vessel?.name || 'Unknown Vessel',
-        vessel_type: item.vessel?.type || 'N/A',
+        vessel_type: item.vessel?.vessel_type || 'N/A',
         company_name: item.company?.name || 'Unknown Company'
       })) || [];
 

@@ -94,9 +94,9 @@ BEGIN
     VALUES (
       'assignment_accepted',
       'Assignment Accepted',
-      '{{seafarer_name}} has accepted the assignment for {{vessel_name}} as {{position}}.',
+      '{{seafarer_name}} has accepted the assignment: {{assignment_title}}',
       'success',
-      '["seafarer_name", "vessel_name", "position"]'::jsonb,
+      '["seafarer_name", "assignment_title"]'::jsonb,
       true,
       NOW()
     );
@@ -111,9 +111,9 @@ BEGIN
     VALUES (
       'assignment_rejected',
       'Assignment Rejected',
-      '{{seafarer_name}} has rejected the assignment for {{vessel_name}}. Reason: {{reason}}',
+      '{{seafarer_name}} has rejected the assignment: {{assignment_title}}. Reason: {{reason}}',
       'warning',
-      '["seafarer_name", "vessel_name", "reason"]'::jsonb,
+      '["seafarer_name", "assignment_title", "reason"]'::jsonb,
       true,
       NOW()
     );
@@ -151,12 +151,20 @@ BEGIN
   -- Build notification based on response type
   IF NEW.response_type = 'accepted' THEN
     v_notification_title := 'Assignment Accepted';
-    v_notification_message := v_seafarer.full_name || ' has accepted the assignment for ' || 
-      COALESCE(v_assignment.vessel_name, 'vessel') || ' as ' || v_assignment.position || '.';
+    v_notification_message := v_seafarer.full_name || ' has accepted the assignment: ' || 
+      COALESCE(v_assignment.title, 'Assignment') || 
+      CASE WHEN v_assignment.vessel_name IS NOT NULL 
+        THEN ' (' || v_assignment.vessel_name || ')'
+        ELSE ''
+      END || '.';
   ELSE
     v_notification_title := 'Assignment Rejected';
-    v_notification_message := v_seafarer.full_name || ' has rejected the assignment for ' || 
-      COALESCE(v_assignment.vessel_name, 'vessel') || '.';
+    v_notification_message := v_seafarer.full_name || ' has rejected the assignment: ' || 
+      COALESCE(v_assignment.title, 'Assignment') ||
+      CASE WHEN v_assignment.vessel_name IS NOT NULL 
+        THEN ' (' || v_assignment.vessel_name || ')'
+        ELSE ''
+      END || '.';
     
     IF NEW.notes IS NOT NULL THEN
       v_notification_message := v_notification_message || ' Reason: ' || NEW.notes;
@@ -169,17 +177,17 @@ BEGIN
     title,
     message,
     type,
-    is_read,
+    read,
     created_at
   )
   SELECT 
     up.id,
     v_notification_title,
     v_notification_message,
-    CASE 
+    (CASE 
       WHEN NEW.response_type = 'accepted' THEN 'success'
       ELSE 'warning'
-    END,
+    END)::notification_type,
     false,
     NOW()
   FROM user_profiles up
