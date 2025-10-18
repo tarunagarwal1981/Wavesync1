@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/useToast';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import styles from './AssignmentManagement.module.css';
 
 interface Assignment {
@@ -57,6 +58,7 @@ interface Vessel {
 }
 
 interface AssignmentFormData {
+  title: string;
   seafarer_id: string;
   vessel_id: string;
   departure_port: string;
@@ -69,6 +71,7 @@ interface AssignmentFormData {
 }
 
 const AssignmentManagement: React.FC = () => {
+  const { profile } = useAuth();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [seafarers, setSeafarers] = useState<Seafarer[]>([]);
   const [vessels, setVessels] = useState<Vessel[]>([]);
@@ -76,6 +79,7 @@ const AssignmentManagement: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
   const [formData, setFormData] = useState<AssignmentFormData>({
+    title: '',
     seafarer_id: '',
     vessel_id: '',
     departure_port: '',
@@ -102,19 +106,34 @@ const AssignmentManagement: React.FC = () => {
         .select(`
           *,
           seafarer:user_profiles!seafarer_id(full_name, email),
-          vessel:vessels!vessel_id(name, vessel_type, company:companies(name)),
-          seafarer_profile:seafarer_profiles!seafarer_id(rank)
+          vessel:vessels!vessel_id(name, vessel_type, company:companies(name))
         `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
+      
+      // Fetch seafarer profiles for rank information
+      const seafarerIds = (data || []).map(a => a.seafarer_id).filter(Boolean);
+      let seafarerProfiles = {};
+      
+      if (seafarerIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('seafarer_profiles')
+          .select('user_id, rank')
+          .in('user_id', seafarerIds);
+        
+        seafarerProfiles = (profiles || []).reduce((acc, profile) => {
+          acc[profile.user_id] = profile;
+          return acc;
+        }, {});
+      }
       
       // Transform the data to match our interface
       const transformedData = (data || []).map(assignment => ({
         ...assignment,
         seafarer: {
           ...assignment.seafarer,
-          rank: assignment.seafarer_profile?.rank
+          rank: seafarerProfiles[assignment.seafarer_id]?.rank || 'N/A'
         }
       }));
       
@@ -188,12 +207,24 @@ const AssignmentManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate that we have a company_id
+    if (!profile?.company_id) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        description: 'Unable to determine company. Please contact support.',
+        duration: 5000
+      });
+      return;
+    }
+    
     try {
       if (editingAssignment) {
         // Update existing assignment
         const { error } = await supabase
           .from('assignments')
           .update({
+            title: formData.title,
             vessel_id: formData.vessel_id,
             departure_port: formData.departure_port,
             arrival_port: formData.arrival_port,
@@ -218,6 +249,8 @@ const AssignmentManagement: React.FC = () => {
         const { error } = await supabase
           .from('assignments')
           .insert({
+            title: formData.title,
+            company_id: profile?.company_id,
             seafarer_id: formData.seafarer_id,
             vessel_id: formData.vessel_id,
             departure_port: formData.departure_port,
@@ -256,6 +289,7 @@ const AssignmentManagement: React.FC = () => {
   const handleEdit = (assignment: Assignment) => {
     setEditingAssignment(assignment);
     setFormData({
+      title: assignment.title || '',
       seafarer_id: assignment.seafarer_id,
       vessel_id: assignment.vessel_id,
       departure_port: assignment.departure_port || '',
@@ -330,6 +364,7 @@ const AssignmentManagement: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
+      title: '',
       seafarer_id: '',
       vessel_id: '',
       departure_port: '',
@@ -413,6 +448,19 @@ const AssignmentManagement: React.FC = () => {
 
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="title">Assignment Title *</label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Enter assignment title"
+                  />
+                </div>
+
                 <div className={styles.formGroup}>
                   <label htmlFor="seafarer_id">Seafarer *</label>
                   <select

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/useToast';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import styles from './VesselManagement.module.css';
 
 interface Vessel {
@@ -31,7 +32,6 @@ interface VesselFormData {
   imo_number: string;
   vessel_type: string;
   flag: string;
-  company_id: string;
   status: string;
   capacity: number;
   built_year: number;
@@ -39,6 +39,7 @@ interface VesselFormData {
 }
 
 const VesselManagement: React.FC = () => {
+  const { profile } = useAuth();
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,6 @@ const VesselManagement: React.FC = () => {
     imo_number: '',
     vessel_type: 'container',
     flag: '',
-    company_id: '',
     status: 'active',
     capacity: 0,
     built_year: new Date().getFullYear(),
@@ -60,9 +60,14 @@ const VesselManagement: React.FC = () => {
   useEffect(() => {
     fetchVessels();
     fetchCompanies();
-  }, []);
+  }, [profile?.company_id]);
 
   const fetchVessels = async () => {
+    if (!profile?.company_id) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -71,6 +76,7 @@ const VesselManagement: React.FC = () => {
           *,
           company:companies(name)
         `)
+        .eq('company_id', profile.company_id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -114,6 +120,17 @@ const VesselManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate that we have a company_id
+    if (!profile?.company_id) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        description: 'Unable to determine company. Please contact support.',
+        duration: 5000
+      });
+      return;
+    }
+    
     try {
       if (editingVessel) {
         // Update existing vessel
@@ -124,7 +141,6 @@ const VesselManagement: React.FC = () => {
             imo_number: formData.imo_number || null,
             vessel_type: formData.vessel_type,
             flag: formData.flag || null,
-            company_id: formData.company_id || null,
             status: formData.status,
             capacity: formData.capacity || null,
             built_year: formData.built_year || null,
@@ -149,7 +165,7 @@ const VesselManagement: React.FC = () => {
             imo_number: formData.imo_number || null,
             vessel_type: formData.vessel_type,
             flag: formData.flag || null,
-            company_id: formData.company_id || null,
+            company_id: profile?.company_id,
             status: formData.status,
             capacity: formData.capacity || null,
             built_year: formData.built_year || null,
@@ -185,7 +201,6 @@ const VesselManagement: React.FC = () => {
       imo_number: vessel.imo_number || '',
       vessel_type: vessel.vessel_type,
       flag: vessel.flag || '',
-      company_id: vessel.company_id || '',
       status: vessel.status,
       capacity: vessel.capacity || 0,
       built_year: vessel.built_year || new Date().getFullYear(),
@@ -230,7 +245,6 @@ const VesselManagement: React.FC = () => {
       imo_number: '',
       vessel_type: 'container',
       flag: '',
-      company_id: '',
       status: 'active',
       capacity: 0,
       built_year: new Date().getFullYear(),
@@ -366,22 +380,6 @@ const VesselManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
-                  <label htmlFor="company_id">Company</label>
-                  <select
-                    id="company_id"
-                    name="company_id"
-                    value={formData.company_id}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select a company</option>
-                    {companies.map(company => (
-                      <option key={company.id} value={company.id}>
-                        {company.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
 
                 <div className={styles.formGroup}>
                   <label htmlFor="status">Status *</label>

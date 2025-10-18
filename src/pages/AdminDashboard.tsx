@@ -1,12 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/SupabaseAuthContext';
+import { supabase } from '../lib/supabase';
 import CompanyManagement from '../components/CompanyManagement';
 import UserManagement from '../components/UserManagement';
 import styles from './AdminDashboard.module.css';
 
+interface DashboardStats {
+  totalUsers: number;
+  totalCompanies: number;
+  activeAssignments: number;
+  totalSeafarers: number;
+  totalVessels: number;
+  pendingDocuments: number;
+}
+
 const AdminDashboard = () => {
   const { user, profile } = useAuth();
   const [activeView, setActiveView] = useState<'dashboard' | 'companies' | 'users'>('dashboard');
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    totalCompanies: 0,
+    activeAssignments: 0,
+    totalSeafarers: 0,
+    totalVessels: 0,
+    pendingDocuments: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Fetch dashboard statistics
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch all stats in parallel
+        const [usersResult, companiesResult, assignmentsResult, seafarersResult, vesselsResult, documentsResult] = await Promise.all([
+          supabase.from('user_profiles').select('id', { count: 'exact', head: true }),
+          supabase.from('companies').select('id', { count: 'exact', head: true }),
+          supabase.from('assignments').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+          supabase.from('user_profiles').select('id', { count: 'exact', head: true }).eq('user_type', 'seafarer'),
+          supabase.from('vessels').select('id', { count: 'exact', head: true }),
+          supabase.from('documents').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+        ]);
+
+        setStats({
+          totalUsers: usersResult.count || 0,
+          totalCompanies: companiesResult.count || 0,
+          activeAssignments: assignmentsResult.count || 0,
+          totalSeafarers: seafarersResult.count || 0,
+          totalVessels: vesselsResult.count || 0,
+          pendingDocuments: documentsResult.count || 0
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
   
   const renderContent = () => {
     switch (activeView) {
@@ -29,8 +82,8 @@ const AdminDashboard = () => {
                 </div>
                 <div className={styles.statContent}>
                   <h3 className={styles.statTitle}>Total Users</h3>
-                  <p className={styles.statNumber}>1,245</p>
-                  <p className={styles.statSubtext}>Active users</p>
+                  <p className={styles.statNumber}>{loading ? '...' : stats.totalUsers}</p>
+                  <p className={styles.statSubtext}>{stats.totalSeafarers} seafarers</p>
                 </div>
               </div>
               
@@ -46,8 +99,8 @@ const AdminDashboard = () => {
                 </div>
                 <div className={styles.statContent}>
                   <h3 className={styles.statTitle}>Companies</h3>
-                  <p className={styles.statNumber}>68</p>
-                  <p className={styles.statSubtext}>Registered companies</p>
+                  <p className={styles.statNumber}>{loading ? '...' : stats.totalCompanies}</p>
+                  <p className={styles.statSubtext}>{stats.totalVessels} vessels</p>
                 </div>
               </div>
               
@@ -62,8 +115,8 @@ const AdminDashboard = () => {
                 </div>
                 <div className={styles.statContent}>
                   <h3 className={styles.statTitle}>Active Assignments</h3>
-                  <p className={styles.statNumber}>234</p>
-                  <p className={styles.statSubtext}>Currently active</p>
+                  <p className={styles.statNumber}>{loading ? '...' : stats.activeAssignments}</p>
+                  <p className={styles.statSubtext}>{stats.pendingDocuments} pending docs</p>
                 </div>
               </div>
               

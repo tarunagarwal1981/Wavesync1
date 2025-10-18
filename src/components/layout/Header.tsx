@@ -13,6 +13,7 @@ import {
   FileText,
   GraduationCap
 } from 'lucide-react';
+import NotificationBell from '../NotificationBell';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -36,7 +37,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
     signOut = () => Promise.resolve();
   }
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogout = async () => {
@@ -44,34 +44,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
     setShowUserMenu(false);
   };
 
-  const notifications = [
-    {
-      id: 1,
-      title: 'New Assignment Available',
-      message: 'MV Ocean Pioneer - Chief Officer position',
-      time: '2 hours ago',
-      unread: true,
-      type: 'assignment'
-    },
-    {
-      id: 2,
-      title: 'Document Expiring Soon',
-      message: 'Medical Certificate expires in 15 days',
-      time: '1 day ago',
-      unread: true,
-      type: 'document'
-    },
-    {
-      id: 3,
-      title: 'Training Completed',
-      message: 'Basic Safety Training certificate issued',
-      time: '3 days ago',
-      unread: false,
-      type: 'training'
-    }
-  ];
-
-  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <header className={styles.header}>
@@ -108,51 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
       {/* Header Actions */}
       <div className={styles.actionsSection}>
         {/* Notifications */}
-        <div className={styles.notificationContainer}>
-          <button 
-            className={styles.notificationButton}
-            onClick={() => setShowNotifications(!showNotifications)}
-          >
-            <Bell size={20} />
-            {unreadCount > 0 && (
-              <span className={styles.notificationBadge}>{unreadCount}</span>
-            )}
-          </button>
-
-          {/* Notifications Dropdown */}
-          {showNotifications && (
-            <div className={styles.notificationDropdown}>
-              <div className={styles.notificationHeader}>
-                <h3>Notifications</h3>
-                <button 
-                  className={styles.markAllRead}
-                  onClick={() => setShowNotifications(false)}
-                >
-                  Mark all read
-                </button>
-              </div>
-              <div className={styles.notificationList}>
-                {notifications.map((notification) => (
-                  <div 
-                    key={notification.id} 
-                    className={`${styles.notificationItem} ${notification.unread ? styles.unread : ''}`}
-                  >
-                    <div className={styles.notificationIcon}>
-                      {notification.type === 'assignment' && <Anchor size={16} />}
-                      {notification.type === 'document' && <FileText size={16} />}
-                      {notification.type === 'training' && <GraduationCap size={16} />}
-                    </div>
-                    <div className={styles.notificationContent}>
-                      <h4 className={styles.notificationTitle}>{notification.title}</h4>
-                      <p className={styles.notificationMessage}>{notification.message}</p>
-                      <span className={styles.notificationTime}>{notification.time}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <NotificationBell />
 
         {/* User Profile */}
         <div className={styles.userContainer}>

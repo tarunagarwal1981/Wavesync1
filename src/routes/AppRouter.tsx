@@ -12,7 +12,6 @@ import Documents from "../pages/Documents";
 import Training from "../pages/Training";
 import Profile from "../pages/Profile";
 import Notifications from "../pages/Notifications";
-import TravelModule from "../components/TravelModule";
 import { 
   MessagesPage, 
   SettingsPage, 
@@ -22,8 +21,6 @@ import {
   HelpSupportPage 
 } from "../pages/__stubs__";
 import { 
-  CrewDirectoryPage, 
-  FleetManagementPage, 
   AnalyticsPage, 
   BudgetPage, 
   SchedulingPage, 
@@ -32,6 +29,7 @@ import {
   CompliancePage, 
   UserManagementPage 
 } from "../pages/__stubs_company__";
+import CrewDirectory from "../components/CrewDirectory";
 import { 
   AdminAnalyticsPage, 
   PerformanceMonitorPage, 
@@ -53,6 +51,9 @@ import CompanyManagement from "../components/CompanyManagement";
 import UserManagement from "../components/UserManagement";
 import VesselManagement from "../components/VesselManagement";
 import AssignmentManagement from "../components/AssignmentManagement";
+import DocumentManagement from "../components/DocumentManagement";
+import TravelManagement from "../components/TravelManagement";
+import MyTravel from "../components/MyTravel";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -84,9 +85,9 @@ export const AppRouter: React.FC = () => {
             </Layout>
           </SupabaseProtectedRoute>
         } />
-        <Route path="/assignments" element={
+        <Route path="/my-assignments" element={
           <SupabaseProtectedRoute>
-            <Layout title="Assignments">
+            <Layout title="My Assignments">
               <PageTransition><Assignments /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
@@ -98,10 +99,26 @@ export const AppRouter: React.FC = () => {
             </Layout>
           </SupabaseProtectedRoute>
         } />
-        <Route path="/documents" element={
+        <Route path="/my-documents" element={
           <SupabaseProtectedRoute>
-            <Layout title="Documents">
-              <PageTransition><Documents /></PageTransition>
+            <Layout title="My Documents">
+              <PageTransition><DocumentManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Seafarer Travel */}
+        <Route path="/my-travel" element={
+          <SupabaseProtectedRoute>
+            <Layout title="My Travel">
+              <PageTransition><MyTravel /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Company Document Management */}
+        <Route path="/company/documents" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Document Management">
+              <PageTransition><DocumentManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
@@ -130,13 +147,6 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="Messages">
               <PageTransition><MessagesPage /></PageTransition>
-            </Layout>
-          </SupabaseProtectedRoute>
-        } />
-        <Route path="/travel" element={
-          <SupabaseProtectedRoute>
-            <Layout title="Travel">
-              <PageTransition><TravelModule /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
@@ -182,7 +192,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/crew" element={
           <SupabaseProtectedRoute>
             <Layout title="Crew Directory">
-              <PageTransition><CrewDirectoryPage /></PageTransition>
+              <PageTransition><CrewDirectory /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
@@ -196,7 +206,15 @@ export const AppRouter: React.FC = () => {
         <Route path="/fleet" element={
           <SupabaseProtectedRoute>
             <Layout title="Fleet Management">
-              <PageTransition><FleetManagementPage /></PageTransition>
+              <PageTransition><VesselManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Travel Management */}
+        <Route path="/travel" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Travel Management">
+              <PageTransition><TravelManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />

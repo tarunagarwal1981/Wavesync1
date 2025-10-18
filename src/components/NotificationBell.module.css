@@ -1,0 +1,106 @@
+/* Notification Bell Container */
+.notificationBell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+}
+
+.notificationBell:hover {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.notificationBell:active {
+  transform: scale(0.95);
+}
+
+/* Bell Icon */
+.bellIcon {
+  font-size: 1.25rem;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.notificationBell:hover .bellIcon {
+  color: #374151;
+}
+
+/* Badge for Unread Count */
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Loading Indicator */
+.loadingIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notificationBell {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .bellIcon {
+    font-size: 1.125rem;
+  }
+  
+  .badge {
+    font-size: 0.6875rem;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+  }
+}
+
