@@ -234,6 +234,53 @@ travel_expenses
 
 ---
 
+### 6. **Travel Documents System** ✅
+**Files**: 
+- `src/components/TravelDocuments.tsx` (399 lines)
+- `src/components/TravelDocuments.module.css` (232 lines)
+- `travel-document-notification-simple.sql` (74 lines)
+
+#### Features:
+**For Company/Manning Users:**
+- ✅ Upload travel documents for seafarers
+- ✅ Multiple document types (e-tickets, visas, hotel confirmations, insurance, etc.)
+- ✅ File validation (10MB limit, specific types)
+- ✅ Delete documents if needed
+- ✅ Track uploader and upload date
+
+**For Seafarers:**
+- ✅ View all travel documents in modal
+- ✅ Download documents for offline access
+- ✅ See document metadata (type, size, uploader, date)
+- ✅ Receive notifications when documents are uploaded
+- ✅ Read-only access (cannot delete)
+
+#### Document Types Supported:
+- ✈️ E-Ticket
+- 🎫 Boarding Pass
+- 🏨 Hotel Confirmation
+- 🛂 Visa
+- 🛡️ Insurance
+- 📋 Itinerary
+- 🧾 Receipt
+- 📄 Other
+
+#### Storage:
+- **Bucket**: `travel-documents` (Supabase Storage)
+- **Organization**: Files organized by travel request ID
+- **Path Structure**: `{travel_request_id}/{timestamp}_{filename}`
+- **Security**: RLS policies for access control
+
+#### Notifications:
+- ✅ Automatic notification when document uploaded
+- ✅ Includes document type and travel date
+- ✅ Links to specific document
+- ✅ Shows uploader information
+
+**See `TRAVEL_DOCUMENTS_COMPLETE.md` for detailed documentation.**
+
+---
+
 ## 🚀 Setup Instructions
 
 ### **Step 1: Database Setup**
@@ -257,7 +304,14 @@ travel-notification-triggers.sql
 travel-storage-setup.sql
 ```
 
-### **Step 4: Test the System**
+### **Step 4: Document Notification Setup**
+```bash
+# Set up document upload notifications
+# In Supabase SQL Editor, execute:
+travel-document-notification-simple.sql
+```
+
+### **Step 5: Test the System**
 1. Login as company user
 2. Navigate to "Travel Planning"
 3. Create a test travel request
@@ -282,8 +336,10 @@ travel-storage-setup.sql
 
 ### **Notification Tests**:
 - [ ] Run `travel-notification-triggers.sql`
+- [ ] Run `travel-document-notification-simple.sql`
 - [ ] Create new travel request → Check notification
 - [ ] Approve travel request → Check notification
+- [ ] Upload document → Check notification
 - [ ] Book travel → Check notification
 - [ ] Confirm travel → Check notification
 - [ ] Add flight booking → Check notification

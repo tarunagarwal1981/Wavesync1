@@ -20,6 +20,9 @@ interface Assignment {
   actual_end_date?: string;
   salary?: number;
   status: string;
+  response_status?: string;
+  response_date?: string;
+  response_notes?: string;
   priority: string;
   notes?: string;
   created_at: string;
@@ -401,6 +404,15 @@ const AssignmentManagement: React.FC = () => {
     return colors[priority] || 'var(--text-secondary)';
   };
 
+  const getResponseStatusColor = (responseStatus: string) => {
+    const colors: { [key: string]: string } = {
+      'pending': '#f59e0b',
+      'accepted': '#10b981',
+      'rejected': '#ef4444'
+    };
+    return colors[responseStatus] || 'var(--text-secondary)';
+  };
+
   const getAvailableSeafarers = () => {
     return seafarers.filter(seafarer => 
       seafarer.availability_status === 'available' || 
@@ -633,6 +645,11 @@ const AssignmentManagement: React.FC = () => {
                   <div className={styles.assignmentStatus} style={{ color: getStatusColor(assignment.status) }}>
                     {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                   </div>
+                  {assignment.response_status && (
+                    <div className={styles.responseStatus} style={{ color: getResponseStatusColor(assignment.response_status) }}>
+                      {assignment.response_status === 'pending' ? '⏳' : assignment.response_status === 'accepted' ? '✅' : '❌'} {assignment.response_status.charAt(0).toUpperCase() + assignment.response_status.slice(1)}
+                    </div>
+                  )}
                   <div className={styles.assignmentPriority} style={{ color: getPriorityColor(assignment.priority) }}>
                     {assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)} Priority
                   </div>

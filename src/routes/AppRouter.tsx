@@ -6,7 +6,7 @@ import { PageTransition, ErrorBoundary } from "../components/ui";
 import { SupabaseProtectedRoute } from "../components/SupabaseProtectedRoute";
 import Login from "../pages/Login";
 import DashboardRouter from "../components/DashboardRouter";
-import Assignments from "../pages/Assignments";
+import MyAssignments from "../components/MyAssignments";
 import Tasks from "../pages/Tasks";
 import Documents from "../pages/Documents";
 import Training from "../pages/Training";
@@ -88,7 +88,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/my-assignments" element={
           <SupabaseProtectedRoute>
             <Layout title="My Assignments">
-              <PageTransition><Assignments /></PageTransition>
+              <PageTransition><MyAssignments /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
