@@ -53,6 +53,7 @@ import DocumentManagement from "../components/DocumentManagement";
 import TravelManagement from "../components/TravelManagement";
 import MyTravel from "../components/MyTravel";
 import TaskManagement from "../components/TaskManagement";
+import ExpiryDashboard from "../components/ExpiryDashboard";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -222,6 +223,14 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="Task Management">
               <PageTransition><TaskManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Document Expiry & Compliance Dashboard */}
+        <Route path="/expiry-dashboard" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Document Expiry & Compliance">
+              <PageTransition><ExpiryDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />

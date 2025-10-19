@@ -257,6 +257,15 @@ export const companyNavigation: NavigationSection[] = [
         description: "Manage crew documents and certificates"
       },
       {
+        id: "expiry-dashboard",
+        title: "Document Expiry",
+        icon: AlertTriangle,
+        href: "/expiry-dashboard",
+        badge: "⚠️",
+        permissions: [UserRole.COMPANY_USER],
+        description: "Monitor certificate expiration and compliance"
+      },
+      {
         id: "training-programs",
         title: "Training Programs",
         icon: GraduationCap,

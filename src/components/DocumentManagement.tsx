@@ -18,6 +18,7 @@ import {
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/SupabaseAuthContext';
 import { useToast } from '../hooks/useToast';
+import { getExpiryStatusInfo, getExpiryText } from '../utils/expiryHelpers';
 import styles from './DocumentManagement.module.css';
 
 // Types
@@ -761,22 +762,38 @@ const DocumentManagement: React.FC = () => {
                     </div>
                   </div>
                   
-                  {document.expiry_date && (
-                    <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>Expiry:</span>
-                      <span 
-                        className={`${styles.expiryDate} ${
-                          isExpired(document.expiry_date) ? styles.expired :
-                          isExpiringSoon(document.expiry_date) ? styles.expiringSoon : ''
-                        }`}
-                      >
-                        <Calendar className={styles.calendarIcon} />
-                        {new Date(document.expiry_date).toLocaleDateString()}
-                        {isExpired(document.expiry_date) && <span className={styles.expiredLabel}> (Expired)</span>}
-                        {isExpiringSoon(document.expiry_date) && <span className={styles.expiringLabel}> (Expiring Soon)</span>}
-                      </span>
-                    </div>
-                  )}
+                  {document.expiry_date && (() => {
+                    const expiryInfo = getExpiryStatusInfo(document.expiry_date);
+                    const expiryText = getExpiryText(document.expiry_date);
+                    
+                    return (
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>Expiry:</span>
+                        <div className={styles.expiryBadgeContainer}>
+                          <span 
+                            className={styles.expiryBadge}
+                            style={{ 
+                              backgroundColor: expiryInfo.bgColor,
+                              color: expiryInfo.color,
+                              borderColor: expiryInfo.color
+                            }}
+                          >
+                            <Calendar className={styles.calendarIcon} size={14} />
+                            {new Date(document.expiry_date).toLocaleDateString()}
+                          </span>
+                          <span 
+                            className={styles.expiryStatusBadge}
+                            style={{ 
+                              backgroundColor: expiryInfo.bgColor,
+                              color: expiryInfo.color
+                            }}
+                          >
+                            {expiryInfo.icon} {expiryText}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })()}
                   
                   <div className={styles.detailRow}>
                     <span className={styles.detailLabel}>Uploaded:</span>
