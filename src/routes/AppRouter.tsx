@@ -54,6 +54,9 @@ import TaskManagement from "../components/TaskManagement";
 import ExpiryDashboard from "../components/ExpiryDashboard";
 import AnalyticsDashboard from "../components/AnalyticsDashboard";
 import MessagingPage from "../components/MessagingPage";
+import AIAgentSettings from "../components/admin/AIAgentSettings";
+import AIAssignmentQueue from "../components/company/AIAssignmentQueue";
+import AIPerformanceDashboard from "../components/company/AIPerformanceDashboard";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -409,6 +412,29 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="System Updates">
               <PageTransition><SystemUpdatesPage /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        
+        {/* AI Agent Routes */}
+        <Route path="/admin/ai-settings" element={
+          <SupabaseProtectedRoute>
+            <Layout title="AI Agent Settings">
+              <PageTransition><AIAgentSettings /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        <Route path="/ai-assignments" element={
+          <SupabaseProtectedRoute>
+            <Layout title="AI Assignments">
+              <PageTransition><AIAssignmentQueue /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        <Route path="/ai-performance" element={
+          <SupabaseProtectedRoute>
+            <Layout title="AI Performance">
+              <PageTransition><AIPerformanceDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />

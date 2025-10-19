@@ -314,13 +314,12 @@ Respond in JSON format:
    */
   private async getAvailableSeafarers(rank: string): Promise<Seafarer[]> {
     const { data, error } = await supabase
-      .from('seafarer_profile')
+      .from('seafarer_profiles')
       .select(`
         *,
         user:user_profiles(*),
         documents:documents(*)
       `)
-      .eq('company_id', this.companyId)
       .eq('rank', rank)
       .eq('availability_status', 'available');
 
