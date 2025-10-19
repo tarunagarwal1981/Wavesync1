@@ -1,20 +1,19 @@
-import { useAuth } from '../contexts/AuthContext';
-import { UserRole } from '../types';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import SeafarerDashboard from '../pages/SeafarerDashboard';
 import CompanyDashboard from '../pages/CompanyDashboard';
 import AdminDashboard from '../pages/AdminDashboard';
 
 const DashboardRouter = () => {
-  const { user } = useAuth();
+  const { profile } = useAuth();
   
-  console.log('🎯 DashboardRouter - user role:', user?.role);
+  console.log('🎯 DashboardRouter - user type:', profile?.user_type);
   
-  if (user?.role === UserRole.COMPANY_USER) {
+  if (profile?.user_type === 'company') {
     console.log('🎯 Rendering CompanyDashboard');
     return <CompanyDashboard />;
   }
   
-  if (user?.role === UserRole.ADMIN || user?.role === UserRole.SUPER_ADMIN) {
+  if (profile?.user_type === 'admin') {
     console.log('🎯 Rendering AdminDashboard');
     return <AdminDashboard />;
   }

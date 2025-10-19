@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { 
   Search, 
-  Bell, 
   User, 
   LogOut, 
   Settings, 
   Menu,
   ChevronDown,
-  Anchor,
-  Waves,
-  FileText,
-  GraduationCap
+  Waves
 } from 'lucide-react';
+import NotificationBell from '../NotificationBell';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -21,44 +18,28 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
-  const { user, logout, isDemoMode } = useAuth();
+  // Safely get auth context with fallback
+  let user, profile, signOut;
+  try {
+    const authContext = useAuth();
+    user = authContext.user;
+    profile = authContext.profile;
+    signOut = authContext.signOut;
+  } catch (error) {
+    // If useAuth fails, provide fallback values
+    console.warn('Header: useAuth not available, using fallback values');
+    user = null;
+    profile = null;
+    signOut = () => Promise.resolve();
+  }
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut();
     setShowUserMenu(false);
   };
 
-  const notifications = [
-    {
-      id: 1,
-      title: 'New Assignment Available',
-      message: 'MV Ocean Pioneer - Chief Officer position',
-      time: '2 hours ago',
-      unread: true,
-      type: 'assignment'
-    },
-    {
-      id: 2,
-      title: 'Document Expiring Soon',
-      message: 'Medical Certificate expires in 15 days',
-      time: '1 day ago',
-      unread: true,
-      type: 'document'
-    },
-    {
-      id: 3,
-      title: 'Training Completed',
-      message: 'Basic Safety Training certificate issued',
-      time: '3 days ago',
-      unread: false,
-      type: 'training'
-    }
-  ];
-
-  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <header className={styles.header}>
@@ -70,10 +51,10 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
       {/* Page Title */}
       <div className={styles.titleSection}>
         <h1 className={styles.pageTitle}>{title}</h1>
-        {isDemoMode && (
+        {profile?.user_type && (
           <div className={styles.demoBadge}>
             <Waves size={14} />
-            <span>Demo Mode</span>
+            <span>{profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1)}</span>
           </div>
         )}
       </div>
@@ -95,51 +76,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
       {/* Header Actions */}
       <div className={styles.actionsSection}>
         {/* Notifications */}
-        <div className={styles.notificationContainer}>
-          <button 
-            className={styles.notificationButton}
-            onClick={() => setShowNotifications(!showNotifications)}
-          >
-            <Bell size={20} />
-            {unreadCount > 0 && (
-              <span className={styles.notificationBadge}>{unreadCount}</span>
-            )}
-          </button>
-
-          {/* Notifications Dropdown */}
-          {showNotifications && (
-            <div className={styles.notificationDropdown}>
-              <div className={styles.notificationHeader}>
-                <h3>Notifications</h3>
-                <button 
-                  className={styles.markAllRead}
-                  onClick={() => setShowNotifications(false)}
-                >
-                  Mark all read
-                </button>
-              </div>
-              <div className={styles.notificationList}>
-                {notifications.map((notification) => (
-                  <div 
-                    key={notification.id} 
-                    className={`${styles.notificationItem} ${notification.unread ? styles.unread : ''}`}
-                  >
-                    <div className={styles.notificationIcon}>
-                      {notification.type === 'assignment' && <Anchor size={16} />}
-                      {notification.type === 'document' && <FileText size={16} />}
-                      {notification.type === 'training' && <GraduationCap size={16} />}
-                    </div>
-                    <div className={styles.notificationContent}>
-                      <h4 className={styles.notificationTitle}>{notification.title}</h4>
-                      <p className={styles.notificationMessage}>{notification.message}</p>
-                      <span className={styles.notificationTime}>{notification.time}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <NotificationBell />
 
         {/* User Profile */}
         <div className={styles.userContainer}>
@@ -148,15 +85,15 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
             <div className={styles.userAvatar}>
-              {user?.avatar ? (
-                <img src={user.avatar} alt={user.firstName} />
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt={profile.full_name} />
               ) : (
                 <User size={20} />
               )}
             </div>
             <div className={styles.userInfo}>
-              <span className={styles.userName}>{user?.firstName} {user?.lastName}</span>
-              <span className={styles.userRole}>{user?.rank || user?.position}</span>
+              <span className={styles.userName}>{profile?.full_name}</span>
+              <span className={styles.userRole}>{profile?.user_type}</span>
             </div>
             <ChevronDown size={16} className={styles.chevron} />
           </button>
@@ -166,16 +103,16 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
             <div className={styles.userDropdown}>
               <div className={styles.userDropdownHeader}>
                 <div className={styles.userDropdownAvatar}>
-                  {user?.avatar ? (
-                    <img src={user.avatar} alt={user.firstName} />
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt={profile.full_name} />
                   ) : (
                     <User size={24} />
                   )}
                 </div>
                 <div className={styles.userDropdownInfo}>
-                  <h3>{user?.firstName} {user?.lastName}</h3>
+                  <h3>{profile?.full_name}</h3>
                   <p>{user?.email}</p>
-                  <span className={styles.userDropdownRole}>{user?.rank || user?.position}</span>
+                  <span className={styles.userDropdownRole}>{profile?.user_type}</span>
                 </div>
               </div>
               <div className={styles.userDropdownMenu}>

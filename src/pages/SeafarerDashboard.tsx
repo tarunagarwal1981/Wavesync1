@@ -1,19 +1,15 @@
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/SupabaseAuthContext';
+import { useNavigate } from 'react-router-dom';
 import styles from './SeafarerDashboard.module.css';
 
 const SeafarerDashboard = () => {
-  const { user, isDemoMode } = useAuth();
+  const { profile } = useAuth();
+  const navigate = useNavigate();
   
   return (
     <div className={styles.dashboard}>
-      {isDemoMode && (
-        <div className={styles.demoBanner}>
-          Demo Mode: Seafarer Dashboard - {user?.firstName} {user?.lastName}
-        </div>
-      )}
-      
       <h1 className={styles.title}>
-        Welcome back, {user?.firstName}!
+        Welcome back, {profile?.full_name || 'Seafarer'}!
       </h1>
       
       <div className={styles.statsGrid}>
@@ -91,13 +87,28 @@ const SeafarerDashboard = () => {
       <div className={styles.actionsCard}>
         <h2 className={styles.actionsTitle}>Quick Actions</h2>
         <div className={styles.actionsGrid}>
-          <button className={`${styles.actionButton} ${styles.primary}`}>
+          <button 
+            className={`${styles.actionButton} ${styles.primary}`}
+            onClick={() => navigate('/my-assignments')}
+          >
             View Assignments
           </button>
-          <button className={`${styles.actionButton} ${styles.success}`}>
+          <button 
+            className={`${styles.actionButton} ${styles.success}`}
+            onClick={() => navigate('/my-documents')}
+          >
             Upload Document
           </button>
-          <button className={`${styles.actionButton} ${styles.secondary}`}>
+          <button 
+            className={`${styles.actionButton} ${styles.info}`}
+            onClick={() => navigate('/my-travel')}
+          >
+            View Travel
+          </button>
+          <button 
+            className={`${styles.actionButton} ${styles.secondary}`}
+            onClick={() => navigate('/tasks')}
+          >
             Check Tasks
           </button>
         </div>

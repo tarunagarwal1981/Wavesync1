@@ -24,7 +24,7 @@ export const NAV_ITEMS: NavigationItem[] = [
   {
     key: "dashboard",
     label: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: Home,
   },
   {

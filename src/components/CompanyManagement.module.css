@@ -1,0 +1,454 @@
+/* Company Management Styles */
+.container {
+  padding: var(--space-6);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  animation: fadeIn var(--transition-slow) ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: var(--font-32);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--letter-tight);
+  margin: 0;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-12);
+  font-weight: var(--font-medium);
+  font-size: var(--font-14);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.createButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-light);
+  border-top: 4px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Container */
+.formContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+}
+
+.formCard {
+  background: var(--bg-surface);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn var(--transition-base) ease-out;
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.formHeader h2 {
+  font-size: var(--font-20);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-8);
+  transition: all var(--transition-base);
+}
+
+.closeButton:hover {
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+}
+
+.form {
+  padding: var(--space-6);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.formGroup:last-of-type {
+  grid-column: 1 / -1;
+}
+
+.formGroup label {
+  font-size: var(--font-14);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-8);
+  font-size: var(--font-14);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  transition: all var(--transition-base);
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formActions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-6);
+}
+
+.cancelButton {
+  padding: var(--space-3) var(--space-5);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-8);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.cancelButton:hover {
+  background: var(--bg-surface-2);
+}
+
+.submitButton {
+  padding: var(--space-3) var(--space-5);
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-8);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.submitButton:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Companies Grid */
+.companiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: var(--space-6);
+}
+
+/* Empty State */
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyIcon {
+  margin-bottom: var(--space-4);
+  color: var(--text-muted);
+}
+
+.emptyState h3 {
+  font-size: var(--font-20);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.emptyState p {
+  margin: 0 0 var(--space-6) 0;
+  font-size: var(--font-14);
+}
+
+/* Company Card */
+.companyCard {
+  background: var(--gradient-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-16);
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+  animation: fadeIn var(--transition-slow) ease-out;
+}
+
+.companyCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.companyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.companyInfo {
+  flex: 1;
+}
+
+.companyName {
+  font-size: var(--font-18);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.companyEmail {
+  font-size: var(--font-14);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.companyActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.editButton,
+.deleteButton {
+  padding: var(--space-2);
+  border: none;
+  border-radius: var(--radius-8);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton {
+  background: var(--bg-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.editButton:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.deleteButton {
+  background: var(--bg-surface);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+.deleteButton:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+.companyDetails {
+  margin-bottom: var(--space-4);
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-14);
+  color: var(--text-secondary);
+}
+
+.detailItem:last-child {
+  margin-bottom: 0;
+}
+
+.detailItem svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.detailItem a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.detailItem a:hover {
+  text-decoration: underline;
+}
+
+.companyFooter {
+  border-top: 1px solid var(--border-light);
+  padding-top: var(--space-3);
+}
+
+.createdDate {
+  font-size: var(--font-12);
+  color: var(--text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-4);
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+  
+  .title {
+    font-size: var(--font-24);
+    text-align: center;
+  }
+  
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .companiesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .companyHeader {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .companyActions {
+    align-self: flex-end;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .container,
+  .companyCard,
+  .formCard {
+    animation: none;
+  }
+  
+  .companyCard:hover,
+  .createButton:hover,
+  .submitButton:hover {
+    transform: none;
+  }
+  
+  .spinner {
+    animation: none;
+  }
+}

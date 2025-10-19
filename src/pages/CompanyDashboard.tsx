@@ -1,16 +1,14 @@
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import styles from './CompanyDashboard.module.css';
 
 const CompanyDashboard = () => {
-  const { user, isDemoMode } = useAuth();
+  const { profile } = useAuth();
   
   return (
     <div className={styles.dashboard}>
-      {isDemoMode && (
-        <div className={styles.demoBanner}>
-          Demo Mode: Company Dashboard - {user?.firstName} {user?.lastName}
-        </div>
-      )}
+      <div className={styles.demoBanner}>
+        Welcome: {profile?.full_name} - {profile?.user_type}
+      </div>
       
       <h1 className={styles.title}>
         Company Dashboard

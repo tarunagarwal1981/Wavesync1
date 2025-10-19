@@ -1,21 +1,19 @@
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 
 const Assignments = () => {
-  const { user, isDemoMode } = useAuth();
+  const { profile } = useAuth();
   
   return (
     <div style={{ padding: '24px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {isDemoMode && (
-        <div style={{
-          backgroundColor: '#3b82f6',
-          color: 'white',
-          padding: '12px 20px',
-          borderRadius: '8px',
-          marginBottom: '24px'
-        }}>
-          Demo Mode: Assignments - {user?.firstName} {user?.lastName}
-        </div>
-      )}
+      <div style={{
+        backgroundColor: '#3b82f6',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        marginBottom: '24px'
+      }}>
+        Welcome: {profile?.full_name} - {profile?.user_type}
+      </div>
       
       <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '24px' }}>
         Assignments

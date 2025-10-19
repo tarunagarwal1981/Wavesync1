@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { SidebarBase } from './SidebarBase';
 import { getNavigationForRole } from '../../utils/navigationConfig';
 
@@ -14,13 +14,13 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   onClose, 
   isCollapsed = false 
 }) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   
-  if (!user) {
+  if (!user || !profile) {
     return null;
   }
 
-  const navigationSections = getNavigationForRole(user.role);
+  const navigationSections = getNavigationForRole(profile.user_type);
 
   return (
     <SidebarBase

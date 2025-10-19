@@ -57,7 +57,7 @@ export const seafarerNavigation: NavigationSection[] = [
         id: "dashboard",
         title: "Dashboard",
         icon: Home,
-        href: "/",
+        href: "/dashboard",
         permissions: [UserRole.SEAFARER],
         description: "Overview of assignments and tasks"
       },
@@ -73,7 +73,7 @@ export const seafarerNavigation: NavigationSection[] = [
         id: "assignments",
         title: "My Assignments",
         icon: Briefcase,
-        href: "/assignments",
+        href: "/my-assignments",
         badge: 2,
         permissions: [UserRole.SEAFARER],
         description: "Current and pending assignments"
@@ -89,9 +89,9 @@ export const seafarerNavigation: NavigationSection[] = [
       },
       {
         id: "documents",
-        title: "Documents",
+        title: "My Documents",
         icon: FileText,
-        href: "/documents",
+        href: "/my-documents",
         badge: 1,
         permissions: [UserRole.SEAFARER],
         description: "Personal documents and certificates"
@@ -120,22 +120,12 @@ export const seafarerNavigation: NavigationSection[] = [
     title: "Travel & Logistics",
     items: [
       {
-        id: "travel-plans",
-        title: "Travel Plans",
+        id: "my-travel",
+        title: "My Travel",
         icon: Plane,
-        href: "/travel",
+        href: "/my-travel",
         permissions: [UserRole.SEAFARER],
-        description: "View travel arrangements",
-        dataSection: "plans"
-      },
-      {
-        id: "travel-documents",
-        title: "Travel Documents",
-        icon: FileCheck,
-        href: "/travel",
-        permissions: [UserRole.SEAFARER],
-        description: "View and download travel documents",
-        dataSection: "documents"
+        description: "View travel arrangements and itinerary"
       },
       {
         id: "vessel-info",
@@ -195,7 +185,7 @@ export const companyNavigation: NavigationSection[] = [
         id: "dashboard",
         title: "Dashboard",
         icon: Home,
-        href: "/",
+        href: "/dashboard",
         permissions: [UserRole.COMPANY_USER],
         description: "Overview of crew and operations"
       },
@@ -236,13 +226,13 @@ export const companyNavigation: NavigationSection[] = [
         description: "Create and manage assignments"
       },
       {
-        id: "task-oversight",
-        title: "Task Oversight",
+        id: "task-management",
+        title: "Task Management",
         icon: CheckSquare,
-        href: "/tasks",
+        href: "/task-management",
         badge: 15,
         permissions: [UserRole.COMPANY_USER],
-        description: "Monitor crew tasks"
+        description: "Create and manage crew tasks"
       },
       {
         id: "analytics-reports",
@@ -258,13 +248,22 @@ export const companyNavigation: NavigationSection[] = [
     title: "Operations",
     items: [
       {
-        id: "document-center",
-        title: "Document Center",
+        id: "document-management",
+        title: "Document Management",
         icon: FileText,
-        href: "/documents",
+        href: "/company/documents",
         badge: 7,
         permissions: [UserRole.COMPANY_USER],
-        description: "Manage crew documents"
+        description: "Manage crew documents and certificates"
+      },
+      {
+        id: "expiry-dashboard",
+        title: "Document Expiry",
+        icon: AlertTriangle,
+        href: "/expiry-dashboard",
+        badge: "⚠️",
+        permissions: [UserRole.COMPANY_USER],
+        description: "Monitor certificate expiration and compliance"
       },
       {
         id: "training-programs",
@@ -319,13 +318,12 @@ export const companyNavigation: NavigationSection[] = [
     title: "Administration",
     items: [
       {
-        id: "communications",
-        title: "Communications",
+        id: "messages",
+        title: "Messages",
         icon: MessageSquare,
-        href: "/communications",
-        badge: 5,
+        href: "/messages",
         permissions: [UserRole.COMPANY_USER],
-        description: "Company communications"
+        description: "Direct messaging with crew"
       },
       {
         id: "company-settings",
@@ -417,6 +415,24 @@ export const adminNavigation: NavigationSection[] = [
         badge: 8,
         permissions: [UserRole.ADMIN],
         description: "Manage companies and organizations"
+      },
+      {
+        id: "vessel-management",
+        title: "Vessel Management",
+        icon: Ship,
+        href: "/admin/vessels",
+        badge: 12,
+        permissions: [UserRole.ADMIN],
+        description: "Manage vessels and fleet"
+      },
+      {
+        id: "assignment-management",
+        title: "Assignment Management",
+        icon: ClipboardList,
+        href: "/admin/assignments",
+        badge: 24,
+        permissions: [UserRole.ADMIN],
+        description: "Manage seafarer assignments to vessels"
       },
       {
         id: "permissions-roles",
@@ -514,14 +530,15 @@ export const adminNavigation: NavigationSection[] = [
 ];
 
 // Helper function to get navigation based on user role
-export const getNavigationForRole = (role: UserRole): NavigationSection[] => {
+export const getNavigationForRole = (role: string): NavigationSection[] => {
   switch (role) {
-    case UserRole.SEAFARER:
+    case 'seafarer':
       return seafarerNavigation;
-    case UserRole.COMPANY_USER:
+    case 'company':
+    case 'company_user':
       return companyNavigation;
-    case UserRole.ADMIN:
-    case UserRole.SUPER_ADMIN:
+    case 'admin':
+    case 'super_admin':
       return adminNavigation;
     default:
       return seafarerNavigation;
@@ -529,12 +546,17 @@ export const getNavigationForRole = (role: UserRole): NavigationSection[] => {
 };
 
 // Helper function to get all navigation items flattened
-export const getAllNavigationItems = (role: UserRole): NavigationItem[] => {
+export const getAllNavigationItems = (role: string): NavigationItem[] => {
   const sections = getNavigationForRole(role);
   return sections.flatMap(section => section.items);
 };
 
 // Helper function to check if user has permission for navigation item
-export const hasNavigationPermission = (item: NavigationItem, userRole: UserRole): boolean => {
-  return item.permissions.includes(userRole);
+export const hasNavigationPermission = (item: NavigationItem, userRole: string): boolean => {
+  // Convert string role to UserRole enum for comparison
+  const roleEnum = userRole === 'company' ? UserRole.COMPANY_USER : 
+                   userRole === 'seafarer' ? UserRole.SEAFARER :
+                   userRole === 'admin' ? UserRole.ADMIN :
+                   userRole === 'super_admin' ? UserRole.SUPER_ADMIN : UserRole.SEAFARER;
+  return item.permissions.includes(roleEnum);
 };
