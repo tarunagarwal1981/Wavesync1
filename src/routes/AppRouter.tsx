@@ -12,7 +12,6 @@ import Training from "../pages/Training";
 import Profile from "../pages/Profile";
 import Notifications from "../pages/Notifications";
 import { 
-  MessagesPage, 
   SettingsPage, 
   VesselInfoPage, 
   PortInfoPage, 
@@ -54,6 +53,7 @@ import MyTravel from "../components/MyTravel";
 import TaskManagement from "../components/TaskManagement";
 import ExpiryDashboard from "../components/ExpiryDashboard";
 import AnalyticsDashboard from "../components/AnalyticsDashboard";
+import MessagingPage from "../components/MessagingPage";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -146,7 +146,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/messages" element={
           <SupabaseProtectedRoute>
             <Layout title="Messages">
-              <PageTransition><MessagesPage /></PageTransition>
+              <PageTransition><MessagingPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />

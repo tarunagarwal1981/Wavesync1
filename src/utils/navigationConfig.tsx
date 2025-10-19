@@ -318,13 +318,12 @@ export const companyNavigation: NavigationSection[] = [
     title: "Administration",
     items: [
       {
-        id: "communications",
-        title: "Communications",
+        id: "messages",
+        title: "Messages",
         icon: MessageSquare,
-        href: "/communications",
-        badge: 5,
+        href: "/messages",
         permissions: [UserRole.COMPANY_USER],
-        description: "Company communications"
+        description: "Direct messaging with crew"
       },
       {
         id: "company-settings",
