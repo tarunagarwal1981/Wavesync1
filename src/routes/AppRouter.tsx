@@ -20,7 +20,6 @@ import {
   HelpSupportPage 
 } from "../pages/__stubs__";
 import { 
-  AnalyticsPage, 
   BudgetPage, 
   SchedulingPage, 
   CommunicationsPage, 
@@ -54,6 +53,7 @@ import TravelManagement from "../components/TravelManagement";
 import MyTravel from "../components/MyTravel";
 import TaskManagement from "../components/TaskManagement";
 import ExpiryDashboard from "../components/ExpiryDashboard";
+import AnalyticsDashboard from "../components/AnalyticsDashboard";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -237,7 +237,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/analytics" element={
           <SupabaseProtectedRoute>
             <Layout title="Analytics & Reports">
-              <PageTransition><AnalyticsPage /></PageTransition>
+              <PageTransition><AnalyticsDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
