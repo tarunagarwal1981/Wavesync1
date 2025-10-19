@@ -84,10 +84,16 @@ const DocumentManagement: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [editingDocument, setEditingDocument] = useState<Document | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [approvalModal, setApprovalModal] = useState<{
+    show: boolean;
+    document: Document | null;
+    action: 'approve' | 'reject' | null;
+  }>({ show: false, document: null, action: null });
+  const [approvalComments, setApprovalComments] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState<DocumentFormData>({
     user_id: '',
@@ -385,25 +391,74 @@ const DocumentManagement: React.FC = () => {
     }
   };
 
-  const handleStatusChange = async (documentId: string, newStatus: string) => {
+  const handleApprovalClick = (document: Document, action: 'approve' | 'reject') => {
+    setApprovalModal({ show: true, document, action });
+    setApprovalComments('');
+  };
+
+  const handleApprovalSubmit = async () => {
+    if (!approvalModal.document || !approvalModal.action) return;
+
+    // Require comments for rejection
+    if (approvalModal.action === 'reject' && !approvalComments.trim()) {
+      addToast({
+        type: 'error',
+        title: 'Comments Required',
+        description: 'Please provide a reason for rejection',
+        duration: 5000
+      });
+      return;
+    }
+
     try {
+      const newStatus = approvalModal.action === 'approve' ? 'approved' : 'rejected';
+      
+      // Update document status
       const { error } = await supabase
         .from('documents')
         .update({
           status: newStatus,
-          verified_at: newStatus === 'approved' ? new Date().toISOString() : null,
-          verified_by: newStatus === 'approved' ? profile?.id : null
+          verified_at: new Date().toISOString(),
+          verified_by: profile?.id,
+          description: approvalComments 
+            ? `${approvalModal.document.description || ''}\n\n--- ${approvalModal.action === 'approve' ? 'Approval' : 'Rejection'} Note ---\n${approvalComments}`
+            : approvalModal.document.description
         })
-        .eq('id', documentId);
+        .eq('id', approvalModal.document.id);
 
       if (error) throw error;
+
+      // Send notification to seafarer
+      if (approvalModal.document.user_id) {
+        const notificationTitle = approvalModal.action === 'approve' 
+          ? 'Document Approved ✅'
+          : 'Document Rejected ❌';
+        
+        const notificationMessage = approvalModal.action === 'approve'
+          ? `Your document "${approvalModal.document.filename}" has been approved by the company.${approvalComments ? `\n\nNote: ${approvalComments}` : ''}`
+          : `Your document "${approvalModal.document.filename}" has been rejected and needs to be re-uploaded.\n\nReason: ${approvalComments}`;
+
+        await supabase
+          .from('notifications')
+          .insert({
+            user_id: approvalModal.document.user_id,
+            title: notificationTitle,
+            message: notificationMessage,
+            type: approvalModal.action === 'approve' ? 'success' : 'error',
+            read: false,
+            created_at: new Date().toISOString()
+          });
+      }
 
       addToast({
         type: 'success',
         title: `Document ${newStatus} successfully`,
+        description: `Seafarer has been notified`,
         duration: 5000
       });
 
+      setApprovalModal({ show: false, document: null, action: null });
+      setApprovalComments('');
       fetchDocuments();
     } catch (error) {
       console.error('Error updating document status:', error);
@@ -802,18 +857,32 @@ const DocumentManagement: React.FC = () => {
                   <div className={styles.statusActions}>
                     <button 
                       className={styles.approveButton}
-                      onClick={() => handleStatusChange(document.id, 'approved')}
+                      onClick={() => handleApprovalClick(document, 'approve')}
                     >
                       <CheckCircle className={styles.buttonIcon} />
                       Approve
                     </button>
                     <button 
                       className={styles.rejectButton}
-                      onClick={() => handleStatusChange(document.id, 'rejected')}
+                      onClick={() => handleApprovalClick(document, 'reject')}
                     >
                       <XCircle className={styles.buttonIcon} />
                       Reject
                     </button>
+                  </div>
+                )}
+
+                {/* Show approval/rejection status */}
+                {document.status === 'approved' && document.verified_at && (
+                  <div className={styles.approvalStatus}>
+                    <CheckCircle className={styles.approvalIcon} />
+                    <span>Approved on {new Date(document.verified_at).toLocaleDateString()}</span>
+                  </div>
+                )}
+                {document.status === 'rejected' && document.verified_at && (
+                  <div className={styles.rejectionStatus}>
+                    <XCircle className={styles.rejectionIcon} />
+                    <span>Rejected on {new Date(document.verified_at).toLocaleDateString()}</span>
                   </div>
                 )}
               </div>
@@ -821,6 +890,76 @@ const DocumentManagement: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Approval/Rejection Modal */}
+      {approvalModal.show && approvalModal.document && approvalModal.action && (
+        <div className={styles.modalOverlay} onClick={() => setApprovalModal({ show: false, document: null, action: null })}>
+          <div className={styles.approvalModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.approvalModalHeader}>
+              <h3>
+                {approvalModal.action === 'approve' ? '✅ Approve Document' : '❌ Reject Document'}
+              </h3>
+              <button
+                className={styles.closeModalButton}
+                onClick={() => setApprovalModal({ show: false, document: null, action: null })}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.approvalModalBody}>
+              <div className={styles.documentPreview}>
+                <p><strong>Document:</strong> {approvalModal.document.filename}</p>
+                <p><strong>Type:</strong> {approvalModal.document.document_type}</p>
+                <p><strong>Uploaded by:</strong> {approvalModal.document.user?.full_name}</p>
+                {approvalModal.document.expiry_date && (
+                  <p><strong>Expiry Date:</strong> {new Date(approvalModal.document.expiry_date).toLocaleDateString()}</p>
+                )}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="approvalComments">
+                  {approvalModal.action === 'approve' ? 'Comments (optional)' : 'Reason for Rejection *'}
+                </label>
+                <textarea
+                  id="approvalComments"
+                  className={styles.approvalTextarea}
+                  value={approvalComments}
+                  onChange={(e) => setApprovalComments(e.target.value)}
+                  placeholder={
+                    approvalModal.action === 'approve'
+                      ? 'Add any notes or instructions...'
+                      : 'Please specify why this document is being rejected...'
+                  }
+                  rows={4}
+                  required={approvalModal.action === 'reject'}
+                />
+              </div>
+
+              {approvalModal.action === 'reject' && (
+                <div className={styles.warningMessage}>
+                  ⚠️ The seafarer will be notified and will need to re-upload the document.
+                </div>
+              )}
+            </div>
+
+            <div className={styles.approvalModalFooter}>
+              <button
+                className={styles.cancelModalButton}
+                onClick={() => setApprovalModal({ show: false, document: null, action: null })}
+              >
+                Cancel
+              </button>
+              <button
+                className={approvalModal.action === 'approve' ? styles.confirmApproveButton : styles.confirmRejectButton}
+                onClick={handleApprovalSubmit}
+              >
+                {approvalModal.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

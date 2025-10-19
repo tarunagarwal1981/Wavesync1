@@ -669,6 +669,210 @@
   margin: 0;
 }
 
+/* Approval/Rejection Status */
+.approvalStatus,
+.rejectionStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.approvalStatus {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.rejectionStatus {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.approvalIcon,
+.rejectionIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Approval Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.approvalModal {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.approvalModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.approvalModalHeader h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.closeModalButton {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.closeModalButton:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.approvalModalBody {
+  padding: 24px;
+}
+
+.documentPreview {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.documentPreview p {
+  margin: 8px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+.documentPreview strong {
+  color: #111827;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.approvalTextarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111827;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.approvalTextarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.warningMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #78350f;
+  font-weight: 500;
+}
+
+.approvalModalFooter {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 20px 24px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.cancelModalButton,
+.confirmApproveButton,
+.confirmRejectButton {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancelModalButton {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.cancelModalButton:hover {
+  background: #e5e7eb;
+}
+
+.confirmApproveButton {
+  background: #10b981;
+  color: white;
+}
+
+.confirmApproveButton:hover {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.confirmRejectButton {
+  background: #ef4444;
+  color: white;
+}
+
+.confirmRejectButton:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
