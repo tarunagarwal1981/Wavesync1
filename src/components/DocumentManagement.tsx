@@ -453,19 +453,6 @@ const DocumentManagement: React.FC = () => {
     }
   };
 
-  const isExpiringSoon = (expiryDate: string) => {
-    if (!expiryDate) return false;
-    const expiry = new Date(expiryDate);
-    const now = new Date();
-    const daysUntilExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    return daysUntilExpiry <= 30 && daysUntilExpiry > 0;
-  };
-
-  const isExpired = (expiryDate: string) => {
-    if (!expiryDate) return false;
-    return new Date(expiryDate) < new Date();
-  };
-
   // Filter documents
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||

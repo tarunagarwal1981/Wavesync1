@@ -31,6 +31,51 @@ const MyTasks: React.FC = () => {
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [completionNotes, setCompletionNotes] = useState('');
   const [completing, setCompleting] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [documentType, setDocumentType] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+
+  // Helper functions
+  const requiresDocumentUpload = (category: string): boolean => {
+    return ['document_upload', 'training', 'medical', 'compliance'].includes(category);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      
+      // Validate file size (10MB max)
+      if (file.size > 10 * 1024 * 1024) {
+        addToast({
+          title: 'File too large',
+          description: 'Please select a file smaller than 10MB',
+          type: 'error'
+        });
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        addToast({
+          title: 'Invalid file type',
+          description: 'Please select a PDF, image, or Word document',
+          type: 'error'
+        });
+        return;
+      }
+
+      setUploadedFile(file);
+    }
+  };
 
   // Fetch tasks
   const fetchTasks = async () => {
@@ -78,15 +123,79 @@ const MyTasks: React.FC = () => {
   const handleCompleteClick = (task: Task) => {
     setSelectedTask(task);
     setCompletionNotes('');
+    setUploadedFile(null);
+    setDocumentType('');
+    setExpiryDate('');
     setShowCompleteModal(true);
   };
 
   const handleCompleteSubmit = async () => {
-    if (!selectedTask) return;
+    if (!selectedTask || !profile) return;
+
+    // Check if document upload is required but not provided
+    if (requiresDocumentUpload(selectedTask.category) && !uploadedFile) {
+      addToast({
+        title: 'Document Required',
+        description: 'Please upload the required certificate/document before completing this task',
+        type: 'error'
+      });
+      return;
+    }
+
+    // Check if document type is provided when file is uploaded
+    if (uploadedFile && !documentType) {
+      addToast({
+        title: 'Document Type Required',
+        description: 'Please select the document type',
+        type: 'error'
+      });
+      return;
+    }
 
     try {
       setCompleting(true);
 
+      let documentId = null;
+
+      // Upload document if provided
+      if (uploadedFile) {
+        // Upload file to storage
+        const fileExt = uploadedFile.name.split('.').pop();
+        const fileName = `${profile.id}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('documents')
+          .upload(fileName, uploadedFile);
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('documents')
+          .getPublicUrl(fileName);
+
+        // Create document record
+        const { data: docData, error: docError } = await supabase
+          .from('documents')
+          .insert({
+            user_id: profile.id,
+            filename: uploadedFile.name,
+            file_url: publicUrl,
+            file_type: uploadedFile.type,
+            file_size: uploadedFile.size,
+            document_type: documentType,
+            expiry_date: expiryDate || null,
+            status: 'pending',
+            uploaded_at: new Date().toISOString()
+          })
+          .select('id')
+          .single();
+
+        if (docError) throw docError;
+        documentId = docData.id;
+      }
+
+      // Complete the task
       const { error } = await supabase.rpc('complete_task', {
         p_task_id: selectedTask.id,
         p_completion_notes: completionNotes || null
@@ -94,15 +203,32 @@ const MyTasks: React.FC = () => {
 
       if (error) throw error;
 
+      // Link document to task if uploaded
+      if (documentId) {
+        await supabase
+          .from('tasks')
+          .update({ 
+            completion_notes: completionNotes 
+              ? `${completionNotes}\n\nDocument uploaded: ${uploadedFile?.name}`
+              : `Document uploaded: ${uploadedFile?.name}`
+          })
+          .eq('id', selectedTask.id);
+      }
+
       addToast({
         title: 'Task Completed',
-        description: `"${selectedTask.title}" has been marked as complete`,
+        description: uploadedFile 
+          ? `"${selectedTask.title}" completed and document uploaded successfully`
+          : `"${selectedTask.title}" has been marked as complete`,
         type: 'success'
       });
 
       setShowCompleteModal(false);
       setSelectedTask(null);
       setCompletionNotes('');
+      setUploadedFile(null);
+      setDocumentType('');
+      setExpiryDate('');
       fetchTasks();
     } catch (error: any) {
       console.error('Error completing task:', error);
@@ -356,8 +482,70 @@ const MyTasks: React.FC = () => {
               <p className={styles.modalText}>
                 You are about to mark <strong>"{selectedTask.title}"</strong> as complete.
               </p>
+
+              {/* Document Upload - Required for certain task categories */}
+              {requiresDocumentUpload(selectedTask.category) && (
+                <div className={styles.uploadSection}>
+                  <div className={styles.requiredBadge}>
+                    <span className={styles.requiredIcon}>⚠️</span>
+                    <span className={styles.requiredText}>Document Upload Required</span>
+                  </div>
+                  
+                  <label className={styles.label}>
+                    Upload Certificate/Document *
+                  </label>
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                    onChange={handleFileChange}
+                    className={styles.fileInput}
+                    required
+                  />
+                  {uploadedFile && (
+                    <div className={styles.filePreview}>
+                      <span className={styles.fileIcon}>📄</span>
+                      <span className={styles.fileName}>{uploadedFile.name}</span>
+                      <span className={styles.fileSize}>
+                        ({(uploadedFile.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
+                    </div>
+                  )}
+
+                  <label className={styles.label}>
+                    Document Type *
+                  </label>
+                  <select
+                    className={styles.select}
+                    value={documentType}
+                    onChange={(e) => setDocumentType(e.target.value)}
+                    required
+                  >
+                    <option value="">Select document type</option>
+                    <option value="STCW Certificate">STCW Certificate</option>
+                    <option value="Passport">Passport</option>
+                    <option value="Visa">Visa</option>
+                    <option value="Medical Certificate">Medical Certificate</option>
+                    <option value="Seamans Book">Seaman's Book</option>
+                    <option value="Training Certificate">Training Certificate</option>
+                    <option value="Safety Certificate">Safety Certificate</option>
+                    <option value="Other">Other Certificate</option>
+                  </select>
+
+                  <label className={styles.label}>
+                    Expiry Date (if applicable)
+                  </label>
+                  <input
+                    type="date"
+                    className={styles.input}
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+              )}
+
               <label className={styles.label}>
-                Completion Notes (optional)
+                Completion Notes {requiresDocumentUpload(selectedTask.category) ? '(optional)' : ''}
               </label>
               <textarea
                 className={styles.textarea}
