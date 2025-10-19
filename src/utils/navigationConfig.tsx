@@ -226,13 +226,13 @@ export const companyNavigation: NavigationSection[] = [
         description: "Create and manage assignments"
       },
       {
-        id: "task-oversight",
-        title: "Task Oversight",
+        id: "task-management",
+        title: "Task Management",
         icon: CheckSquare,
-        href: "/tasks",
+        href: "/task-management",
         badge: 15,
         permissions: [UserRole.COMPANY_USER],
-        description: "Monitor crew tasks"
+        description: "Create and manage crew tasks"
       },
       {
         id: "analytics-reports",

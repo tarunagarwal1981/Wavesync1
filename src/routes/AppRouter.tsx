@@ -54,6 +54,7 @@ import AssignmentManagement from "../components/AssignmentManagement";
 import DocumentManagement from "../components/DocumentManagement";
 import TravelManagement from "../components/TravelManagement";
 import MyTravel from "../components/MyTravel";
+import TaskManagement from "../components/TaskManagement";
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -215,6 +216,14 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="Travel Management">
               <PageTransition><TravelManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+        } />
+        {/* Task Management */}
+        <Route path="/task-management" element={
+          <SupabaseProtectedRoute>
+            <Layout title="Task Management">
+              <PageTransition><TaskManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
         } />
