@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   Upload, 
   FileText, 
-  Download, 
   Eye, 
   Edit, 
   Trash2, 
@@ -14,8 +13,7 @@ import {
   Filter,
   Plus,
   Calendar,
-  User,
-  FileCheck
+  User
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/SupabaseAuthContext';
@@ -234,7 +232,7 @@ const DocumentManagement: React.FC = () => {
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}/${Date.now()}.${fileExt}`;
     
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('documents')
       .upload(fileName, file);
 

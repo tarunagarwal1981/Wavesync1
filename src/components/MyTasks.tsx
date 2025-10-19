@@ -87,7 +87,7 @@ const MyTasks: React.FC = () => {
     try {
       setCompleting(true);
 
-      const { data, error} = await supabase.rpc('complete_task', {
+      const { error } = await supabase.rpc('complete_task', {
         p_task_id: selectedTask.id,
         p_completion_notes: completionNotes || null
       });

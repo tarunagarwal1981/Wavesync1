@@ -15,7 +15,7 @@ interface DashboardStats {
 }
 
 const AdminDashboard = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [activeView, setActiveView] = useState<'dashboard' | 'companies' | 'users'>('dashboard');
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,

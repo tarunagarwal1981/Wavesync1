@@ -1,6 +1,5 @@
 import React from 'react';
 import { SupabaseLogin } from '../components/SupabaseLogin';
-import { SimpleLoginTest } from '../components/SimpleLoginTest';
 import styles from './Login.module.css';
 
 export const Login: React.FC = () => {

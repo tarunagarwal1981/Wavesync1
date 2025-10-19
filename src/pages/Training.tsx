@@ -1,11 +1,11 @@
 import { useAuth } from '../contexts/SupabaseAuthContext';
 
 const Training = () => {
-  const { user, isDemoMode } = useAuth();
+  const { profile } = useAuth();
   
   return (
     <div style={{ padding: '24px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {isDemoMode && (
+      {profile && (
         <div style={{
           backgroundColor: '#3b82f6',
           color: 'white',
@@ -13,7 +13,7 @@ const Training = () => {
           borderRadius: '8px',
           marginBottom: '24px'
         }}>
-          Demo Mode: Training - {user?.firstName} {user?.lastName}
+          Training - {profile?.full_name}
         </div>
       )}
       

@@ -1,11 +1,11 @@
 import { useAuth } from '../contexts/SupabaseAuthContext';
 
 const Profile = () => {
-  const { user, isDemoMode } = useAuth();
+  const { user, profile } = useAuth();
   
   return (
     <div style={{ padding: '24px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {isDemoMode && (
+      {profile && (
         <div style={{
           backgroundColor: '#3b82f6',
           color: 'white',
@@ -13,7 +13,7 @@ const Profile = () => {
           borderRadius: '8px',
           marginBottom: '24px'
         }}>
-          Demo Mode: Profile - {user?.firstName} {user?.lastName}
+          Profile - {profile?.full_name}
         </div>
       )}
       
@@ -25,10 +25,10 @@ const Profile = () => {
         <h2 style={{ marginBottom: '20px' }}>Personal Information</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>First Name</label>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Full Name</label>
             <input 
               type="text" 
-              value={user?.firstName || ''} 
+              value={profile?.full_name || ''} 
               readOnly
               style={{ 
                 width: '100%', 
@@ -41,10 +41,10 @@ const Profile = () => {
           </div>
           
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Last Name</label>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>User Type</label>
             <input 
               type="text" 
-              value={user?.lastName || ''} 
+              value={profile?.user_type || ''} 
               readOnly
               style={{ 
                 width: '100%', 
@@ -60,7 +60,7 @@ const Profile = () => {
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Email</label>
             <input 
               type="email" 
-              value={user?.email || ''} 
+              value={user?.email || profile?.email || ''} 
               readOnly
               style={{ 
                 width: '100%', 
@@ -76,7 +76,7 @@ const Profile = () => {
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Phone</label>
             <input 
               type="tel" 
-              value={user?.phone || ''} 
+              value={profile?.phone || ''} 
               readOnly
               style={{ 
                 width: '100%', 

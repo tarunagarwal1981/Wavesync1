@@ -104,7 +104,6 @@ const TravelDocuments: React.FC<TravelDocumentsProps> = ({
       setUploading(true);
 
       // Generate unique file path
-      const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${Date.now()}_${selectedFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
       const filePath = `${travelRequestId}/${fileName}`;
 

@@ -2,12 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   Filter, 
-  Users, 
-  Ship, 
-  Calendar, 
-  Clock,
-  MapPin,
-  Phone,
+  Users,
   MoreVertical,
   Download,
   Eye,

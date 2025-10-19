@@ -1,11 +1,10 @@
 import { useAuth } from '../contexts/SupabaseAuthContext';
-import { UserRole } from '../types';
 import SeafarerDashboard from '../pages/SeafarerDashboard';
 import CompanyDashboard from '../pages/CompanyDashboard';
 import AdminDashboard from '../pages/AdminDashboard';
 
 const DashboardRouter = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   
   console.log('🎯 DashboardRouter - user type:', profile?.user_type);
   

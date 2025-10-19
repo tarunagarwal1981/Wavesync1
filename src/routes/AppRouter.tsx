@@ -8,7 +8,6 @@ import Login from "../pages/Login";
 import DashboardRouter from "../components/DashboardRouter";
 import MyAssignments from "../components/MyAssignments";
 import Tasks from "../pages/Tasks";
-import Documents from "../pages/Documents";
 import Training from "../pages/Training";
 import Profile from "../pages/Profile";
 import Notifications from "../pages/Notifications";
@@ -34,7 +33,6 @@ import {
   AdminAnalyticsPage, 
   PerformanceMonitorPage, 
   SystemAlertsPage, 
-  AllUsersPage, 
   PermissionsRolesPage, 
   UserAnalyticsPage, 
   SystemSettingsPage, 

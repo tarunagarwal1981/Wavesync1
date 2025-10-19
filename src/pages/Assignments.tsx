@@ -1,7 +1,7 @@
 import { useAuth } from '../contexts/SupabaseAuthContext';
 
 const Assignments = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   
   return (
     <div style={{ padding: '24px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>

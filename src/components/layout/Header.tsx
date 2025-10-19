@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { 
   Search, 
-  Bell, 
   User, 
   LogOut, 
   Settings, 
   Menu,
   ChevronDown,
-  Anchor,
-  Waves,
-  FileText,
-  GraduationCap
+  Waves
 } from 'lucide-react';
 import NotificationBell from '../NotificationBell';
 import styles from './Header.module.css';

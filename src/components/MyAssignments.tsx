@@ -84,7 +84,7 @@ const MyAssignments: React.FC = () => {
       setResponding(true);
 
       // Call the database function
-      const { data, error } = await supabase.rpc('respond_to_assignment', {
+      const { error } = await supabase.rpc('respond_to_assignment', {
         p_assignment_id: assignment.id,
         p_response_type: 'accepted',
         p_notes: null
@@ -136,7 +136,7 @@ const MyAssignments: React.FC = () => {
       setResponding(true);
 
       // Call the database function
-      const { data, error } = await supabase.rpc('respond_to_assignment', {
+      const { error } = await supabase.rpc('respond_to_assignment', {
         p_assignment_id: selectedAssignment.id,
         p_response_type: 'rejected',
         p_notes: rejectReason

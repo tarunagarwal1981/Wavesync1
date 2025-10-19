@@ -22,11 +22,6 @@ interface Vessel {
   };
 }
 
-interface Company {
-  id: string;
-  name: string;
-}
-
 interface VesselFormData {
   name: string;
   imo_number: string;
@@ -41,7 +36,6 @@ interface VesselFormData {
 const VesselManagement: React.FC = () => {
   const { profile } = useAuth();
   const [vessels, setVessels] = useState<Vessel[]>([]);
-  const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingVessel, setEditingVessel] = useState<Vessel | null>(null);
@@ -59,7 +53,6 @@ const VesselManagement: React.FC = () => {
 
   useEffect(() => {
     fetchVessels();
-    fetchCompanies();
   }, [profile?.company_id]);
 
   const fetchVessels = async () => {
@@ -93,19 +86,6 @@ const VesselManagement: React.FC = () => {
     }
   };
 
-  const fetchCompanies = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .select('id, name')
-        .order('name');
-
-      if (error) throw error;
-      setCompanies(data || []);
-    } catch (error) {
-      console.error('Error fetching companies:', error);
-    }
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

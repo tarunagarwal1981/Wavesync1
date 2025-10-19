@@ -148,7 +148,9 @@ const UserManagement: React.FC = () => {
           throw new Error('No active session');
         }
 
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/create-user`, {
+        // Get Supabase URL from environment or use default
+        const supabaseUrl = 'https://tdtynyofltrqvkbkyhzo.supabase.co';
+        const response = await fetch(`${supabaseUrl}/functions/v1/create-user`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

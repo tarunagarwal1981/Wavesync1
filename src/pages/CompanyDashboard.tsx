@@ -2,7 +2,7 @@ import { useAuth } from '../contexts/SupabaseAuthContext';
 import styles from './CompanyDashboard.module.css';
 
 const CompanyDashboard = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   
   return (
     <div className={styles.dashboard}>

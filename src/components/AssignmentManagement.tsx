@@ -6,6 +6,7 @@ import styles from './AssignmentManagement.module.css';
 
 interface Assignment {
   id: string;
+  title?: string;
   seafarer_id: string;
   vessel_id: string;
   vessel_name?: string;
@@ -117,7 +118,7 @@ const AssignmentManagement: React.FC = () => {
       
       // Fetch seafarer profiles for rank information
       const seafarerIds = (data || []).map(a => a.seafarer_id).filter(Boolean);
-      let seafarerProfiles = {};
+      let seafarerProfiles: Record<string, any> = {};
       
       if (seafarerIds.length > 0) {
         const { data: profiles } = await supabase
@@ -125,7 +126,7 @@ const AssignmentManagement: React.FC = () => {
           .select('user_id, rank')
           .in('user_id', seafarerIds);
         
-        seafarerProfiles = (profiles || []).reduce((acc, profile) => {
+        seafarerProfiles = (profiles || []).reduce((acc: Record<string, any>, profile: any) => {
           acc[profile.user_id] = profile;
           return acc;
         }, {});
@@ -161,6 +162,7 @@ const AssignmentManagement: React.FC = () => {
           id,
           full_name,
           email,
+          company_id,
           seafarer_profile:seafarer_profiles(rank, availability_status)
         `)
         .eq('user_type', 'seafarer')
@@ -169,12 +171,16 @@ const AssignmentManagement: React.FC = () => {
       if (error) throw error;
       
       // Transform to match our interface
-      const transformedData = (data || []).map(seafarer => ({
+      const transformedData = (data || []).map((seafarer: any) => ({
         id: seafarer.id,
         full_name: seafarer.full_name,
         email: seafarer.email,
-        rank: seafarer.seafarer_profile?.rank,
-        availability_status: seafarer.seafarer_profile?.availability_status || 'available',
+        rank: Array.isArray(seafarer.seafarer_profile) && seafarer.seafarer_profile.length > 0 
+          ? seafarer.seafarer_profile[0].rank 
+          : seafarer.seafarer_profile?.rank,
+        availability_status: Array.isArray(seafarer.seafarer_profile) && seafarer.seafarer_profile.length > 0
+          ? seafarer.seafarer_profile[0].availability_status || 'available'
+          : seafarer.seafarer_profile?.availability_status || 'available',
         company_id: seafarer.company_id
       }));
       
