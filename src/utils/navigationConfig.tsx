@@ -57,7 +57,7 @@ export const seafarerNavigation: NavigationSection[] = [
         id: "dashboard",
         title: "Dashboard",
         icon: Home,
-        href: "/",
+        href: "/dashboard",
         permissions: [UserRole.SEAFARER],
         description: "Overview of assignments and tasks"
       },
@@ -185,7 +185,7 @@ export const companyNavigation: NavigationSection[] = [
         id: "dashboard",
         title: "Dashboard",
         icon: Home,
-        href: "/",
+        href: "/dashboard",
         permissions: [UserRole.COMPANY_USER],
         description: "Overview of crew and operations"
       },
