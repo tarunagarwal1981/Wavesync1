@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null
   profile: UserProfile | null
   loading: boolean
+  authLoading: boolean // Separate loading state for auth operations
   signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<{ error: any | null }>
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<{ error: AuthError | null }>
@@ -31,7 +32,8 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true) // Loading state for initial session check
+  const [authLoading, setAuthLoading] = useState(false) // Loading state for auth operations
 
   useEffect(() => {
     console.log('🚀 SupabaseAuthProvider: Initializing...')
@@ -75,9 +77,9 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     try {
       console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
       
-      // Increase timeout to 30 seconds and add retry logic
+      // Reduce timeout to 10 seconds for faster failure and better UX
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 30000)
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 10000)
       )
       
       const fetchPromise = supabase
@@ -90,15 +92,9 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
       if (error) {
         console.error('❌ Error fetching user profile:', error)
-        console.error('❌ Error details:', JSON.stringify(error, null, 2))
         
-        // Retry once if it's a timeout or network error
-        if (retryCount < 1 && (error.message?.includes('timeout') || error.code === 'PGRST301')) {
-          console.log('🔄 Retrying profile fetch...')
-          await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
-          return fetchUserProfile(userId, retryCount + 1)
-        }
-        
+        // Don't retry on timeout - just continue without profile
+        // This allows login to succeed even if profile fetch fails
         console.warn('⚠️ Could not fetch profile, continuing without profile data')
         setProfile(null)
       } else {
@@ -106,18 +102,10 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         setProfile(data)
       }
     } catch (error) {
-      console.error('❌ Error fetching user profile:', error)
-      console.error('❌ Error type:', typeof error)
-      console.error('❌ Error message:', error instanceof Error ? error.message : 'Unknown error')
+      console.error('❌ Error fetching user profile:', error instanceof Error ? error.message : 'Unknown error')
       
-      // Retry once on timeout
-      if (retryCount < 1 && error instanceof Error && error.message.includes('timeout')) {
-        console.log('🔄 Retrying profile fetch after timeout...')
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        return fetchUserProfile(userId, retryCount + 1)
-      }
-      
-      console.warn('⚠️ Could not fetch profile after retries, continuing without profile data')
+      // Don't retry - allow app to continue functioning without profile
+      console.warn('⚠️ Could not fetch profile, continuing without profile data')
       setProfile(null)
     } finally {
       console.log('🔄 Setting loading to false')
@@ -127,6 +115,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
     try {
+      setAuthLoading(true)
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -175,11 +164,14 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       return { error: null }
     } catch (error) {
       return { error: error as AuthError }
+    } finally {
+      setAuthLoading(false)
     }
   }
 
   const signIn = async (email: string, password: string) => {
     try {
+      setAuthLoading(true)
       console.log('🔐 Attempting sign in for:', email)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -196,6 +188,8 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     } catch (error) {
       console.log('💥 Sign in exception:', error)
       return { error: error as AuthError }
+    } finally {
+      setAuthLoading(false)
     }
   }
 
@@ -236,6 +230,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     session,
     profile,
     loading,
+    authLoading,
     signUp,
     signIn,
     signOut,

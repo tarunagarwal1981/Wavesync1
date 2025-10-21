@@ -17,7 +17,7 @@ interface LoginFormData {
 }
 
 export const SupabaseLogin: React.FC = () => {
-  const { signIn, signUp, loading } = useAuth()
+  const { signIn, signUp, authLoading } = useAuth()
   const { addToast } = useToast()
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
@@ -276,9 +276,9 @@ export const SupabaseLogin: React.FC = () => {
           <button
             type="submit"
             className={styles.submitButton}
-            disabled={loading}
+            disabled={authLoading}
           >
-            {loading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In')}
+            {authLoading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In')}
           </button>
         </form>
 
