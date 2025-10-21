@@ -83,7 +83,7 @@ const CompanyDashboard = () => {
         </Card>
       </div>
       
-      <Card variant="default">
+      <Card variant="elevated" padding="none">
         <CardHeader>
           <h2 className={styles.actionsTitle}>Quick Actions</h2>
         </CardHeader>

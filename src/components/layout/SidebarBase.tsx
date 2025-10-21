@@ -107,7 +107,9 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
         {/* Maritime Branding Header */}
         <div className={styles.branding}>
           <div className={styles.logo}>
-            <NeuralCrewLogo width={40} height={40} variant="cyan" />
+            <div className={styles.logoIconWrapper}>
+              <NeuralCrewLogo width={50} height={50} variant="cyan" animated />
+            </div>
             {!isCollapsed && (
               <div className={styles.logoText}>
                 <BrandText size="md" variant="gradient" />

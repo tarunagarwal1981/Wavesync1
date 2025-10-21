@@ -1,16 +1,40 @@
 /* Header */
 .header {
   height: 64px;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: white;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  padding: 0 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 30;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Mobile Menu Button */
+.mobileMenuButton {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #475569;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 12px;
+}
+
+.mobileMenuButton:hover {
+  background: rgba(14, 165, 233, 0.08);
+  color: #0ea5e9;
+}
+
+.mobileMenuButton:active {
+  transform: scale(0.95);
 }
 
 .leftSection {
@@ -68,6 +92,7 @@
 .searchSection {
   flex: 1;
   max-width: 400px;
+  margin: 0 16px;
 }
 
 .searchContainer {
@@ -80,32 +105,43 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #64748b;
+  color: #94a3b8;
   pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.searchContainer:focus-within .searchIcon {
+  color: #0ea5e9;
 }
 
 .searchInput {
   width: 100%;
   padding: 10px 12px 10px 40px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 14px;
-  background: #f9fafb;
-  transition: all 0.2s ease;
+  background: #f8fafc;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #0ea5e9;
   background: white;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
 }
 
 .searchInput::placeholder {
-  color: #9ca3af;
+  color: #94a3b8;
 }
 
 /* Actions Section */
+.actionsSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .rightSection {
   display: flex;
   align-items: center;
@@ -304,23 +340,25 @@
   background: var(--color-surface-hover);
 }
 
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
+/* Avatar styling handled by Avatar component */
+.userAvatar {
+  flex-shrink: 0;
 }
 
-.userAvatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.userButton:hover {
+  background: rgba(14, 165, 233, 0.05);
 }
 
 .userInfo {
@@ -366,22 +404,9 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
+/* Avatar styling handled by Avatar component */
 .userDropdownAvatar {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  overflow: hidden;
-}
-
-.userDropdownAvatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .userDropdownInfo {
@@ -466,6 +491,12 @@
 
 /* Mobile */
 @media (max-width: 767px) {
+  .mobileMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .menuButton {
     display: flex;
   }
@@ -477,6 +508,10 @@
   .userName {
     display: none;
   }
+  
+  .userRole {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -485,17 +520,25 @@
   }
 
   .pageTitle {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .demoBadge {
     font-size: 10px;
     padding: 3px 6px;
   }
+  
+  .searchSection {
+    display: none;
+  }
 
   .notificationDropdown,
   .userDropdown {
     width: calc(100vw - 24px);
     right: -12px;
+  }
+  
+  .chevron {
+    display: none;
   }
 }
