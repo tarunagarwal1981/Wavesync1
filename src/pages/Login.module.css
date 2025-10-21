@@ -40,21 +40,31 @@
   z-index: 2;
 }
 
+.logoContainer {
+  margin-bottom: 32px;
+}
+
 .logo {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 20px;
   position: relative;
 }
 
 .logoText {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
+}
+
+.brandWithBadge {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
 }
 
 .tagline {
@@ -67,20 +77,21 @@
 }
 
 .aiBadge {
-  position: absolute;
-  top: 0;
-  right: -80px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
   color: white;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   animation: aiGlow 3s ease-in-out infinite;
+  width: fit-content;
+  align-self: flex-start;
+  transform: translateY(-4px);
 }
 
 .aiSparkle {
@@ -152,9 +163,9 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .loginCard {
@@ -620,8 +631,23 @@
     padding: 24px;
   }
   
+  .logo {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
   .logoText {
-    font-size: 1.75rem;
+    align-items: center;
+  }
+  
+  .brandWithBadge {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .aiBadge {
+    transform: translateY(0);
   }
   
   .brandingTitle {

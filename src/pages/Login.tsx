@@ -10,15 +10,19 @@ export const Login: React.FC = () => {
       {/* Left Side - Branding */}
       <div className={styles.brandingSection}>
         <div className={styles.brandingContent}>
-          <div className={styles.logo}>
-            <NeuralCrewLogo width={80} height={80} variant="cyan" animated />
-            <div className={styles.logoText}>
-              <BrandText size="xl" variant="gradient" />
-              <p className={styles.tagline}>Maritime Platform</p>
-            </div>
-            <div className={styles.aiBadge}>
-              <span className={styles.aiSparkle}>✨</span>
-              <span className={styles.aiText}>AI-Powered</span>
+          <div className={styles.logoContainer}>
+            <div className={styles.logo}>
+              <NeuralCrewLogo width={100} height={100} variant="cyan" animated />
+              <div className={styles.logoText}>
+                <div className={styles.brandWithBadge}>
+                  <BrandText size="xl" variant="gradient" />
+                  <div className={styles.aiBadge}>
+                    <span className={styles.aiSparkle}>✨</span>
+                    <span className={styles.aiText}>AI-Powered</span>
+                  </div>
+                </div>
+                <p className={styles.tagline}>Maritime Platform</p>
+              </div>
             </div>
           </div>
           <h2 className={styles.brandingTitle}>Maritime Crew Management Platform</h2>
