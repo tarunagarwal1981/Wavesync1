@@ -1,0 +1,1 @@
+how dev1:src/pages/AdminDashboard.tsx
