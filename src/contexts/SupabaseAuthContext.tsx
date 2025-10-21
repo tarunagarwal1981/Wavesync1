@@ -71,13 +71,13 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     return () => subscription.unsubscribe()
   }, [])
 
-  const fetchUserProfile = async (userId: string) => {
+  const fetchUserProfile = async (userId: string, retryCount = 0) => {
     try {
-      console.log('🔍 Fetching user profile for:', userId)
+      console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
       
-      // Add timeout to prevent hanging
+      // Increase timeout to 30 seconds and add retry logic
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 10000)
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 30000)
       )
       
       const fetchPromise = supabase
@@ -91,6 +91,15 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       if (error) {
         console.error('❌ Error fetching user profile:', error)
         console.error('❌ Error details:', JSON.stringify(error, null, 2))
+        
+        // Retry once if it's a timeout or network error
+        if (retryCount < 1 && (error.message?.includes('timeout') || error.code === 'PGRST301')) {
+          console.log('🔄 Retrying profile fetch...')
+          await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
+          return fetchUserProfile(userId, retryCount + 1)
+        }
+        
+        console.warn('⚠️ Could not fetch profile, continuing without profile data')
         setProfile(null)
       } else {
         console.log('✅ User profile loaded:', data)
@@ -100,6 +109,15 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       console.error('❌ Error fetching user profile:', error)
       console.error('❌ Error type:', typeof error)
       console.error('❌ Error message:', error instanceof Error ? error.message : 'Unknown error')
+      
+      // Retry once on timeout
+      if (retryCount < 1 && error instanceof Error && error.message.includes('timeout')) {
+        console.log('🔄 Retrying profile fetch after timeout...')
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        return fetchUserProfile(userId, retryCount + 1)
+      }
+      
+      console.warn('⚠️ Could not fetch profile after retries, continuing without profile data')
       setProfile(null)
     } finally {
       console.log('🔄 Setting loading to false')

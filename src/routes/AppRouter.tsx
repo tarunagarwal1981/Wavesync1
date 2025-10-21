@@ -100,10 +100,7 @@ export const AppRouter: React.FC = () => {
           <SuspenseRoute loadingText="Loading dashboard...">
           <SupabaseProtectedRoute>
             <Layout title="WaveSync">
-              {(() => {
-                console.log('🛣️ Dashboard route matched - rendering DashboardRouter');
-                return <PageTransition><ErrorBoundary><DashboardRouter /></ErrorBoundary></PageTransition>;
-              })()}
+              <PageTransition><DashboardRouter /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
           </SuspenseRoute>
@@ -241,250 +238,318 @@ export const AppRouter: React.FC = () => {
         
         {/* Company User specific routes */}
         <Route path="/crew" element={
+          <SuspenseRoute loadingText="Loading crew directory...">
           <SupabaseProtectedRoute>
             <Layout title="Crew Directory">
               <PageTransition><CrewDirectory /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/ai-assignments" element={
+          <SuspenseRoute loadingText="Loading AI assignments...">
           <SupabaseProtectedRoute>
             <Layout title="AI Assignments">
               <PageTransition><AIAssignmentPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/fleet" element={
+          <SuspenseRoute loadingText="Loading fleet management...">
           <SupabaseProtectedRoute>
             <Layout title="Fleet Management">
               <PageTransition><VesselManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Travel Management */}
         <Route path="/travel" element={
+          <SuspenseRoute loadingText="Loading travel management...">
           <SupabaseProtectedRoute>
             <Layout title="Travel Management">
               <PageTransition><TravelManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Task Management */}
         <Route path="/task-management" element={
+          <SuspenseRoute loadingText="Loading task management...">
           <SupabaseProtectedRoute>
             <Layout title="Task Management">
               <PageTransition><TaskManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Document Expiry & Compliance Dashboard */}
         <Route path="/expiry-dashboard" element={
+          <SuspenseRoute loadingText="Loading expiry dashboard...">
           <SupabaseProtectedRoute>
             <Layout title="Document Expiry & Compliance">
               <PageTransition><ExpiryDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/analytics" element={
+          <SuspenseRoute loadingText="Loading analytics...">
           <SupabaseProtectedRoute>
             <Layout title="Analytics & Reports">
               <PageTransition><AnalyticsDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/budget" element={
+          <SuspenseRoute loadingText="Loading budget...">
           <SupabaseProtectedRoute>
             <Layout title="Budget & Expenses">
               <PageTransition><BudgetPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/schedule" element={
+          <SuspenseRoute loadingText="Loading scheduling...">
           <SupabaseProtectedRoute>
             <Layout title="Scheduling">
               <PageTransition><SchedulingPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/communications" element={
+          <SuspenseRoute loadingText="Loading communications...">
           <SupabaseProtectedRoute>
             <Layout title="Communications">
               <PageTransition><CommunicationsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/company/settings" element={
+          <SuspenseRoute loadingText="Loading company settings...">
           <SupabaseProtectedRoute>
             <Layout title="Company Settings">
               <PageTransition><CompanySettingsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/compliance" element={
+          <SuspenseRoute loadingText="Loading compliance...">
           <SupabaseProtectedRoute>
             <Layout title="Compliance">
               <PageTransition><CompliancePage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/users" element={
+          <SuspenseRoute loadingText="Loading user management...">
           <SupabaseProtectedRoute>
             <Layout title="User Management">
               <PageTransition><UserManagementPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         
         {/* Admin specific routes */}
         <Route path="/admin" element={
+          <SuspenseRoute loadingText="Loading admin dashboard...">
           <SupabaseProtectedRoute>
             <Layout title="Admin Dashboard">
               <PageTransition><DashboardRouter /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/analytics" element={
+          <SuspenseRoute loadingText="Loading analytics...">
           <SupabaseProtectedRoute>
             <Layout title="System Analytics">
               <PageTransition><AdminAnalyticsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/performance" element={
+          <SuspenseRoute loadingText="Loading performance monitor...">
           <SupabaseProtectedRoute>
             <Layout title="Performance Monitor">
               <PageTransition><PerformanceMonitorPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/alerts" element={
+          <SuspenseRoute loadingText="Loading alerts...">
           <SupabaseProtectedRoute>
             <Layout title="System Alerts">
               <PageTransition><SystemAlertsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/users" element={
+          <SuspenseRoute loadingText="Loading user management...">
           <SupabaseProtectedRoute>
             <Layout title="User Management">
               <PageTransition><UserManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/companies" element={
+          <SuspenseRoute loadingText="Loading company management...">
           <SupabaseProtectedRoute>
             <Layout title="Company Management">
               <PageTransition><CompanyManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/vessels" element={
+          <SuspenseRoute loadingText="Loading vessel management...">
           <SupabaseProtectedRoute>
             <Layout title="Vessel Management">
               <PageTransition><VesselManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Company area routes */}
         <Route path="/assignments" element={
+          <SuspenseRoute loadingText="Loading assignment management...">
           <SupabaseProtectedRoute>
             <Layout title="Assignment Management">
               <PageTransition><AssignmentManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/permissions" element={
+          <SuspenseRoute loadingText="Loading permissions...">
           <SupabaseProtectedRoute>
             <Layout title="Permissions & Roles">
               <PageTransition><PermissionsRolesPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/user-analytics" element={
+          <SuspenseRoute loadingText="Loading user analytics...">
           <SupabaseProtectedRoute>
             <Layout title="User Analytics">
               <PageTransition><UserAnalyticsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/settings" element={
+          <SuspenseRoute loadingText="Loading system settings...">
           <SupabaseProtectedRoute>
             <Layout title="System Settings">
               <PageTransition><SystemSettingsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/config" element={
+          <SuspenseRoute loadingText="Loading configuration...">
           <SupabaseProtectedRoute>
             <Layout title="Configuration">
               <PageTransition><ConfigurationPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/audit" element={
+          <SuspenseRoute loadingText="Loading audit logs...">
           <SupabaseProtectedRoute>
             <Layout title="Audit Logs">
               <PageTransition><AuditLogsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/security" element={
+          <SuspenseRoute loadingText="Loading security settings...">
           <SupabaseProtectedRoute>
             <Layout title="Security Settings">
               <PageTransition><SecuritySettingsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/reports" element={
+          <SuspenseRoute loadingText="Loading reports...">
           <SupabaseProtectedRoute>
             <Layout title="Reports & Exports">
               <PageTransition><ReportsExportsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/support" element={
+          <SuspenseRoute loadingText="Loading support tickets...">
           <SupabaseProtectedRoute>
             <Layout title="Support Tickets">
               <PageTransition><SupportTicketsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/docs" element={
+          <SuspenseRoute loadingText="Loading documentation...">
           <SupabaseProtectedRoute>
             <Layout title="Documentation">
               <PageTransition><DocumentationPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/admin/updates" element={
+          <SuspenseRoute loadingText="Loading system updates...">
           <SupabaseProtectedRoute>
             <Layout title="System Updates">
               <PageTransition><SystemUpdatesPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         
         {/* AI Agent Routes */}
         <Route path="/admin/ai-settings" element={
+          <SuspenseRoute loadingText="Loading AI settings...">
           <SupabaseProtectedRoute>
             <Layout title="AI Agent Settings">
               <PageTransition><AIAgentSettings /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/ai-assignments" element={
+          <SuspenseRoute loadingText="Loading AI assignments...">
           <SupabaseProtectedRoute>
             <Layout title="AI Assignments">
               <PageTransition><AIAssignmentQueue /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/ai-performance" element={
+          <SuspenseRoute loadingText="Loading AI performance...">
           <SupabaseProtectedRoute>
             <Layout title="AI Performance">
               <PageTransition><AIPerformanceDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         
         {/* Catch all route */}
