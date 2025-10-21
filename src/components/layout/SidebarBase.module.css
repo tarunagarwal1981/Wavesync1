@@ -1,20 +1,19 @@
-/* Sidebar Base Styles with Enhanced Responsive Design */
+/* Sidebar uses Ocean Breeze theme variables */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 280px;
   height: 100vh;
-  background: var(--gradient-glass);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
   transform: translateX(-100%);
-  transition: transform var(--transition-slow), width var(--transition-slow);
+  transition: transform var(--transition-base), width var(--transition-base);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar.open {
@@ -27,14 +26,16 @@
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
   z-index: 999;
   display: none;
+  animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 768px) {
@@ -43,11 +44,11 @@
   }
 }
 
-/* Maritime Branding with Enhanced Gradient */
+/* Branding Section */
 .branding {
-  padding: 24px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--gradient-maritime);
+  padding: var(--spacing-lg) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
   position: relative;
   overflow: hidden;
   min-height: 80px;
@@ -69,22 +70,31 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-md);
   position: relative;
   z-index: 1;
   width: 100%;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 0 var(--spacing-sm);
 }
 
 .sidebar.collapsed .logo {
   justify-content: center;
+  padding: 0;
+}
+
+.logoIconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logoIcon {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-12);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,41 +107,43 @@
 .logoText {
   display: flex;
   flex-direction: column;
+  gap: 4px;
   min-width: 0;
 }
 
 .brandName {
   font-size: 20px;
-  font-weight: var(--font-bold);
-  color: white;
-  line-height: 1;
-  letter-spacing: var(--letter-tight);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
 }
 
 .brandTagline {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: var(--font-medium);
+  color: var(--color-text-muted);
+  font-weight: 500;
 }
 
 /* Navigation */
 .navigation {
   flex: 1;
-  padding: 20px 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-md) 0;
 }
 
 .navSection {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-xl);
 }
 
 .sectionTitle {
   font-size: 12px;
-  font-weight: var(--font-semibold);
-  color: var(--text-muted);
+  font-weight: 600;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 0 0 12px 20px;
+  margin: 0 0 var(--spacing-sm) var(--spacing-md);
+  padding: 0 var(--spacing-sm);
 }
 
 .navList {
@@ -153,17 +165,31 @@
 .navLink {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  color: var(--text-secondary);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-md);
+  margin: 0 var(--spacing-sm);
+  color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all var(--transition-base);
+  border-radius: var(--radius-lg);
   position: relative;
-  font-weight: var(--font-medium);
-  border-radius: 0 var(--radius-12) var(--radius-12) 0;
-  margin-right: 12px;
-  flex: 1;
-  min-height: 44px; /* Touch-friendly minimum */
+  font-weight: 500;
+  font-size: 14px;
+  /* Enhanced transitions */
+  transition: all var(--transition-fast);
+  will-change: transform, background, color;
+}
+
+.navLink::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 70%;
+  background: var(--color-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  transition: transform var(--transition-fast);
 }
 
 .navLink.nested {
@@ -172,27 +198,26 @@
 }
 
 .navLink:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--color-surface-hover);
   color: var(--color-primary);
   transform: translateX(4px);
 }
 
+.navLink:hover::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
 .navLink.active {
-  background: var(--gradient-primary);
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 600;
   box-shadow: var(--shadow-sm);
   transform: translateX(4px);
 }
 
 .navLink.active::before {
-  content: '';
-  position: absolute;
-  left: -12px;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--gradient-primary);
-  border-radius: 0 var(--radius-6) var(--radius-6) 0;
+  transform: translateY(-50%) scaleY(1);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* AI Assignment Special Styling */
@@ -268,7 +293,12 @@
 
 .navIcon {
   flex-shrink: 0;
-  transition: transform var(--transition-base);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
 }
 
 .navLink:hover .navIcon {
@@ -278,31 +308,27 @@
 .navLabel {
   flex: 1;
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .badge {
   background: var(--color-error);
-  color: white;
+  color: var(--color-text-inverse);
   font-size: 11px;
-  font-weight: var(--font-semibold);
+  font-weight: 600;
   padding: 2px 6px;
-  border-radius: 10px;
+  border-radius: var(--radius-full);
   min-width: 18px;
   text-align: center;
   box-shadow: var(--shadow-xs);
-  flex-shrink: 0;
 }
 
 .expandButton {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 8px;
-  border-radius: var(--radius-6);
+  border-radius: var(--radius-sm);
   transition: all var(--transition-base);
   display: flex;
   align-items: center;
@@ -311,7 +337,7 @@
 }
 
 .expandButton:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(14, 165, 233, 0.1);
   color: var(--color-primary);
 }
 
@@ -319,24 +345,25 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-8);
+  background: var(--color-background-alt);
+  border-radius: var(--radius-md);
   margin: 4px 12px 8px 20px;
 }
 
 /* Maritime Footer */
 .footer {
-  padding: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .footerContent {
   display: flex;
   align-items: center;
-  gap: 12px;
-  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
 }
 
 .sidebar.collapsed .footerContent {
@@ -344,36 +371,27 @@
 }
 
 .footerIcon {
-  width: 32px;
-  height: 32px;
-  background: rgba(59, 130, 246, 0.2);
-  border-radius: var(--radius-8);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  flex-shrink: 0;
 }
 
 .footerText {
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  gap: 2px;
 }
 
 .footerTitle {
-  font-size: 14px;
-  font-weight: var(--font-semibold);
-  color: var(--text-primary);
-  line-height: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 .footerSubtitle {
   font-size: 11px;
-  color: var(--text-muted);
-  font-weight: var(--font-regular);
+  color: var(--color-text-muted);
 }
 
 /* Desktop Styles */

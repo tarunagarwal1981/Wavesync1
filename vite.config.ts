@@ -17,6 +17,7 @@ export default defineConfig({
       '@/services': resolve(__dirname, './src/services'),
       '@/providers': resolve(__dirname, './src/providers'),
       '@/routes': resolve(__dirname, './src/routes'),
+      '@/assets': resolve(__dirname, './src/assets'),
     },
   },
   build: {

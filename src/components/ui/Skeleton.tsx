@@ -1,54 +1,59 @@
-import React from "react";
-import styles from "./Skeleton.module.css";
+import React from 'react';
+import styles from './Skeleton.module.css';
 
-export interface SkeletonProps {
+interface SkeletonProps {
+  variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;
-  borderRadius?: string;
   className?: string;
-  lines?: number;
-  variant?: "text" | "rectangular" | "circular" | "card";
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({ 
-  width, 
-  height, 
-  borderRadius, 
-  className, 
-  lines = 1,
-  variant = "rectangular" 
+const Skeleton: React.FC<SkeletonProps> = ({
+  variant = 'text',
+  width,
+  height,
+  className = ''
 }) => {
-  const baseStyle: React.CSSProperties = {
-    width: width || "100%",
-    height: height || "1em",
-    borderRadius: borderRadius || "var(--radius-12)",
+  const style: React.CSSProperties = {
+    width: typeof width === 'number' ? `${width}px` : width,
+    height: typeof height === 'number' ? `${height}px` : height
   };
 
-  if (variant === "text" && lines > 1) {
-    return (
-      <div className={[styles.skeleton, className].filter(Boolean).join(" ")}>
-        {Array.from({ length: lines }, (_, i) => (
-          <div
-            key={i}
-            className={styles.line}
-            style={{
-              ...baseStyle,
-              width: i === lines - 1 ? "60%" : "100%",
-              height: "1em",
-              marginBottom: i < lines - 1 ? "0.5em" : "0",
-            }}
-          />
-        ))}
-      </div>
-    );
-  }
+  const classes = [
+    styles.skeleton,
+    styles[variant],
+    className
+  ].filter(Boolean).join(' ');
 
-  return (
-    <div
-      className={[styles.skeleton, className].filter(Boolean).join(" ")}
-      style={baseStyle}
-    />
-  );
+  return <div className={classes} style={style} />;
 };
+
+// Preset skeletons
+export const SkeletonText: React.FC<{ lines?: number }> = ({ lines = 3 }) => (
+  <div className={styles.textContainer}>
+    {Array.from({ length: lines }).map((_, i) => (
+      <Skeleton 
+        key={i} 
+        variant="text" 
+        width={i === lines - 1 ? '80%' : '100%'} 
+      />
+    ))}
+  </div>
+);
+
+export const SkeletonCard: React.FC = () => (
+  <div className={styles.cardContainer}>
+    <div className={styles.cardHeader}>
+      <Skeleton variant="circular" width={40} height={40} />
+      <div style={{ flex: 1 }}>
+        <Skeleton variant="text" width="60%" />
+        <Skeleton variant="text" width="40%" />
+      </div>
+    </div>
+    <div className={styles.cardBody}>
+      <SkeletonText lines={3} />
+    </div>
+  </div>
+);
 
 export default Skeleton;

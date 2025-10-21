@@ -10,6 +10,7 @@ import {
   Waves
 } from 'lucide-react';
 import NotificationBell from '../NotificationBell';
+import { Avatar } from '../ui/Avatar';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -84,13 +85,12 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
             className={styles.userButton}
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
-            <div className={styles.userAvatar}>
-              {profile?.avatar_url ? (
-                <img src={profile.avatar_url} alt={profile.full_name} />
-              ) : (
-                <User size={20} />
-              )}
-            </div>
+            <Avatar 
+              src={profile?.avatar_url} 
+              name={profile?.full_name}
+              size="md"
+              className={styles.userAvatar}
+            />
             <div className={styles.userInfo}>
               <span className={styles.userName}>{profile?.full_name}</span>
               <span className={styles.userRole}>{profile?.user_type}</span>
@@ -102,13 +102,12 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
           {showUserMenu && (
             <div className={styles.userDropdown}>
               <div className={styles.userDropdownHeader}>
-                <div className={styles.userDropdownAvatar}>
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt={profile.full_name} />
-                  ) : (
-                    <User size={24} />
-                  )}
-                </div>
+                <Avatar 
+                  src={profile?.avatar_url} 
+                  name={profile?.full_name}
+                  size="lg"
+                  className={styles.userDropdownAvatar}
+                />
                 <div className={styles.userDropdownInfo}>
                   <h3>{profile?.full_name}</h3>
                   <p>{user?.email}</p>

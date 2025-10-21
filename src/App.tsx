@@ -9,6 +9,8 @@ import { ToastContainer } from './components/ui';
 // import InteractiveFeatures from './components/InteractiveFeatures'; // Removed - causing rendering issues
 import { useApp } from './contexts/AppContext';
 // import { useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const AppContent: React.FC = () => {
   console.log('AppContent rendering');
@@ -69,15 +71,19 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <DemoProvider>
-        <AppProvider>
-          <AppProviders>
-            <Router>
-              <AppContent />
-            </Router>
-          </AppProviders>
-        </AppProvider>
-      </DemoProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <DemoProvider>
+            <AppProvider>
+              <AppProviders>
+                <Router>
+                  <AppContent />
+                </Router>
+              </AppProviders>
+            </AppProvider>
+          </DemoProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 

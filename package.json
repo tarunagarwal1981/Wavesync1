@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "test": "vitest"
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "test": "vitest",
+    "build:analyze": "npm run build && vite-bundle-visualizer",
+    "pre-deploy": "npm run type-check && npm run lint && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.75.0",

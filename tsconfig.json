@@ -32,7 +32,8 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/services/*": ["./src/services/*"],
       "@/providers/*": ["./src/providers/*"],
-      "@/routes/*": ["./src/routes/*"]
+      "@/routes/*": ["./src/routes/*"],
+      "@/assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src", "src/types"],

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ActivityFeed.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { FileText, ClipboardList, CheckSquare, GraduationCap, Bell, MessageSquare } from "lucide-react";
-import { Button } from "./Button";
+import Button from "./Button";
 
 export type ActivityType = "document" | "assignment" | "task" | "training" | "system" | "message";
 

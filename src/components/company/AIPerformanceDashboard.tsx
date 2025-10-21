@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Bot, TrendingUp, Clock, CheckCircle, XCircle, Users, Ship, Activity } from 'lucide-react';
+import { Bot, TrendingUp, Clock, CheckCircle, XCircle, Users, Activity } from 'lucide-react';
 
 interface PerformanceMetrics {
   total_assignments: number;
@@ -90,7 +90,7 @@ export default function AIPerformanceDashboard() {
               .eq('id', activity.entity_id)
               .single();
             
-            entityName = assignment?.seafarer?.full_name || 'Unknown';
+            entityName = (assignment as any)?.seafarer?.full_name || 'Unknown';
           }
 
           return {
@@ -335,7 +335,7 @@ export default function AIPerformanceDashboard() {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .ai-performance-dashboard {
           padding: 2rem;
           max-width: 1400px;
@@ -677,4 +677,5 @@ export default function AIPerformanceDashboard() {
     </div>
   );
 }
+
 

@@ -1,88 +1,77 @@
-/**
- * Database Service
- * Supabase client and helper functions
- */
-
 import { createClient } from '@supabase/supabase-js';
-import { logger } from './logging.service';
+import dotenv from 'dotenv';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY; // Use service key for server-side
+dotenv.config();
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_KEY environment variables');
-}
+const supabaseUrl = process.env.SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY!;
 
-export const supabase = createClient(supabaseUrl, supabaseKey, {
+export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false
   }
 });
 
-/**
- * Get all companies with AI enabled
- */
-export async function getAIEnabledCompanies(): Promise<string[]> {
-  const { data, error } = await supabase
-    .from('ai_agent_config')
-    .select('company_id')
-    .eq('is_enabled', true);
-
-  if (error) {
-    logger.error('[Database] Failed to fetch AI-enabled companies:', error);
-    return [];
-  }
-
-  return data?.map(c => c.company_id) || [];
+// Database types
+export interface UserProfile {
+  id: string;
+  full_name: string;
+  email: string;
+  role: 'admin' | 'company' | 'seafarer';
+  company_id?: string;
 }
 
-/**
- * Get AI config for a company
- */
-export async function getAIConfig(companyId: string): Promise<any> {
-  const { data, error } = await supabase
-    .from('ai_agent_config')
-    .select('*')
-    .eq('company_id', companyId)
-    .single();
-
-  if (error) {
-    logger.warn(`[Database] No AI config found for company: ${companyId}`);
-    return null;
-  }
-
-  return data;
+export interface Company {
+  id: string;
+  name: string;
+  email: string;
 }
 
-/**
- * Update AI performance metrics
- */
-export async function updatePerformanceMetrics(
-  companyId: string,
-  metrics: {
-    assignments_created?: number;
-    assignments_approved?: number;
-    assignments_rejected?: number;
-    tasks_generated?: number;
-    time_saved_hours?: number;
-    cost_savings_usd?: number;
-  }
-): Promise<void> {
-  const today = new Date().toISOString().split('T')[0];
-
-  const { error } = await supabase
-    .from('ai_performance_metrics')
-    .upsert({
-      company_id: companyId,
-      metric_date: today,
-      ...metrics
-    }, {
-      onConflict: 'company_id,metric_date'
-    });
-
-  if (error) {
-    logger.error('[Database] Failed to update performance metrics:', error);
-  }
+export interface SeafarerProfile {
+  id: string;
+  user_id: string;
+  full_name: string;
+  rank: string;
+  nationality: string;
+  date_of_birth: string;
+  status: 'on_board' | 'on_shore' | 'on_leave';
+  company_id: string;
+  available_from?: string;
 }
 
+export interface Assignment {
+  id: string;
+  company_id: string;
+  vessel_id: string;
+  seafarer_id: string;
+  rank: string;
+  sign_on_date: string;
+  sign_off_date: string;
+  contract_duration_months: number;
+  status: 'pending' | 'accepted' | 'rejected' | 'active' | 'completed';
+}
+
+export interface Vessel {
+  id: string;
+  name: string;
+  imo_number: string;
+  vessel_type: string;
+  flag: string;
+  company_id: string;
+}
+
+export interface AIConfig {
+  company_id: string;
+  is_enabled: boolean;
+  autonomy_level: 'full' | 'semi' | 'assistant';
+  min_match_score: number;
+  advance_planning_days: number;
+  enabled_features: {
+    crew_planning: boolean;
+    task_generation: boolean;
+    document_analysis?: boolean;
+    compliance_monitoring?: boolean;
+    travel_optimization?: boolean;
+  };
+}

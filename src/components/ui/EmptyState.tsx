@@ -1,59 +1,43 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './EmptyState.module.css';
+import { Button } from './';
 
 interface EmptyStateProps {
-  icon?: string;
+  icon?: ReactNode;
   title: string;
-  description: string;
+  description?: string;
   action?: {
     label: string;
     onClick: () => void;
   };
-  suggestions?: string[];
-  className?: string;
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
-  icon = '📋',
+const EmptyState: React.FC<EmptyStateProps> = ({
+  icon,
   title,
   description,
-  action,
-  suggestions = [],
-  className
+  action
 }) => {
   return (
-    <div className={`${styles.emptyState} ${className || ''}`}>
-      <div className={styles.emptyIcon}>
-        {icon}
-      </div>
-      
-      <div className={styles.emptyContent}>
-        <h3 className={styles.emptyTitle}>{title}</h3>
-        <p className={styles.emptyDescription}>{description}</p>
-        
-        {suggestions.length > 0 && (
-          <div className={styles.suggestions}>
-            <h4 className={styles.suggestionsTitle}>Try these actions:</h4>
-            <ul className={styles.suggestionsList}>
-              {suggestions.map((suggestion, index) => (
-                <li key={index} className={styles.suggestionItem}>
-                  <span className={styles.suggestionBullet}>•</span>
-                  {suggestion}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        
-        {action && (
-          <button
-            onClick={action.onClick}
-            className={styles.actionButton}
-          >
-            {action.label}
-          </button>
-        )}
-      </div>
+    <div className={styles.container}>
+      {icon && (
+        <div className={styles.icon}>
+          {icon}
+        </div>
+      )}
+      <h3 className={styles.title}>{title}</h3>
+      {description && (
+        <p className={styles.description}>{description}</p>
+      )}
+      {action && (
+        <Button
+          variant="primary"
+          size="md"
+          onClick={action.onClick}
+        >
+          {action.label}
+        </Button>
+      )}
     </div>
   );
 };

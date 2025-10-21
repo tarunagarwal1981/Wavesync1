@@ -3,9 +3,9 @@
  * View and approve/reject AI-generated assignments
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { CheckCircle, XCircle, AlertCircle, Bot, User, Ship, TrendingUp, Calendar, MapPin, Award } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Bot, User, Ship, TrendingUp, Calendar, Award } from 'lucide-react';
 
 interface AIAssignment {
   ai_assignment_id: string;
@@ -354,7 +354,7 @@ export default function AIAssignmentQueue() {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .ai-assignment-queue {
           padding: 2rem;
           max-width: 1400px;
@@ -791,4 +791,5 @@ export default function AIAssignmentQueue() {
     </div>
   );
 }
+
 

@@ -1,34 +1,52 @@
-import React from "react";
-import styles from "./Card.module.css";
+import React, { ReactNode, HTMLAttributes } from 'react';
+import styles from './Card.module.css';
 
-type Elevation = 0 | 1 | 2 | 3;
-
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  elevation?: Elevation;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'elevated' | 'outlined' | 'glass';
+  hoverable?: boolean;
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  children: ReactNode;
 }
 
-export const Card: React.FC<CardProps> = ({
-  elevation = 1,
-  header,
-  footer,
-  className,
+const Card: React.FC<CardProps> = ({
+  variant = 'default',
+  hoverable = false,
+  padding = 'md',
   children,
+  className = '',
   ...props
 }) => {
-  const classes = [styles.card, styles[`elevation-${elevation}`], className]
-    .filter(Boolean)
-    .join(" ");
+  const classes = [
+    styles.card,
+    styles[variant],
+    styles[`padding-${padding}`],
+    hoverable ? styles.hoverable : '',
+    className
+  ].filter(Boolean).join(' ');
 
   return (
-    <section className={classes} {...props}>
-      {header && <header className={styles.header}>{header}</header>}
-      <div className={styles.body}>{children}</div>
-      {footer && <footer className={styles.footer}>{footer}</footer>}
-    </section>
+    <div className={classes} {...props}>
+      {children}
+    </div>
   );
 };
 
-export default Card;
+// Sub-components
+interface CardHeaderProps {
+  children: ReactNode;
+  className?: string;
+}
 
+export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => (
+  <div className={`${styles.header} ${className}`}>{children}</div>
+);
+
+export const CardBody: React.FC<CardHeaderProps> = ({ children, className = '' }) => (
+  <div className={`${styles.body} ${className}`}>{children}</div>
+);
+
+export const CardFooter: React.FC<CardHeaderProps> = ({ children, className = '' }) => (
+  <div className={`${styles.footer} ${className}`}>{children}</div>
+);
+
+export default Card;
