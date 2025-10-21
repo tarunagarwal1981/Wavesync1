@@ -35,12 +35,7 @@ export const AssignmentDetailsModal: React.FC<AssignmentDetailsModalProps> = ({ 
   const tabs: Tab[] = ["Vessel", "Position", "Contract", "Company", "Documents", "Actions"];
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Assignment Details" fullScreenOnMobile footer={
-      <div className={styles.footer}>
-        <Button variant="ghost" onClick={onDownloadPdf}>Download PDF</Button>
-        <Button variant="secondary" onClick={onClose}>Close</Button>
-      </div>
-    }>
+    <Modal isOpen={isOpen} onClose={onClose} title="Assignment Details">
       <div className={styles.tabs} role="tablist">
         {tabs.map(t => (
           <button key={t} role="tab" aria-selected={tab === t} className={[styles.tab, tab === t ? styles.tabActive : undefined].filter(Boolean).join(" ")} onClick={() => setTab(t)}>
@@ -111,6 +106,8 @@ export const AssignmentDetailsModal: React.FC<AssignmentDetailsModalProps> = ({ 
       {tab === "Actions" && (
         <section className={styles.section}>
           <div className={styles.footer}>
+            <Button variant="ghost" onClick={onDownloadPdf}>Download PDF</Button>
+            <Button variant="secondary" onClick={onClose}>Close</Button>
             <Button variant="primary" onClick={onAccept}>Accept</Button>
             <Button variant="ghost" onClick={onDecline}>Decline</Button>
           </div>

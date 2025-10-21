@@ -1,0 +1,167 @@
+/* Final polish and refinements for WaveSync */
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Hide navigation in print */
+  aside,
+  header {
+    display: none !important;
+  }
+  
+  /* Optimize for print */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  /* Show URLs for links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+}
+
+/* Focus visible for better accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Improve tap targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+  
+  button,
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Dark mode preference (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Ocean Breeze is light theme, but respect user preference */
+  /* Could add dark theme variant here in future */
+}
+
+/* Selection styling */
+::selection {
+  background: var(--color-primary-light);
+  color: var(--color-text-primary);
+}
+
+::-moz-selection {
+  background: var(--color-primary-light);
+  color: var(--color-text-primary);
+}
+
+/* Improve image loading */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Better form focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+/* Disabled state consistency */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading cursor for async operations */
+.loading-cursor {
+  cursor: wait !important;
+}
+
+/* Prevent text selection on UI elements */
+button,
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Smooth page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+

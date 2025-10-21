@@ -1,0 +1,105 @@
+/* Ocean Breeze Theme Variables */
+/* These will be injected by ThemeProvider but we define defaults here */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #0ea5e9;
+  --color-primary-hover: #0284c7;
+  --color-primary-light: #7dd3fc;
+  --color-primary-dark: #0369a1;
+  
+  /* Secondary Colors */
+  --color-secondary: #0284c7;
+  --color-secondary-hover: #075985;
+  --color-secondary-light: #38bdf8;
+  
+  /* Accent Colors */
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-accent-light: #818cf8;
+  
+  /* Background Colors */
+  --color-background: #f8fafc;
+  --color-background-alt: #f1f5f9;
+  
+  /* Surface Colors */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+  --color-surface-elevated: #fafbfc;
+  
+  /* Border Colors */
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+  --color-border-light: #f1f5f9;
+  
+  /* Text Colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-disabled: #94a3b8;
+  --color-text-inverse: #ffffff;
+  
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-info: #0ea5e9;
+  --color-info-light: #e0f2fe;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(14, 165, 233, 0.08);
+  --shadow-md: 0 4px 12px rgba(14, 165, 233, 0.12);
+  --shadow-lg: 0 8px 24px rgba(14, 165, 233, 0.15);
+  --shadow-xl: 0 12px 36px rgba(14, 165, 233, 0.18);
+  --shadow-2xl: 0 20px 60px rgba(14, 165, 233, 0.25);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* Border Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-4xl: 96px;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: var(--transition-base);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions on transform and opacity to prevent animation conflicts */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+}
+
+

@@ -1,5 +1,7 @@
 import React from 'react';
 import { SupabaseLogin } from '../components/SupabaseLogin';
+import { NeuralCrewLogo } from '../assets/logos';
+import { BrandText } from '../components/ui';
 import styles from './Login.module.css';
 
 export const Login: React.FC = () => {
@@ -9,8 +11,11 @@ export const Login: React.FC = () => {
       <div className={styles.brandingSection}>
         <div className={styles.brandingContent}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>🌊</div>
-            <h1 className={styles.logoText}>WaveSync</h1>
+            <NeuralCrewLogo width={80} height={80} variant="cyan" animated />
+            <div className={styles.logoText}>
+              <BrandText size="xl" variant="gradient" />
+              <p className={styles.tagline}>Maritime Platform</p>
+            </div>
             <div className={styles.aiBadge}>
               <span className={styles.aiSparkle}>✨</span>
               <span className={styles.aiText}>AI-Powered</span>
@@ -40,7 +45,6 @@ export const Login: React.FC = () => {
           <div className={styles.wave1}></div>
           <div className={styles.wave2}></div>
           <div className={styles.wave3}></div>
-          <div className={styles.ship}></div>
         </div>
       </div>
 

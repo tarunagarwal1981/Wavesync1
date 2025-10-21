@@ -1,5 +1,6 @@
 import { useAuth } from '../contexts/SupabaseAuthContext';
 import styles from './CompanyDashboard.module.css';
+import { Card, CardHeader, CardBody } from '../components/ui';
 
 const CompanyDashboard = () => {
   const { profile } = useAuth();
@@ -15,7 +16,7 @@ const CompanyDashboard = () => {
       </h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
+        <Card variant="elevated" hoverable padding="lg">
           <div className={styles.statIcon}>
             <div className={styles.iconContainer}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -29,9 +30,9 @@ const CompanyDashboard = () => {
             <p className={styles.statNumber}>45</p>
             <p className={styles.statSubtext}>12 officers, 33 crew</p>
           </div>
-        </div>
+        </Card>
         
-        <div className={styles.statCard}>
+        <Card variant="elevated" hoverable padding="lg">
           <div className={styles.statIcon}>
             <div className={`${styles.iconContainer} ${styles.success}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -46,9 +47,9 @@ const CompanyDashboard = () => {
             <p className={styles.statNumber}>12</p>
             <p className={styles.statSubtext}>3 urgent</p>
           </div>
-        </div>
+        </Card>
         
-        <div className={styles.statCard}>
+        <Card variant="elevated" hoverable padding="lg">
           <div className={styles.statIcon}>
             <div className={`${styles.iconContainer} ${styles.warning}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -63,9 +64,9 @@ const CompanyDashboard = () => {
             <p className={styles.statNumber}>8</p>
             <p className={styles.statSubtext}>7 active, 1 dry dock</p>
           </div>
-        </div>
+        </Card>
         
-        <div className={styles.statCard}>
+        <Card variant="elevated" hoverable padding="lg">
           <div className={styles.statIcon}>
             <div className={`${styles.iconContainer} ${styles.info}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -79,23 +80,27 @@ const CompanyDashboard = () => {
             <p className={styles.statNumber}>6</p>
             <p className={styles.statSubtext}>2 contracts, 4 documents</p>
           </div>
-        </div>
+        </Card>
       </div>
       
-      <div className={styles.actionsCard}>
-        <h2 className={styles.actionsTitle}>Quick Actions</h2>
-        <div className={styles.actionsGrid}>
-          <button className={`${styles.actionButton} ${styles.primary}`}>
-            Manage Crew
-          </button>
-          <button className={`${styles.actionButton} ${styles.success}`}>
-            Post Job
-          </button>
-          <button className={`${styles.actionButton} ${styles.secondary}`}>
-            View Reports
-          </button>
-        </div>
-      </div>
+      <Card variant="default">
+        <CardHeader>
+          <h2 className={styles.actionsTitle}>Quick Actions</h2>
+        </CardHeader>
+        <CardBody>
+          <div className={styles.actionsGrid}>
+            <button className={`${styles.actionButton} ${styles.primary}`}>
+              Manage Crew
+            </button>
+            <button className={`${styles.actionButton} ${styles.success}`}>
+              Post Job
+            </button>
+            <button className={`${styles.actionButton} ${styles.secondary}`}>
+              View Reports
+            </button>
+          </div>
+        </CardBody>
+      </Card>
     </div>
   );
 };

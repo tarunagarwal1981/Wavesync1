@@ -1,69 +1,59 @@
-import React from "react";
-import styles from "./Modal.module.css";
+import React, { ReactNode, useEffect } from 'react';
+import styles from './Modal.module.css';
 
-export interface ModalProps {
+interface ModalProps {
   isOpen: boolean;
-  title?: string;
   onClose: () => void;
-  children?: React.ReactNode;
-  footer?: React.ReactNode;
-  fullScreenOnMobile?: boolean;
+  title?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  children: ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, children, footer, fullScreenOnMobile }) => {
-  const dialogRef = React.useRef<HTMLDivElement | null>(null);
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  size = 'md',
+  children
+}) => {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
 
-  React.useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
     if (isOpen) {
-      document.addEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "hidden"; // Prevent background scroll
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
+
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
-  React.useEffect(() => {
-    if (!isOpen) return;
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    dialogRef.current?.focus();
-    return () => previouslyFocused?.focus();
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
-  function onBackdrop(e: React.MouseEvent) {
-    if (e.target === e.currentTarget) onClose();
-  }
-
   return (
-    <div className={styles.backdrop} role="presentation" onMouseDown={onBackdrop}>
-      <div
-        className={[styles.dialog, fullScreenOnMobile ? styles.fullScreenMobile : undefined].filter(Boolean).join(" ")}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        tabIndex={-1}
-        ref={dialogRef}
+    <div className={styles.overlay} onClick={onClose}>
+      <div 
+        className={`${styles.modal} ${styles[size]}`}
+        onClick={(e) => e.stopPropagation()}
       >
         {title && (
           <div className={styles.header}>
-            <span>{title}</span>
-            <button className={styles.closeButton} onClick={onClose} aria-label="Close modal">
-              ✕
+            <h3 className={styles.title}>{title}</h3>
+            <button className={styles.closeButton} onClick={onClose}>
+              ×
             </button>
           </div>
         )}
-        <div className={styles.body}>{children}</div>
-        {footer && <div className={styles.footer}>{footer}</div>}
+        <div className={styles.content}>
+          {children}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Modal;
-

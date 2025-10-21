@@ -1,0 +1,85 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║         WaveSync AI Service - Final Setup Steps                  ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+STEP 1: Copy the template
+─────────────────────────────────────────────────────────────────────
+Run this command:
+  Copy-Item .env.template .env
+
+STEP 2: Get your Upstash Redis password
+─────────────────────────────────────────────────────────────────────
+1. Go to: https://console.upstash.com/redis
+2. Click on your database: closing-bluebird-15255
+3. Scroll down to "Connect your database" section
+4. Click the "ioredis" tab
+5. Copy the FULL connection string that looks like:
+   redis://default:AbCdEf123456789@closing-bluebird-15255.upstash.io:6379
+
+STEP 3: Get your OpenAI API key
+─────────────────────────────────────────────────────────────────────
+1. Go to: https://platform.openai.com/api-keys
+2. Click "+ Create new secret key"
+3. Name it "WaveSync AI"
+4. Copy the key (starts with sk-)
+
+STEP 4: Edit your .env file
+─────────────────────────────────────────────────────────────────────
+Open .env file in your editor and replace:
+
+Line 10: OPENAI_API_KEY=sk-REPLACE-ME-WITH-YOUR-OPENAI-KEY
+Replace with: OPENAI_API_KEY=sk-your-actual-key-here
+
+Line 16: REDIS_URL=redis://default:YOUR-PASSWORD-HERE@closing-bluebird-15255.upstash.io:6379
+Replace with the FULL connection string from Upstash
+
+STEP 5: Start the AI service
+─────────────────────────────────────────────────────────────────────
+Run:
+  npm run dev
+
+Expected output:
+  ═══════════════════════════════════════════════
+  🚀 WaveSync AI Service Started Successfully!
+  ═══════════════════════════════════════════════
+  📡 Server running on port 3001
+  ✅ Redis connected
+  🤖 AI Agent ready for autonomous crew planning
+  ═══════════════════════════════════════════════
+
+STEP 6: Test the service
+─────────────────────────────────────────────────────────────────────
+Open a NEW terminal and run:
+  curl http://localhost:3001/health
+
+Should return:
+  {
+    "status": "healthy",
+    "service": "wavesync-ai-agent",
+    "timestamp": "..."
+  }
+
+✅ IF YOU SEE THIS, YOU'RE READY TO GO!
+
+─────────────────────────────────────────────────────────────────────
+NEXT STEPS:
+─────────────────────────────────────────────────────────────────────
+1. Open your main WaveSync app
+2. Login as Admin
+3. Go to: /admin/ai-settings
+4. Enable AI for a test company
+5. Watch the magic happen!
+
+See AI_NEXT_STEPS.md for detailed testing instructions.
+
+─────────────────────────────────────────────────────────────────────
+TROUBLESHOOTING:
+─────────────────────────────────────────────────────────────────────
+• Redis connection error: Verify the FULL connection string from Upstash
+• OpenAI error: Check your API key is valid and has credits
+• Database error: Verify Supabase credentials match your main .env
+
+Need help? Check QUICK_SETUP.md or AI_IMPLEMENTATION_QUICK_REFERENCE.md
+
+
+

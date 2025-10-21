@@ -34,7 +34,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   if (isLoading) {
     return (
       <div className={[styles.loadingContainer, className].filter(Boolean).join(" ")}>
-        {skeleton || <Skeleton variant="card" height="200px" />}
+        {skeleton || <Skeleton variant="rectangular" height="200px" />}
       </div>
     );
   }

@@ -1,0 +1,408 @@
+/* 3D Effects & Animations for Ocean Breeze Theme */
+
+/* ============================================
+   3D CARD EFFECTS
+   ============================================ */
+
+.card-3d {
+  transform: perspective(1000px) rotateX(0deg);
+  transition: transform var(--transition-base), 
+              box-shadow var(--transition-base);
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) rotateX(2deg) translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-3d:active {
+  transform: perspective(1000px) rotateX(1deg) translateY(-2px);
+}
+
+/* Subtle 3D lift on hover */
+.card-lift {
+  transition: transform var(--transition-base), 
+              box-shadow var(--transition-base);
+}
+
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   GLASS MORPHISM EFFECTS
+   ============================================ */
+
+.glass-effect {
+  backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(14, 165, 233, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-effect-dark {
+  backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(248, 250, 252, 0.6);
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+
+.glow-effect {
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.5); 
+  }
+}
+
+.glow-primary {
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.2);
+}
+
+.glow-primary:hover {
+  box-shadow: 0 6px 30px rgba(14, 165, 233, 0.4);
+}
+
+/* ============================================
+   ELEVATION LAYERS
+   ============================================ */
+
+.elevation-0 { box-shadow: none; }
+.elevation-1 { box-shadow: var(--shadow-xs); }
+.elevation-2 { box-shadow: var(--shadow-sm); }
+.elevation-3 { box-shadow: var(--shadow-md); }
+.elevation-4 { box-shadow: var(--shadow-lg); }
+.elevation-5 { box-shadow: var(--shadow-xl); }
+
+/* ============================================
+   BUTTON ANIMATIONS
+   ============================================ */
+
+.btn-scale {
+  transition: transform var(--transition-fast);
+}
+
+.btn-scale:hover {
+  transform: scale(1.02);
+}
+
+.btn-scale:active {
+  transform: scale(0.98);
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   LOADING ANIMATIONS
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-background) 0%,
+    var(--color-surface-elevated) 50%,
+    var(--color-background) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.spinner {
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   FADE & SLIDE ANIMATIONS
+   ============================================ */
+
+.fade-in {
+  animation: fadeIn var(--transition-base) ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in-up {
+  animation: fadeInUp var(--transition-base) ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight var(--transition-base) ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   SCALE & BOUNCE
+   ============================================ */
+
+.scale-in {
+  animation: scaleIn var(--transition-fast) ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.hover-brighten {
+  transition: filter var(--transition-fast);
+}
+
+.hover-brighten:hover {
+  filter: brightness(1.1);
+}
+
+.hover-lift-light {
+  transition: transform var(--transition-fast);
+}
+
+.hover-lift-light:hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   PULSE ANIMATIONS
+   ============================================ */
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-scale {
+  animation: pulseScale 2s ease-in-out infinite;
+}
+
+@keyframes pulseScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   SKELETON LOADERS
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    var(--color-surface-elevated) 50%,
+    var(--color-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+/* ============================================
+   PROGRESS ANIMATIONS
+   ============================================ */
+
+.progress-bar-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: progress-shine 2s infinite;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ============================================
+   ACCESSIBILITY - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card-3d:hover {
+    transform: none;
+  }
+  
+  .shimmer,
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.smooth-corners {
+  border-radius: var(--radius-xl);
+}
+
+.smooth-transition {
+  transition: all var(--transition-base);
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+

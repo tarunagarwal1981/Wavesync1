@@ -21,7 +21,7 @@ function stateBadge(state: AssignmentState) {
   switch (state) {
     case "pending": return <Badge variant="warning">Pending</Badge>;
     case "accepted": return <Badge variant="success">Accepted</Badge>;
-    case "declined": return <Badge variant="danger">Declined</Badge>;
+    case "declined": return <Badge variant="error">Declined</Badge>;
     case "expired": return <Badge variant="warning">Expired</Badge>;
   }
 }

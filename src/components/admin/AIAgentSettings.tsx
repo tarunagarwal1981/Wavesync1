@@ -3,7 +3,7 @@
  * Allows admins to enable/disable AI agent for specific companies
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Save, AlertCircle, CheckCircle, Settings, Zap } from 'lucide-react';
 
@@ -450,7 +450,7 @@ export default function AIAgentSettings() {
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .ai-agent-settings {
           padding: 2rem;
           max-width: 1200px;
@@ -840,4 +840,5 @@ export default function AIAgentSettings() {
     </div>
   );
 }
+
 

@@ -1,118 +1,109 @@
-/**
- * AI Agent Server
- * Main entry point for the AI service
- */
-
 import express from 'express';
-import * as cron from 'node-cron';
 import dotenv from 'dotenv';
 import { logger } from './services/logging.service';
-import { runCrewPlanningJob } from './jobs/crewPlanningJob';
-import { CrewPlanningAgent } from './agents/CrewPlanningAgent';
+import { startCrewPlanningJob, runPlanningForCompany } from './jobs/crewPlanningJob';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = process.env.AI_SERVICE_PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
-// Middleware
 app.use(express.json());
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', service: 'wavesync-ai-agent' });
-});
-
-// ============================================
-// API ENDPOINTS
-// ============================================
-
-/**
- * Trigger crew planning analysis manually for a specific company
- * POST /api/ai/crew-planning/:companyId
- */
-app.post('/api/ai/crew-planning/:companyId', async (req, res) => {
-  try {
-    const { companyId } = req.params;
-    
-    logger.info(`[API] Manual trigger for company: ${companyId}`);
-    
-    const agent = new CrewPlanningAgent(companyId);
-    await agent.run();
-    
-    res.json({ success: true, message: 'Crew planning analysis completed' });
-  } catch (error) {
-    logger.error('[API] Crew planning failed:', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-/**
- * Trigger crew planning analysis for all AI-enabled companies
- * POST /api/ai/crew-planning/run-all
- */
-app.post('/api/ai/crew-planning/run-all', async (req, res) => {
-  try {
-    logger.info('[API] Manual trigger for all companies');
-    
-    await runCrewPlanningJob();
-    
-    res.json({ success: true, message: 'Crew planning analysis completed for all companies' });
-  } catch (error) {
-    logger.error('[API] Crew planning job failed:', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-/**
- * Get AI service status
- * GET /api/ai/status
- */
-app.get('/api/ai/status', (req, res) => {
-  res.json({
-    status: 'running',
-    version: '1.0.0',
-    model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
-    cronSchedule: process.env.AI_CRON_CREW_PLANNING || '0 6 * * *'
+  res.json({ 
+    status: 'healthy',
+    service: 'wavesync-ai-agent',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
-// ============================================
-// CRON JOBS
-// ============================================
-
-// Schedule crew planning job (default: every day at 6 AM UTC)
-const crewPlanningSchedule = process.env.AI_CRON_CREW_PLANNING || '0 6 * * *';
-cron.schedule(crewPlanningSchedule, async () => {
-  logger.info('[Cron] Starting scheduled crew planning job');
+// API endpoint to manually trigger planning cycle for a company
+app.post('/api/trigger-planning', async (req, res) => {
   try {
-    await runCrewPlanningJob();
-  } catch (error) {
-    logger.error('[Cron] Crew planning job failed:', error);
+    const { company_id } = req.body;
+    
+    if (!company_id) {
+      return res.status(400).json({ 
+        error: 'company_id is required',
+        example: { company_id: 'uuid-here' }
+      });
+    }
+
+    logger.info(`Manual trigger requested for company: ${company_id}`);
+    
+    await runPlanningForCompany(company_id);
+    
+    res.json({ 
+      message: 'Planning cycle triggered successfully',
+      company_id: company_id,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    logger.error('Error triggering planning:', error);
+    res.status(500).json({ 
+      error: 'Failed to trigger planning cycle',
+      details: error.message 
+    });
   }
 });
 
-logger.info(`[Cron] Crew planning job scheduled: ${crewPlanningSchedule}`);
-
-// ============================================
-// START SERVER
-// ============================================
-
-app.listen(PORT, () => {
-  logger.info(`🤖 AI Agent Service running on port ${PORT}`);
-  logger.info(`Model: ${process.env.OPENAI_MODEL || 'gpt-4-turbo-preview'}`);
-  logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+// API endpoint to get AI service status
+app.get('/api/status', async (req, res) => {
+  try {
+    const { supabase } = await import('./services/database.service');
+    
+    // Test database connection
+    const { data, error } = await supabase
+      .from('ai_agent_config')
+      .select('count')
+      .limit(1);
+    
+    res.json({
+      status: 'operational',
+      database: error ? 'disconnected' : 'connected',
+      redis: 'checking...',
+      openai: process.env.OPENAI_API_KEY ? 'configured' : 'not configured',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      status: 'error',
+      details: error.message
+    });
+  }
 });
 
-// Handle graceful shutdown
+// Graceful shutdown handler
 process.on('SIGTERM', () => {
-  logger.info('[Server] SIGTERM signal received: closing HTTP server');
+  logger.info('SIGTERM signal received: closing HTTP server');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  logger.info('[Server] SIGINT signal received: closing HTTP server');
+  logger.info('SIGINT signal received: closing HTTP server');
   process.exit(0);
 });
 
+// Start cron jobs
+logger.info('🚀 Initializing WaveSync AI Service...');
+startCrewPlanningJob();
+
+// Start server
+app.listen(PORT, () => {
+  logger.info('═══════════════════════════════════════════════');
+  logger.info('🚀 WaveSync AI Service Started Successfully!');
+  logger.info('═══════════════════════════════════════════════');
+  logger.info(`📡 Server running on port ${PORT}`);
+  logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.info(`📅 Cron jobs initialized`);
+  logger.info(`🤖 AI Agent ready for autonomous crew planning`);
+  logger.info('═══════════════════════════════════════════════');
+  logger.info(`Health check: http://localhost:${PORT}/health`);
+  logger.info(`Status check: http://localhost:${PORT}/api/status`);
+  logger.info('═══════════════════════════════════════════════');
+});
+
+export default app;

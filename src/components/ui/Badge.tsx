@@ -1,40 +1,38 @@
-import React from "react";
-import styles from "./Badge.module.css";
+import React, { ReactNode } from 'react';
+import styles from './Badge.module.css';
 
-type BadgeVariant = "default" | "success" | "warning" | "danger" | "info";
-type BadgeSize = "small" | "medium" | "large";
-
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: BadgeVariant;
-  size?: BadgeSize;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+interface BadgeProps {
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  size?: 'sm' | 'md' | 'lg';
+  pulse?: boolean;
+  dot?: boolean;
+  children: ReactNode;
+  className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ 
-  variant = "default", 
-  size = "medium",
-  leftIcon, 
-  rightIcon, 
-  className, 
-  children, 
-  ...props 
+const Badge: React.FC<BadgeProps> = ({
+  variant = 'default',
+  size = 'md',
+  pulse = false,
+  dot = false,
+  children,
+  className = ''
 }) => {
   const classes = [
-    styles.badge, 
-    styles[variant], 
-    styles[size], 
+    styles.badge,
+    styles[variant],
+    styles[size],
+    pulse ? styles.pulse : '',
+    dot ? styles.dot : '',
     className
-  ].filter(Boolean).join(" ");
-  
+  ].filter(Boolean).join(' ');
+
   return (
-    <span className={classes} {...props}>
-      {leftIcon}
-      <span>{children}</span>
-      {rightIcon}
+    <span className={classes}>
+      {dot && <span className={styles.dotIndicator} />}
+      {children}
     </span>
   );
 };
 
 export default Badge;
-

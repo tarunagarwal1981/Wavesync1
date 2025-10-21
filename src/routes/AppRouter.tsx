@@ -1,62 +1,75 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { NavigationProvider } from "../hooks/useNavigation";
 import Layout from "../components/layout/Layout";
-import { PageTransition, ErrorBoundary } from "../components/ui";
+import { PageTransition, ErrorBoundary, Loading } from "../components/ui";
 import { SupabaseProtectedRoute } from "../components/SupabaseProtectedRoute";
+
+// Eager load only Login and critical components
 import Login from "../pages/Login";
-import DashboardRouter from "../components/DashboardRouter";
-import MyAssignments from "../components/MyAssignments";
-import Tasks from "../pages/Tasks";
-import Training from "../pages/Training";
-import Profile from "../pages/Profile";
-import Notifications from "../pages/Notifications";
-import { 
-  SettingsPage, 
-  VesselInfoPage, 
-  PortInfoPage, 
-  EmergencyContactPage, 
-  HelpSupportPage 
-} from "../pages/__stubs__";
-import { 
-  BudgetPage, 
-  SchedulingPage, 
-  CommunicationsPage, 
-  CompanySettingsPage, 
-  CompliancePage, 
-  UserManagementPage 
-} from "../pages/__stubs_company__";
-import CrewDirectory from "../components/CrewDirectory";
-import { 
-  AdminAnalyticsPage, 
-  PerformanceMonitorPage, 
-  SystemAlertsPage, 
-  PermissionsRolesPage, 
-  UserAnalyticsPage, 
-  SystemSettingsPage, 
-  ConfigurationPage, 
-  AuditLogsPage, 
-  SecuritySettingsPage, 
-  ReportsExportsPage, 
-  SupportTicketsPage, 
-  DocumentationPage, 
-  SystemUpdatesPage 
-} from "../pages/__stubs_admin__";
-import AIAssignmentPage from "../pages/AIAssignmentPage";
-import CompanyManagement from "../components/CompanyManagement";
-import UserManagement from "../components/UserManagement";
-import VesselManagement from "../components/VesselManagement";
-import AssignmentManagement from "../components/AssignmentManagement";
-import DocumentManagement from "../components/DocumentManagement";
-import TravelManagement from "../components/TravelManagement";
-import MyTravel from "../components/MyTravel";
-import TaskManagement from "../components/TaskManagement";
-import ExpiryDashboard from "../components/ExpiryDashboard";
-import AnalyticsDashboard from "../components/AnalyticsDashboard";
-import MessagingPage from "../components/MessagingPage";
-import AIAgentSettings from "../components/admin/AIAgentSettings";
-import AIAssignmentQueue from "../components/company/AIAssignmentQueue";
-import AIPerformanceDashboard from "../components/company/AIPerformanceDashboard";
+
+// Lazy load all other components for code splitting
+const DashboardRouter = lazy(() => import("../components/DashboardRouter"));
+const MyAssignments = lazy(() => import("../components/MyAssignments"));
+const Tasks = lazy(() => import("../pages/Tasks"));
+const Training = lazy(() => import("../pages/Training"));
+const Profile = lazy(() => import("../pages/Profile"));
+const Notifications = lazy(() => import("../pages/Notifications"));
+const CrewDirectory = lazy(() => import("../components/CrewDirectory"));
+const CompanyManagement = lazy(() => import("../components/CompanyManagement"));
+const UserManagement = lazy(() => import("../components/UserManagement"));
+const VesselManagement = lazy(() => import("../components/VesselManagement"));
+const AssignmentManagement = lazy(() => import("../components/AssignmentManagement"));
+const DocumentManagement = lazy(() => import("../components/DocumentManagement"));
+const TravelManagement = lazy(() => import("../components/TravelManagement"));
+const MyTravel = lazy(() => import("../components/MyTravel"));
+const TaskManagement = lazy(() => import("../components/TaskManagement"));
+const ExpiryDashboard = lazy(() => import("../components/ExpiryDashboard"));
+const AnalyticsDashboard = lazy(() => import("../components/AnalyticsDashboard"));
+const MessagingPage = lazy(() => import("../components/MessagingPage"));
+const AIAgentSettings = lazy(() => import("../components/admin/AIAgentSettings"));
+const AIAssignmentQueue = lazy(() => import("../components/company/AIAssignmentQueue"));
+const AIPerformanceDashboard = lazy(() => import("../components/company/AIPerformanceDashboard"));
+const AIAssignmentPage = lazy(() => import("../pages/AIAssignmentPage"));
+const TestPage = lazy(() => import("../pages/TestPage"));
+
+// Lazy load stub pages
+const SettingsPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.SettingsPage })));
+const VesselInfoPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.VesselInfoPage })));
+const PortInfoPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.PortInfoPage })));
+const EmergencyContactPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.EmergencyContactPage })));
+const HelpSupportPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.HelpSupportPage })));
+
+const BudgetPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.BudgetPage })));
+const SchedulingPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.SchedulingPage })));
+const CommunicationsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CommunicationsPage })));
+const CompanySettingsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompanySettingsPage })));
+const CompliancePage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompliancePage })));
+const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
+
+const AdminAnalyticsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AdminAnalyticsPage })));
+const PerformanceMonitorPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.PerformanceMonitorPage })));
+const SystemAlertsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemAlertsPage })));
+const PermissionsRolesPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.PermissionsRolesPage })));
+const UserAnalyticsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.UserAnalyticsPage })));
+const SystemSettingsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemSettingsPage })));
+const ConfigurationPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.ConfigurationPage })));
+const AuditLogsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AuditLogsPage })));
+const SecuritySettingsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SecuritySettingsPage })));
+const ReportsExportsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.ReportsExportsPage })));
+const SupportTicketsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SupportTicketsPage })));
+const DocumentationPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.DocumentationPage })));
+const SystemUpdatesPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemUpdatesPage })));
+
+// Helper component to wrap routes with Suspense
+const SuspenseRoute: React.FC<{ children: React.ReactNode; loadingText?: string }> = ({ 
+  children, 
+  loadingText = "Loading..." 
+}) => (
+  <Suspense fallback={<Loading fullScreen text={loadingText} />}>
+    {children}
+  </Suspense>
+);
 
 export const AppRouter: React.FC = () => {
   console.log('🛣️ AppRouter rendering');
@@ -73,12 +86,18 @@ export const AppRouter: React.FC = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/test" element={
+          <SuspenseRoute loadingText="Loading test page...">
+            <TestPage />
+          </SuspenseRoute>
+        } />
         
         {/* Root route redirect */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         
         {/* Protected Routes */}
         <Route path="/dashboard" element={
+          <SuspenseRoute loadingText="Loading dashboard...">
           <SupabaseProtectedRoute>
             <Layout title="WaveSync">
               {(() => {
@@ -87,108 +106,137 @@ export const AppRouter: React.FC = () => {
               })()}
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/my-assignments" element={
+          <SuspenseRoute loadingText="Loading assignments...">
           <SupabaseProtectedRoute>
             <Layout title="My Assignments">
               <PageTransition><MyAssignments /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/tasks" element={
+          <SuspenseRoute loadingText="Loading tasks...">
           <SupabaseProtectedRoute>
             <Layout title="Tasks">
               <PageTransition><Tasks /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/my-documents" element={
+          <SuspenseRoute loadingText="Loading documents...">
           <SupabaseProtectedRoute>
             <Layout title="My Documents">
               <PageTransition><DocumentManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Seafarer Travel */}
         <Route path="/my-travel" element={
+          <SuspenseRoute loadingText="Loading travel...">
           <SupabaseProtectedRoute>
             <Layout title="My Travel">
               <PageTransition><MyTravel /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         {/* Company Document Management */}
         <Route path="/company/documents" element={
+          <SuspenseRoute loadingText="Loading documents...">
           <SupabaseProtectedRoute>
             <Layout title="Document Management">
               <PageTransition><DocumentManagement /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/training" element={
+          <SuspenseRoute loadingText="Loading training...">
           <SupabaseProtectedRoute>
             <Layout title="Training">
               <PageTransition><Training /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/profile" element={
+          <SuspenseRoute loadingText="Loading profile...">
           <SupabaseProtectedRoute>
             <Layout title="Profile">
               <PageTransition><Profile /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/notifications" element={
+          <SuspenseRoute loadingText="Loading notifications...">
           <SupabaseProtectedRoute>
             <Layout title="Notifications">
               <PageTransition><Notifications /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/messages" element={
+          <SuspenseRoute loadingText="Loading messages...">
           <SupabaseProtectedRoute>
             <Layout title="Messages">
               <PageTransition><MessagingPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/settings" element={
+          <SuspenseRoute loadingText="Loading settings...">
           <SupabaseProtectedRoute>
             <Layout title="Settings">
               <PageTransition><SettingsPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         
         {/* Seafarer specific routes */}
         <Route path="/vessel" element={
+          <SuspenseRoute>
           <SupabaseProtectedRoute>
             <Layout title="Vessel Information">
               <PageTransition><VesselInfoPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/ports" element={
+          <SuspenseRoute>
           <SupabaseProtectedRoute>
             <Layout title="Port Information">
               <PageTransition><PortInfoPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/emergency" element={
+          <SuspenseRoute>
           <SupabaseProtectedRoute>
             <Layout title="Emergency Contact">
               <PageTransition><EmergencyContactPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         <Route path="/support" element={
+          <SuspenseRoute>
           <SupabaseProtectedRoute>
             <Layout title="Help & Support">
               <PageTransition><HelpSupportPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
+          </SuspenseRoute>
         } />
         
         {/* Company User specific routes */}

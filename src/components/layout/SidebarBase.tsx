@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  Anchor, 
   Waves,
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
 import { NavigationSection, NavigationItem } from '../../utils/navigationConfig';
 import styles from './SidebarBase.module.css';
+import { NeuralCrewLogo } from '../../assets/logos';
+import { BrandText } from '../ui';
 
 interface SidebarBaseProps {
   navigationSections: NavigationSection[];
@@ -106,12 +107,10 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
         {/* Maritime Branding Header */}
         <div className={styles.branding}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <Anchor size={24} />
-            </div>
+            <NeuralCrewLogo width={40} height={40} variant="cyan" />
             {!isCollapsed && (
               <div className={styles.logoText}>
-                <span className={styles.brandName}>WaveSync</span>
+                <BrandText size="md" variant="gradient" />
                 <span className={styles.brandTagline}>Maritime Platform</span>
               </div>
             )}

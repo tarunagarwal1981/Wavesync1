@@ -1,78 +1,60 @@
-/**
- * Cache Service
- * Redis-based caching for AI responses
- */
-
 import Redis from 'ioredis';
 import { logger } from './logging.service';
 
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  retryStrategy: (times) => {
-    const delay = Math.min(times * 50, 2000);
-    return delay;
-  },
-  maxRetriesPerRequest: 3
-});
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const useRedis = process.env.USE_REDIS !== 'false';
 
-redis.on('error', (err) => {
-  logger.error('[Cache] Redis error:', err);
-});
+let redis: Redis | null = null;
 
-redis.on('connect', () => {
-  logger.info('[Cache] Redis connected');
-});
+if (useRedis) {
+  try {
+    redis = new Redis(redisUrl);
 
-class CacheService {
-  /**
-   * Get value from cache
-   */
-  async get(key: string): Promise<any> {
+    redis.on('connect', () => {
+      logger.info('✅ Redis connected');
+    });
+
+    redis.on('error', (err) => {
+      logger.warn('⚠️  Redis error (running without cache):', err.message);
+      redis = null;
+    });
+  } catch (error) {
+    logger.warn('⚠️  Redis unavailable, running without cache');
+    redis = null;
+  }
+} else {
+  logger.info('ℹ️  Redis disabled (USE_REDIS=false)');
+}
+
+export const cache = {
+  async get<T>(key: string): Promise<T | null> {
+    if (!redis) return null;
     try {
-      const value = await redis.get(key);
-      if (!value) return null;
-      return JSON.parse(value);
+      const data = await redis.get(key);
+      return data ? JSON.parse(data) : null;
     } catch (error) {
-      logger.error(`[Cache] Failed to get key ${key}:`, error);
+      logger.error(`Cache get error for key ${key}:`, error);
       return null;
     }
-  }
+  },
 
-  /**
-   * Set value in cache
-   */
   async set(key: string, value: any, ttlSeconds: number = 3600): Promise<void> {
+    if (!redis) return;
     try {
       await redis.setex(key, ttlSeconds, JSON.stringify(value));
     } catch (error) {
-      logger.error(`[Cache] Failed to set key ${key}:`, error);
+      logger.error(`Cache set error for key ${key}:`, error);
     }
-  }
+  },
 
-  /**
-   * Delete value from cache
-   */
-  async delete(key: string): Promise<void> {
+  async del(key: string): Promise<void> {
+    if (!redis) return;
     try {
       await redis.del(key);
     } catch (error) {
-      logger.error(`[Cache] Failed to delete key ${key}:`, error);
+      logger.error(`Cache delete error for key ${key}:`, error);
     }
   }
+};
 
-  /**
-   * Clear all cache with pattern
-   */
-  async clearPattern(pattern: string): Promise<void> {
-    try {
-      const keys = await redis.keys(pattern);
-      if (keys.length > 0) {
-        await redis.del(...keys);
-      }
-    } catch (error) {
-      logger.error(`[Cache] Failed to clear pattern ${pattern}:`, error);
-    }
-  }
-}
-
-export const cacheService = new CacheService();
-
+export { redis };

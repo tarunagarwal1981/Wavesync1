@@ -1,130 +1,127 @@
 .toast {
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-12);
-  box-shadow: var(--shadow-medium);
-  padding: var(--space-4);
-  margin-bottom: var(--space-3);
-  max-width: 400px;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  min-width: 300px;
+  max-width: 500px;
+  animation: slideInRight 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(10px);
 }
 
-.toast.visible {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.toast.leaving {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
-.content {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--space-3);
-  align-items: flex-start;
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .icon {
   width: 24px;
   height: 24px;
-  display: grid;
-  place-items: center;
-  font-size: var(--font-16);
-}
-
-.text {
-  display: grid;
-  gap: 4px;
-}
-
-.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-size: 16px;
   font-weight: 700;
-  color: var(--gray-900);
-  font-size: var(--font-14);
+  flex-shrink: 0;
 }
 
-.description {
-  color: var(--gray-600);
-  font-size: var(--font-12);
+.message {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.4;
 }
 
 .closeButton {
+  background: transparent;
+  border: none;
   width: 24px;
   height: 24px;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-size: 20px;
   cursor: pointer;
-  color: var(--gray-500);
-  font-size: var(--font-12);
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-.closeButton:hover {
-  background: var(--gray-100);
-}
-
-.action {
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
-}
-
-.actionButton {
-  padding: 8px 16px;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-12);
-  font-size: var(--font-12);
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.actionButton:hover {
-  background: color-mix(in srgb, var(--color-primary), black 10%);
-}
-
-/* Toast type variants */
+/* Types */
 .success {
-  border-left: 4px solid var(--color-success);
+  background: var(--color-success);
+  color: white;
+}
+
+.success .icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.success .closeButton {
+  color: white;
+}
+
+.success .closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .error {
-  border-left: 4px solid var(--color-error);
+  background: var(--color-error);
+  color: white;
+}
+
+.error .icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.error .closeButton {
+  color: white;
+}
+
+.error .closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .warning {
-  border-left: 4px solid var(--color-warning);
+  background: var(--color-warning);
+  color: white;
+}
+
+.warning .icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.warning .closeButton {
+  color: white;
+}
+
+.warning .closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .info {
-  border-left: 4px solid var(--color-primary);
+  background: var(--color-info);
+  color: white;
 }
 
-@media (max-width: 640px) {
-  .toast {
-    max-width: calc(100vw - 32px);
-    margin-bottom: var(--space-2);
-  }
-  
-  .content {
-    gap: var(--space-2);
-  }
-  
-  .title {
-    font-size: var(--font-13);
-  }
-  
-  .description {
-    font-size: var(--font-11);
-  }
+.info .icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.info .closeButton {
+  color: white;
+}
+
+.info .closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
