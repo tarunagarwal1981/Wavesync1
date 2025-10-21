@@ -216,8 +216,8 @@ const AssignmentManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate that we have a company_id
-    if (!profile?.company_id) {
+    // For company users, require company_id
+    if (!profile?.company_id && profile?.user_type !== 'admin') {
       addToast({
         type: 'error',
         title: 'Error',
@@ -259,7 +259,7 @@ const AssignmentManagement: React.FC = () => {
           .from('assignments')
           .insert({
             title: formData.title,
-            company_id: profile?.company_id,
+            company_id: profile?.company_id || null,
             seafarer_id: formData.seafarer_id,
             vessel_id: formData.vessel_id,
             departure_port: formData.departure_port,
