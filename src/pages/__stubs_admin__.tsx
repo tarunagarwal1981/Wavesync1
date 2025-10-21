@@ -366,27 +366,21 @@ export const PermissionsRolesPage: React.FC = () => {
 
 // ==================== USER ANALYTICS PAGE ====================
 export const UserAnalyticsPage: React.FC = () => {
-  const [stats, setStats] = useState({
-    totalLogins: 0,
-    activeToday: 0,
-    avgSessionTime: '—'
-  });
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>User Analytics</h1>
       
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.totalLogins > 0 ? stats.totalLogins : '—'}</div>
+          <div className={styles.statValue}>—</div>
           <div className={styles.statLabel}>Total Logins</div>
         </div>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.activeToday > 0 ? stats.activeToday : '—'}</div>
+          <div className={styles.statValue}>—</div>
           <div className={styles.statLabel}>Active Today</div>
         </div>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.avgSessionTime}</div>
+          <div className={styles.statValue}>—</div>
           <div className={styles.statLabel}>Avg Session Time</div>
         </div>
       </div>
