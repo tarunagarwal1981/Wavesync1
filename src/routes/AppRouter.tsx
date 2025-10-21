@@ -422,6 +422,15 @@ export const AppRouter: React.FC = () => {
           </SupabaseProtectedRoute>
           </SuspenseRoute>
         } />
+        <Route path="/admin/assignments" element={
+          <SuspenseRoute loadingText="Loading assignment management...">
+          <SupabaseProtectedRoute>
+            <Layout title="Assignment Management">
+              <PageTransition><AssignmentManagement /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+          </SuspenseRoute>
+        } />
         {/* Company area routes */}
         <Route path="/assignments" element={
           <SuspenseRoute loadingText="Loading assignment management...">

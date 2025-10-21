@@ -389,7 +389,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "System Alerts",
         icon: AlertTriangle,
         href: "/admin/alerts",
-        badge: 7,
         permissions: [UserRole.ADMIN],
         description: "System alerts and notifications"
       }
@@ -403,7 +402,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "All Users",
         icon: Users,
         href: "/admin/users",
-        badge: 156,
         permissions: [UserRole.ADMIN],
         description: "Manage all platform users"
       },
@@ -412,7 +410,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "Company Management",
         icon: Ship,
         href: "/admin/companies",
-        badge: 8,
         permissions: [UserRole.ADMIN],
         description: "Manage companies and organizations"
       },
@@ -421,7 +418,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "Vessel Management",
         icon: Ship,
         href: "/admin/vessels",
-        badge: 12,
         permissions: [UserRole.ADMIN],
         description: "Manage vessels and fleet"
       },
@@ -430,7 +426,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "Assignment Management",
         icon: ClipboardList,
         href: "/admin/assignments",
-        badge: 24,
         permissions: [UserRole.ADMIN],
         description: "Manage seafarer assignments to vessels"
       },
@@ -505,7 +500,6 @@ export const adminNavigation: NavigationSection[] = [
         title: "Support Tickets",
         icon: HelpCircle,
         href: "/admin/support",
-        badge: 12,
         permissions: [UserRole.ADMIN],
         description: "Manage support tickets"
       },

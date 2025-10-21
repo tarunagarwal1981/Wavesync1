@@ -56,21 +56,24 @@ const VesselManagement: React.FC = () => {
   }, [profile?.company_id]);
 
   const fetchVessels = async () => {
-    if (!profile?.company_id) {
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Admin users can see all vessels, company users see only their company's vessels
+      let query = supabase
         .from('vessels')
         .select(`
           *,
           company:companies(name)
         `)
-        .eq('company_id', profile.company_id)
         .order('created_at', { ascending: false });
+
+      // If user has a company_id (company user), filter by it
+      if (profile?.company_id && profile?.user_type !== 'admin') {
+        query = query.eq('company_id', profile.company_id);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setVessels(data || []);
@@ -100,8 +103,8 @@ const VesselManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate that we have a company_id
-    if (!profile?.company_id) {
+    // For company users, require company_id
+    if (!profile?.company_id && profile?.user_type !== 'admin') {
       addToast({
         type: 'error',
         title: 'Error',
@@ -137,7 +140,7 @@ const VesselManagement: React.FC = () => {
           duration: 5000
         });
       } else {
-        // Create new vessel
+        // Create new vessel - use profile company_id if available
         const { error } = await supabase
           .from('vessels')
           .insert({
@@ -145,7 +148,7 @@ const VesselManagement: React.FC = () => {
             imo_number: formData.imo_number || null,
             vessel_type: formData.vessel_type,
             flag: formData.flag || null,
-            company_id: profile?.company_id,
+            company_id: profile?.company_id || null,
             status: formData.status,
             capacity: formData.capacity || null,
             built_year: formData.built_year || null,
