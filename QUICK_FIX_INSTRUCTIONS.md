@@ -7,7 +7,12 @@
 - **Fix:** All routes in `AppRouter.tsx` now have proper `<SuspenseRoute>` wrappers
 - **Result:** No more "component suspended" errors when navigating
 
-### 2. Profile Fetch Timeout - MITIGATED ✅
+### 2. Netlify Build Error - FIXED ✅
+- **Issue:** Unused `ErrorBoundary` import causing TypeScript compilation error
+- **Fix:** Removed unused import from `AppRouter.tsx`
+- **Result:** Build passes successfully ✓ (verified locally)
+
+### 3. Profile Fetch Timeout - MITIGATED ✅
 - **Issue:** Profile queries timing out due to RLS circular dependencies
 - **Fix:** Extended timeout to 30s, added retry logic, improved error handling
 - **Result:** App works even if profile fetch is slow or fails

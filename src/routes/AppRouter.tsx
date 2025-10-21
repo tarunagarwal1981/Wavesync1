@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { NavigationProvider } from "../hooks/useNavigation";
 import Layout from "../components/layout/Layout";
-import { PageTransition, ErrorBoundary, Loading } from "../components/ui";
+import { PageTransition, Loading } from "../components/ui";
 import { SupabaseProtectedRoute } from "../components/SupabaseProtectedRoute";
 
 // Eager load only Login and critical components
