@@ -2,7 +2,7 @@
 .layout {
   display: flex;
   height: 100vh;
-  background: #f8fafc;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   overflow: hidden;
 }
 
@@ -19,6 +19,7 @@
   flex: 1;
   padding: 24px;
   overflow-y: auto;
+  background: transparent;
 }
 
 /* Desktop Layout */
