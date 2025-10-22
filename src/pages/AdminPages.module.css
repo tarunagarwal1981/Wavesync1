@@ -1,17 +1,17 @@
-/* Admin Pages Styles */
+/* Admin Pages Modern Styling - Matches Company Dashboard */
 .container {
-  padding: var(--space-6);
-  background: var(--bg-primary);
+  padding: clamp(16px, 4vw, 32px);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100vh;
   animation: fadeIn 0.3s ease-out;
 }
 
 .title {
-  font-size: var(--font-32);
-  font-weight: var(--font-bold);
-  color: var(--text-primary);
-  letter-spacing: var(--letter-tight);
-  margin: 0 0 var(--space-6) 0;
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 700;
+  margin-bottom: 28px;
+  color: #1e293b;
+  letter-spacing: -0.025em;
 }
 
 /* Loading State */
@@ -39,40 +39,87 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Stats Grid */
+/* Stats Grid - Matches Company Dashboard */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 640px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 639px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 .statCard {
-  background: var(--gradient-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-16);
-  padding: var(--space-6);
-  text-align: center;
-  transition: all var(--transition-base);
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
 
 .statCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.statCard:hover::before {
+  opacity: 1;
 }
 
 .statValue {
-  font-size: var(--font-32);
-  font-weight: var(--font-bold);
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .statLabel {
-  font-size: var(--font-14);
-  color: var(--text-secondary);
-  font-weight: var(--font-medium);
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
 }
 
 /* Empty State */
@@ -108,26 +155,34 @@
   color: var(--text-secondary);
 }
 
-/* Info Card */
+/* Info Card - Matches Company Dashboard */
 .infoCard {
-  background: var(--gradient-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-16);
-  padding: var(--space-6);
-  margin-top: var(--space-6);
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.infoCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(14, 165, 233, 0.3);
 }
 
 .infoCard h3 {
-  font-size: var(--font-18);
-  font-weight: var(--font-semibold);
-  color: var(--text-primary);
-  margin: 0 0 var(--space-3) 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
 }
 
 .infoCard p {
-  margin: 0 0 var(--space-3) 0;
-  font-size: var(--font-14);
-  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #64748b;
   line-height: 1.6;
 }
 
@@ -164,62 +219,106 @@
   margin: 0 0 var(--space-4) 0;
 }
 
-/* User Grid */
+/* User Grid - Matches Company Dashboard Cards */
 .userGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .userGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .userGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
 }
 
 .userCard {
-  background: var(--gradient-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-16);
-  padding: var(--space-4);
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  transition: all var(--transition-base);
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.userCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
 
 .userCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.userCard:hover::before {
+  opacity: 1;
 }
 
 .userAvatar {
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-12);
-  background: var(--gradient-primary);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-18);
-  font-weight: var(--font-bold);
+  font-size: 18px;
+  font-weight: 700;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.userCard:hover .userAvatar {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
 }
 
 .userInfo {
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .userName {
-  font-size: var(--font-16);
-  font-weight: var(--font-semibold);
-  color: var(--text-primary);
-  margin-bottom: 2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .userEmail {
-  font-size: var(--font-12);
-  color: var(--text-secondary);
+  font-size: 13px;
+  color: #64748b;
   margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -227,16 +326,19 @@
 }
 
 .userMeta {
-  font-size: var(--font-12);
-  color: var(--text-muted);
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .userBadge {
-  padding: 4px 12px;
-  border-radius: var(--radius-8);
-  font-size: var(--font-12);
-  font-weight: var(--font-semibold);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* Responsive Design */

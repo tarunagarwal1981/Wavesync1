@@ -100,7 +100,7 @@ export const AllUsersPage: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Seafarers ({users.filter(u => u.user_type === 'seafarer').length})</h3>
             <div className={styles.userGrid}>
-              {users.filter(u => u.user_type === 'seafarer').slice(0, 5).map((user) => (
+              {users.filter(u => u.user_type === 'seafarer').map((user) => (
                 <div key={user.id} className={styles.userCard}>
                   <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
                   <div className={styles.userInfo}>
@@ -123,7 +123,7 @@ export const AllUsersPage: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Company Users ({users.filter(u => u.user_type === 'company').length})</h3>
             <div className={styles.userGrid}>
-              {users.filter(u => u.user_type === 'company').slice(0, 5).map((user) => (
+              {users.filter(u => u.user_type === 'company').map((user) => (
                 <div key={user.id} className={styles.userCard}>
                   <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
                   <div className={styles.userInfo}>
