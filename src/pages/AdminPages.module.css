@@ -122,6 +122,89 @@
   z-index: 1;
 }
 
+/* Icon Container Styles - Matches Company Dashboard */
+.statIcon {
+  margin-bottom: 16px;
+}
+
+.iconContainer {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+  transition: all 0.2s ease;
+}
+
+.statsGrid > *:hover .iconContainer {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
+}
+
+.iconContainer.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.statsGrid > *:hover .iconContainer.success {
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+}
+
+.iconContainer.warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.statsGrid > *:hover .iconContainer.warning {
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+}
+
+.iconContainer.info {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.statsGrid > *:hover .iconContainer.info {
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
+}
+
+.statContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.statNumber {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.statSubtext {
+  color: #94a3b8;
+  font-size: 13px;
+  margin: 0;
+  font-weight: 500;
+}
+
 /* Empty State */
 .emptyState {
   display: flex;
