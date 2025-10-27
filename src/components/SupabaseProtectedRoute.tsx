@@ -26,12 +26,13 @@ export const SupabaseProtectedRoute: React.FC<SupabaseProtectedRouteProps> = ({
   }
 
   // Redirect to login if not authenticated
-  if (!user || !profile) {
+  // Only require user to be authenticated, profile is optional
+  if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  // Check user type if required
-  if (requiredUserType && profile.user_type !== requiredUserType) {
+  // Check user type if required (and profile exists)
+  if (requiredUserType && profile && profile.user_type !== requiredUserType) {
     return (
       <div className={styles.accessDeniedContainer}>
         <div className={styles.accessDeniedCard}>

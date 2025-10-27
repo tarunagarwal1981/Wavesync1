@@ -1,6 +1,7 @@
 // Admin pages with real data
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { Card } from '../components/ui';
 import styles from './AdminPages.module.css';
 
 // ==================== ALL USERS PAGE ====================
@@ -65,26 +66,83 @@ export const AllUsersPage: React.FC = () => {
       
       {/* User Summary */}
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.total > 0 ? stats.total : '—'}</div>
-          <div className={styles.statLabel}>Total Users</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.active > 0 ? stats.active : '—'}</div>
-          <div className={styles.statLabel}>Active Users</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.seafarers > 0 ? stats.seafarers : '—'}</div>
-          <div className={styles.statLabel}>Seafarers</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.company > 0 ? stats.company : '—'}</div>
-          <div className={styles.statLabel}>Company Users</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{stats.admins > 0 ? stats.admins : '—'}</div>
-          <div className={styles.statLabel}>Admins</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={styles.iconContainer}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Total Users</h3>
+            <p className={styles.statNumber}>{stats.total > 0 ? stats.total : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Active Users</h3>
+            <p className={styles.statNumber}>{stats.active > 0 ? stats.active : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3 21H21L19 7H5L3 21Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
+                <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Seafarers</h3>
+            <p className={styles.statNumber}>{stats.seafarers > 0 ? stats.seafarers : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.warning}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Company Users</h3>
+            <p className={styles.statNumber}>{stats.company > 0 ? stats.company : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Admins</h3>
+            <p className={styles.statNumber}>{stats.admins > 0 ? stats.admins : '—'}</p>
+          </div>
+        </Card>
       </div>
 
       {/* Users List */}
@@ -100,7 +158,7 @@ export const AllUsersPage: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Seafarers ({users.filter(u => u.user_type === 'seafarer').length})</h3>
             <div className={styles.userGrid}>
-              {users.filter(u => u.user_type === 'seafarer').slice(0, 5).map((user) => (
+              {users.filter(u => u.user_type === 'seafarer').map((user) => (
                 <div key={user.id} className={styles.userCard}>
                   <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
                   <div className={styles.userInfo}>
@@ -123,7 +181,7 @@ export const AllUsersPage: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Company Users ({users.filter(u => u.user_type === 'company').length})</h3>
             <div className={styles.userGrid}>
-              {users.filter(u => u.user_type === 'company').slice(0, 5).map((user) => (
+              {users.filter(u => u.user_type === 'company').map((user) => (
                 <div key={user.id} className={styles.userCard}>
                   <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
                   <div className={styles.userInfo}>
@@ -226,39 +284,107 @@ export const AdminAnalyticsPage: React.FC = () => {
       <h1 className={styles.title}>System Analytics</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.totalUsers > 0 ? analytics.totalUsers : '—'}</div>
-          <div className={styles.statLabel}>Total Users</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.totalCompanies > 0 ? analytics.totalCompanies : '—'}</div>
-          <div className={styles.statLabel}>Companies</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.totalVessels > 0 ? analytics.totalVessels : '—'}</div>
-          <div className={styles.statLabel}>Vessels</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.totalAssignments > 0 ? analytics.totalAssignments : '—'}</div>
-          <div className={styles.statLabel}>Total Assignments</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.activeAssignments > 0 ? analytics.activeAssignments : '—'}</div>
-          <div className={styles.statLabel}>Active Assignments</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{analytics.totalDocuments > 0 ? analytics.totalDocuments : '—'}</div>
-          <div className={styles.statLabel}>Documents</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={styles.iconContainer}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Total Users</h3>
+            <p className={styles.statNumber}>{analytics.totalUsers > 0 ? analytics.totalUsers : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3 21H21L19 7H5L3 21Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
+                <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Companies</h3>
+            <p className={styles.statNumber}>{analytics.totalCompanies > 0 ? analytics.totalCompanies : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3 21H21L19 7H5L3 21Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
+                <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Vessels</h3>
+            <p className={styles.statNumber}>{analytics.totalVessels > 0 ? analytics.totalVessels : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.warning}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Total Assignments</h3>
+            <p className={styles.statNumber}>{analytics.totalAssignments > 0 ? analytics.totalAssignments : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Active Assignments</h3>
+            <p className={styles.statNumber}>{analytics.activeAssignments > 0 ? analytics.activeAssignments : '—'}</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Documents</h3>
+            <p className={styles.statNumber}>{analytics.totalDocuments > 0 ? analytics.totalDocuments : '—'}</p>
+          </div>
+        </Card>
       </div>
 
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>📊 Analytics Dashboard</h3>
         <p>Real-time system metrics and performance indicators.</p>
         {analytics.totalUsers === 0 && (
           <p className={styles.note}>Create users and data to see analytics populate.</p>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
@@ -270,29 +396,73 @@ export const PerformanceMonitorPage: React.FC = () => {
       <h1 className={styles.title}>Performance Monitor</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>99.8%</div>
-          <div className={styles.statLabel}>System Uptime</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Avg Response Time</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Server Load</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Database Queries</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>System Uptime</h3>
+            <p className={styles.statNumber}>99.8%</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2V6M12 18V22M6 12H2M22 12H18M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Avg Response Time</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.warning}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Server Load</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={styles.iconContainer}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Database Queries</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
       </div>
 
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🔧 System Performance</h3>
         <p>Monitor system health and performance metrics in real-time.</p>
         <p className={styles.note}>Advanced performance monitoring coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -304,22 +474,62 @@ export const SystemAlertsPage: React.FC = () => {
       <h1 className={styles.title}>System Alerts</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Critical Alerts</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Warnings</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Info</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Resolved Today</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.warning}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Critical Alerts</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Warnings</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Info</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={styles.iconContainer}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Resolved Today</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
       </div>
 
       <div className={styles.emptyState}>
@@ -336,10 +546,10 @@ export const CompanyManagementPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Company Management</h1>
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🏢 Company Management</h3>
         <p>Navigate to the dedicated Company Management section from the sidebar to manage companies.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -350,7 +560,7 @@ export const PermissionsRolesPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Permissions & Roles</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🔐 Role-Based Access Control</h3>
         <p>Current system roles:</p>
         <ul className={styles.roleList}>
@@ -359,7 +569,7 @@ export const PermissionsRolesPage: React.FC = () => {
           <li><strong>Seafarer:</strong> View assignments, documents, and training</li>
         </ul>
         <p className={styles.note}>Advanced permission management coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -371,25 +581,55 @@ export const UserAnalyticsPage: React.FC = () => {
       <h1 className={styles.title}>User Analytics</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Total Logins</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Active Today</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Avg Session Time</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={styles.iconContainer}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Total Logins</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Active Today</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2V6M12 18V22M6 12H2M22 12H18M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Avg Session Time</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
       </div>
 
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>📈 User Behavior Analytics</h3>
         <p>Track user engagement and platform usage patterns.</p>
         <p className={styles.note}>Detailed analytics dashboard coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -400,11 +640,11 @@ export const SystemSettingsPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>System Settings</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>⚙️ System Configuration</h3>
         <p>Configure global system settings and preferences.</p>
         <p className={styles.note}>Settings panel coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -415,11 +655,11 @@ export const ConfigurationPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Configuration</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🔧 Platform Configuration</h3>
         <p>Advanced configuration options for administrators.</p>
         <p className={styles.note}>Configuration panel coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -445,7 +685,7 @@ export const SecuritySettingsPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Security Settings</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🛡️ Security Configuration</h3>
         <p>Manage security policies and authentication settings.</p>
         <ul className={styles.roleList}>
@@ -455,7 +695,7 @@ export const SecuritySettingsPage: React.FC = () => {
           <li>IP whitelisting</li>
         </ul>
         <p className={styles.note}>Security settings panel coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -466,7 +706,7 @@ export const ReportsExportsPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Reports & Exports</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>📊 System Reports</h3>
         <p>Generate and export system reports.</p>
         <ul className={styles.roleList}>
@@ -476,7 +716,7 @@ export const ReportsExportsPage: React.FC = () => {
           <li>Compliance reports</li>
         </ul>
         <p className={styles.note}>Report generation tools coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -488,18 +728,50 @@ export const SupportTicketsPage: React.FC = () => {
       <h1 className={styles.title}>Support Tickets</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Open Tickets</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>In Progress</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>—</div>
-          <div className={styles.statLabel}>Resolved</div>
-        </div>
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.warning}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Open Tickets</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.info}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2V6M12 18V22M6 12H2M22 12H18M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>In Progress</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
+        
+        <Card variant="elevated" hoverable padding="lg">
+          <div className={styles.statIcon}>
+            <div className={`${styles.iconContainer} ${styles.success}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statTitle}>Resolved</h3>
+            <p className={styles.statNumber}>—</p>
+          </div>
+        </Card>
       </div>
 
       <div className={styles.emptyState}>
@@ -517,7 +789,7 @@ export const DocumentationPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Documentation</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>📖 System Documentation</h3>
         <p>Access guides, tutorials, and API documentation.</p>
         <ul className={styles.roleList}>
@@ -527,7 +799,7 @@ export const DocumentationPage: React.FC = () => {
           <li>Best practices</li>
         </ul>
         <p className={styles.note}>Documentation portal coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -538,12 +810,12 @@ export const SystemUpdatesPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>System Updates</h1>
       
-      <div className={styles.infoCard}>
+      <Card variant="elevated" padding="lg">
         <h3>🔄 Platform Updates</h3>
         <p>Current Version: 1.0.0</p>
         <p>All systems are up to date.</p>
         <p className={styles.note}>Update management tools coming soon.</p>
-      </div>
+      </Card>
     </div>
   );
 };
