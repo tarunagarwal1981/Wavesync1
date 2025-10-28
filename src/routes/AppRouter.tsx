@@ -47,6 +47,7 @@ const CompanySettingsPage = lazy(() => import("../pages/__stubs_company__").then
 const CompliancePage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompliancePage })));
 const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
 
+const AllUsersPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AllUsersPage })));
 const AdminAnalyticsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AdminAnalyticsPage })));
 const PerformanceMonitorPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.PerformanceMonitorPage })));
 const SystemAlertsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemAlertsPage })));
@@ -396,10 +397,10 @@ export const AppRouter: React.FC = () => {
           </SuspenseRoute>
         } />
         <Route path="/admin/users" element={
-          <SuspenseRoute loadingText="Loading user management...">
+          <SuspenseRoute loadingText="Loading users...">
           <SupabaseProtectedRoute>
             <Layout title="User Management">
-              <PageTransition><UserManagement /></PageTransition>
+              <PageTransition><AllUsersPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
           </SuspenseRoute>
