@@ -86,7 +86,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const fetchUserProfile = async (userId: string, retryCount = 0) => {
     // If already fetching for this user, return existing promise
-    if (fetchingRef.current[userId]) {
+    if (fetchingRef.current[userId] !== undefined) {
       console.log('⏳ Already fetching profile for:', userId)
       return fetchingRef.current[userId]
     }

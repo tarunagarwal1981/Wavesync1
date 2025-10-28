@@ -17,7 +17,6 @@ const Profile = lazy(() => import("../pages/Profile"));
 const Notifications = lazy(() => import("../pages/Notifications"));
 const CrewDirectory = lazy(() => import("../components/CrewDirectory"));
 const CompanyManagement = lazy(() => import("../components/CompanyManagement"));
-const UserManagement = lazy(() => import("../components/UserManagement"));
 const VesselManagement = lazy(() => import("../components/VesselManagement"));
 const AssignmentManagement = lazy(() => import("../components/AssignmentManagement"));
 const DocumentManagement = lazy(() => import("../components/DocumentManagement"));
