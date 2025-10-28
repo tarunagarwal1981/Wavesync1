@@ -1,45 +1,56 @@
-/* Company Management Styles */
+/* Company Management Styles - Matches Company Dashboard */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .container {
-  padding: var(--space-6);
-  background: var(--bg-primary);
+  padding: clamp(16px, 4vw, 32px);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100vh;
-  animation: fadeIn var(--transition-slow) ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-6);
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .title {
-  font-size: var(--font-32);
-  font-weight: var(--font-bold);
-  color: var(--text-primary);
-  letter-spacing: var(--letter-tight);
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.025em;
   margin: 0;
 }
 
 .createButton {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-5);
-  background: var(--gradient-primary);
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: white;
   border: none;
-  border-radius: var(--radius-12);
-  font-weight: var(--font-medium);
-  font-size: var(--font-14);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
 }
 
 .createButton:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
 }
 
 /* Loading State */
@@ -211,11 +222,25 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Companies Grid */
+/* Companies Grid - Modern Responsive */
 .companiesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@media (min-width: 640px) {
+  .companiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .companiesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
 }
 
 /* Empty State */
@@ -247,20 +272,40 @@
   font-size: var(--font-14);
 }
 
-/* Company Card */
+/* Company Card - Modern Elevated Design */
 .companyCard {
-  background: var(--gradient-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-16);
-  padding: var(--space-6);
-  transition: all var(--transition-base);
-  animation: fadeIn var(--transition-slow) ease-out;
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.companyCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
 
 .companyCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.companyCard:hover::before {
+  opacity: 1;
 }
 
 .companyHeader {
