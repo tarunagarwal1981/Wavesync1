@@ -52,11 +52,11 @@ export const AllUsersPage: React.FC = () => {
   };
 
   if (loading) {
-    return (
+  return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
         <p>Loading users...</p>
-      </div>
+            </div>
     );
   }
 
@@ -74,11 +74,11 @@ export const AllUsersPage: React.FC = () => {
                 <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-          </div>
+            </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Total Users</h3>
             <p className={styles.statNumber}>{stats.total > 0 ? stats.total : '—'}</p>
-          </div>
+            </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -89,11 +89,11 @@ export const AllUsersPage: React.FC = () => {
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-          </div>
+            </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Active Users</h3>
             <p className={styles.statNumber}>{stats.active > 0 ? stats.active : '—'}</p>
-          </div>
+            </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -105,11 +105,11 @@ export const AllUsersPage: React.FC = () => {
                 <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-          </div>
+            </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Seafarers</h3>
             <p className={styles.statNumber}>{stats.seafarers > 0 ? stats.seafarers : '—'}</p>
-          </div>
+            </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -120,12 +120,12 @@ export const AllUsersPage: React.FC = () => {
                 <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
                 <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+        </div>
+      </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Company Users</h3>
             <p className={styles.statNumber}>{stats.company > 0 ? stats.company : '—'}</p>
-          </div>
+        </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -137,13 +137,13 @@ export const AllUsersPage: React.FC = () => {
                 <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-          </div>
+            </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Admins</h3>
             <p className={styles.statNumber}>{stats.admins > 0 ? stats.admins : '—'}</p>
-          </div>
+            </div>
         </Card>
-      </div>
+        </div>
 
       {/* Users List */}
       {users.length === 0 ? (
@@ -151,7 +151,7 @@ export const AllUsersPage: React.FC = () => {
           <div className={styles.emptyIcon}>👥</div>
           <h3>No Users Found</h3>
           <p>There are no users in the system yet.</p>
-        </div>
+            </div>
       ) : (
         <>
           {/* Seafarers */}
@@ -167,15 +167,15 @@ export const AllUsersPage: React.FC = () => {
                     <div className={styles.userMeta}>
                       {user.seafarer_profile?.[0]?.rank || user.seafarer_profile?.rank || '—'} • 
                       {user.company?.name || 'No Company'}
-                    </div>
-                  </div>
+            </div>
+            </div>
                   <div className={styles.userBadge} style={{ background: '#dbeafe', color: '#1e40af' }}>
                     Seafarer
-                  </div>
-                </div>
-              ))}
             </div>
+            </div>
+              ))}
           </div>
+        </div>
 
           {/* Company Users */}
           <div className={styles.section}>
@@ -189,15 +189,15 @@ export const AllUsersPage: React.FC = () => {
                     <div className={styles.userEmail}>{user.email || '—'}</div>
                     <div className={styles.userMeta}>
                       {user.company?.name || 'No Company'}
-                    </div>
-                  </div>
+            </div>
+            </div>
                   <div className={styles.userBadge} style={{ background: '#e0e7ff', color: '#3730a3' }}>
                     Company
-                  </div>
-                </div>
-              ))}
             </div>
-          </div>
+            </div>
+              ))}
+        </div>
+      </div>
 
           {/* Admins */}
           <div className={styles.section}>
@@ -210,14 +210,14 @@ export const AllUsersPage: React.FC = () => {
                     <div className={styles.userName}>{user.full_name || '—'}</div>
                     <div className={styles.userEmail}>{user.email || '—'}</div>
                     <div className={styles.userMeta}>System Administrator</div>
-                  </div>
+        </div>
                   <div className={styles.userBadge} style={{ background: '#fecaca', color: '#991b1b' }}>
                     Admin
-                  </div>
-                </div>
-              ))}
+      </div>
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
         </>
       )}
     </div>
@@ -291,12 +291,12 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
                 <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+        </div>
+        </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Total Users</h3>
             <p className={styles.statNumber}>{analytics.totalUsers > 0 ? analytics.totalUsers : '—'}</p>
-          </div>
+        </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -307,12 +307,12 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
                 <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+              </div>
+              </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Companies</h3>
             <p className={styles.statNumber}>{analytics.totalCompanies > 0 ? analytics.totalCompanies : '—'}</p>
-          </div>
+            </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -323,8 +323,8 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
                 <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+        </div>
+      </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Vessels</h3>
             <p className={styles.statNumber}>{analytics.totalVessels > 0 ? analytics.totalVessels : '—'}</p>
@@ -338,12 +338,12 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+              </div>
+              </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Total Assignments</h3>
             <p className={styles.statNumber}>{analytics.totalAssignments > 0 ? analytics.totalAssignments : '—'}</p>
-          </div>
+            </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -353,8 +353,8 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+        </div>
+      </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Active Assignments</h3>
             <p className={styles.statNumber}>{analytics.activeAssignments > 0 ? analytics.activeAssignments : '—'}</p>
@@ -369,14 +369,14 @@ export const AdminAnalyticsPage: React.FC = () => {
                 <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
                 <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+              </div>
+              </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Documents</h3>
             <p className={styles.statNumber}>{analytics.totalDocuments > 0 ? analytics.totalDocuments : '—'}</p>
-          </div>
+            </div>
         </Card>
-      </div>
+        </div>
 
       <Card variant="elevated" padding="lg">
         <h3>📊 Analytics Dashboard</h3>
@@ -403,12 +403,12 @@ export const PerformanceMonitorPage: React.FC = () => {
                 <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+        </div>
+        </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>System Uptime</h3>
             <p className={styles.statNumber}>99.8%</p>
-          </div>
+        </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -417,12 +417,12 @@ export const PerformanceMonitorPage: React.FC = () => {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2V6M12 18V22M6 12H2M22 12H18M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-            </div>
-          </div>
+        </div>
+        </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Avg Response Time</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+      </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -433,12 +433,12 @@ export const PerformanceMonitorPage: React.FC = () => {
                 <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
                 <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
               </svg>
-            </div>
-          </div>
+                </div>
+                </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Server Load</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+              </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -449,12 +449,12 @@ export const PerformanceMonitorPage: React.FC = () => {
                 <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
                 <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
               </svg>
+              </div>
             </div>
-          </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Database Queries</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+        </div>
         </Card>
       </div>
 
@@ -463,7 +463,7 @@ export const PerformanceMonitorPage: React.FC = () => {
         <p>Monitor system health and performance metrics in real-time.</p>
         <p className={styles.note}>Advanced performance monitoring coming soon.</p>
       </Card>
-    </div>
+                </div>
   );
 };
 
@@ -480,12 +480,12 @@ export const SystemAlertsPage: React.FC = () => {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-            </div>
-          </div>
+                </div>
+              </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Critical Alerts</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+              </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -495,11 +495,11 @@ export const SystemAlertsPage: React.FC = () => {
                 <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </div>
-          </div>
+        </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Warnings</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+      </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -508,12 +508,12 @@ export const SystemAlertsPage: React.FC = () => {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-            </div>
-          </div>
+                </div>
+                </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Info</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+              </div>
         </Card>
         
         <Card variant="elevated" hoverable padding="lg">
@@ -523,12 +523,12 @@ export const SystemAlertsPage: React.FC = () => {
                 <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
               </svg>
+              </div>
             </div>
-          </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Resolved Today</h3>
             <p className={styles.statNumber}>—</p>
-          </div>
+        </div>
         </Card>
       </div>
 
@@ -587,7 +587,7 @@ export const UserAnalyticsPage: React.FC = () => {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </div>
+      </div>
           </div>
           <div className={styles.statContent}>
             <h3 className={styles.statTitle}>Total Logins</h3>
