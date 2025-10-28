@@ -358,7 +358,7 @@ export const companyNavigation: NavigationSection[] = [
 // Admin Navigation Configuration
 export const adminNavigation: NavigationSection[] = [
   {
-    title: "System Overview",
+    title: "", // No section header
     items: [
       {
         id: "admin-dashboard",
@@ -368,35 +368,33 @@ export const adminNavigation: NavigationSection[] = [
         permissions: [UserRole.ADMIN],
         description: "System overview and metrics"
       },
-      {
-        id: "system-analytics",
-        title: "System Analytics",
-        icon: BarChart3,
-        href: "/admin/analytics",
-        permissions: [UserRole.ADMIN],
-        description: "System performance analytics"
-      },
-      {
-        id: "performance-monitor",
-        title: "Performance Monitor",
-        icon: Activity,
-        href: "/admin/performance",
-        permissions: [UserRole.ADMIN],
-        description: "Monitor system performance"
-      },
-      {
-        id: "system-alerts",
-        title: "System Alerts",
-        icon: AlertTriangle,
-        href: "/admin/alerts",
-        permissions: [UserRole.ADMIN],
-        description: "System alerts and notifications"
-      }
-    ]
-  },
-  {
-    title: "User Management",
-    items: [
+      // Commented out - System Analytics
+      // {
+      //   id: "system-analytics",
+      //   title: "System Analytics",
+      //   icon: BarChart3,
+      //   href: "/admin/analytics",
+      //   permissions: [UserRole.ADMIN],
+      //   description: "System performance analytics"
+      // },
+      // Commented out - Performance Monitor
+      // {
+      //   id: "performance-monitor",
+      //   title: "Performance Monitor",
+      //   icon: Activity,
+      //   href: "/admin/performance",
+      //   permissions: [UserRole.ADMIN],
+      //   description: "Monitor system performance"
+      // },
+      // Commented out - System Alerts
+      // {
+      //   id: "system-alerts",
+      //   title: "System Alerts",
+      //   icon: AlertTriangle,
+      //   href: "/admin/alerts",
+      //   permissions: [UserRole.ADMIN],
+      //   description: "System alerts and notifications"
+      // },
       {
         id: "all-users",
         title: "All Users",
@@ -436,91 +434,94 @@ export const adminNavigation: NavigationSection[] = [
         href: "/admin/permissions",
         permissions: [UserRole.ADMIN],
         description: "Manage user permissions and roles"
-      },
-      {
-        id: "user-analytics",
-        title: "User Analytics",
-        icon: Database,
-        href: "/admin/user-analytics",
-        permissions: [UserRole.ADMIN],
-        description: "User behavior analytics"
       }
-    ]
-  },
-  {
-    title: "System Configuration",
-    items: [
-      {
-        id: "system-settings",
-        title: "System Settings",
-        icon: Settings,
-        href: "/admin/settings",
-        permissions: [UserRole.ADMIN],
-        description: "Global system settings"
-      },
-      {
-        id: "configuration",
-        title: "Configuration",
-        icon: Cog,
-        href: "/admin/config",
-        permissions: [UserRole.ADMIN],
-        description: "System configuration"
-      },
-      {
-        id: "audit-logs",
-        title: "Audit Logs",
-        icon: FileBarChart,
-        href: "/admin/audit",
-        permissions: [UserRole.ADMIN],
-        description: "System audit logs"
-      },
-      {
-        id: "security-settings",
-        title: "Security Settings",
-        icon: Shield,
-        href: "/admin/security",
-        permissions: [UserRole.ADMIN],
-        description: "Security configuration"
-      },
-      {
-        id: "reports-exports",
-        title: "Reports & Exports",
-        icon: FileBarChart,
-        href: "/admin/reports",
-        permissions: [UserRole.ADMIN],
-        description: "Generate system reports"
-      }
-    ]
-  },
-  {
-    title: "Support",
-    items: [
-      {
-        id: "support-tickets",
-        title: "Support Tickets",
-        icon: HelpCircle,
-        href: "/admin/support",
-        permissions: [UserRole.ADMIN],
-        description: "Manage support tickets"
-      },
-      {
-        id: "documentation",
-        title: "Documentation",
-        icon: FileText,
-        href: "/admin/docs",
-        permissions: [UserRole.ADMIN],
-        description: "System documentation"
-      },
-      {
-        id: "system-updates",
-        title: "System Updates",
-        icon: Clock,
-        href: "/admin/updates",
-        permissions: [UserRole.ADMIN],
-        description: "Manage system updates"
-      }
+      // Commented out - User Analytics
+      // {
+      //   id: "user-analytics",
+      //   title: "User Analytics",
+      //   icon: Database,
+      //   href: "/admin/user-analytics",
+      //   permissions: [UserRole.ADMIN],
+      //   description: "User behavior analytics"
+      // }
     ]
   }
+  // Commented out - System Configuration Section
+  // {
+  //   title: "System Configuration",
+  //   items: [
+  //     {
+  //       id: "system-settings",
+  //       title: "System Settings",
+  //       icon: Settings,
+  //       href: "/admin/settings",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "Global system settings"
+  //     },
+  //     {
+  //       id: "configuration",
+  //       title: "Configuration",
+  //       icon: Cog,
+  //       href: "/admin/config",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "System configuration"
+  //     },
+  //     {
+  //       id: "audit-logs",
+  //       title: "Audit Logs",
+  //       icon: FileBarChart,
+  //       href: "/admin/audit",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "System audit logs"
+  //     },
+  //     {
+  //       id: "security-settings",
+  //       title: "Security Settings",
+  //       icon: Shield,
+  //       href: "/admin/security",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "Security configuration"
+  //     },
+  //     {
+  //       id: "reports-exports",
+  //       title: "Reports & Exports",
+  //       icon: FileBarChart,
+  //       href: "/admin/reports",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "Generate system reports"
+  //     }
+  //   ]
+  // },
+  // Commented out - Support Section
+  // {
+  //   title: "Support",
+  //   items: [
+  //     {
+  //       id: "support-tickets",
+  //       title: "Support Tickets",
+  //       icon: HelpCircle,
+  //       href: "/admin/support",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "Manage support tickets"
+  //     },
+  //     {
+  //       id: "documentation",
+  //       title: "Documentation",
+  //       icon: FileText,
+  //       href: "/admin/docs",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "System documentation"
+  //     },
+  //     {
+  //       id: "system-updates",
+  //       title: "System Updates",
+  //       icon: Clock,
+  //       href: "/admin/updates",
+  //       permissions: [UserRole.ADMIN],
+  //       description: "Manage system updates"
+  //     }
+  //   ]
+  // }
 ];
 
 // Helper function to get navigation based on user role

@@ -45,13 +45,13 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
         <div className={styles.navItemContainer}>
           <NavLink
             to={item.href}
+            end={item.href === '/admin' || item.href === '/dashboard'}
             className={({ isActive }) => {
-              // Custom active logic for travel items to prevent overlapping highlights
+              // For travel route, only highlight the planning section by default
               let shouldBeActive = isActive;
               
-              // For travel route, only highlight the first travel item to prevent overlap
               if (item.href === '/travel' && isActive) {
-                shouldBeActive = item.dataSection === 'plans' || item.dataSection === 'planning';
+                shouldBeActive = item.dataSection === 'planning' || !item.dataSection;
               }
               
               return `${styles.navLink} ${shouldBeActive ? styles.active : ''} ${level > 0 ? styles.nested : ''}`;

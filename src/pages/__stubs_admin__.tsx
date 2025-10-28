@@ -159,65 +159,71 @@ export const AllUsersPage: React.FC = () => {
             <h3 className={styles.sectionTitle}>Seafarers ({users.filter(u => u.user_type === 'seafarer').length})</h3>
             <div className={styles.userGrid}>
               {users.filter(u => u.user_type === 'seafarer').map((user) => (
-                <div key={user.id} className={styles.userCard}>
-                  <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userName}>{user.full_name || '—'}</div>
-                    <div className={styles.userEmail}>{user.email || '—'}</div>
-                    <div className={styles.userMeta}>
-                      {user.seafarer_profile?.[0]?.rank || user.seafarer_profile?.rank || '—'} • 
-                      {user.company?.name || 'No Company'}
-            </div>
-            </div>
-                  <div className={styles.userBadge} style={{ background: '#dbeafe', color: '#1e40af' }}>
-                    Seafarer
-            </div>
-            </div>
+                <Card key={user.id} variant="elevated" hoverable padding="lg">
+                  <div className={styles.userCard}>
+                    <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
+                    <div className={styles.userInfo}>
+                      <div className={styles.userName}>{user.full_name || '—'}</div>
+                      <div className={styles.userEmail}>{user.email || '—'}</div>
+                      <div className={styles.userMeta}>
+                        {user.seafarer_profile?.[0]?.rank || user.seafarer_profile?.rank || '—'} • 
+                        {user.company?.name || 'No Company'}
+                      </div>
+                    </div>
+                    <div className={styles.userBadge} style={{ background: '#dbeafe', color: '#1e40af' }}>
+                      Seafarer
+                    </div>
+                  </div>
+                </Card>
               ))}
+            </div>
           </div>
-        </div>
 
           {/* Company Users */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Company Users ({users.filter(u => u.user_type === 'company').length})</h3>
             <div className={styles.userGrid}>
               {users.filter(u => u.user_type === 'company').map((user) => (
-                <div key={user.id} className={styles.userCard}>
-                  <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userName}>{user.full_name || '—'}</div>
-                    <div className={styles.userEmail}>{user.email || '—'}</div>
-                    <div className={styles.userMeta}>
-                      {user.company?.name || 'No Company'}
-            </div>
-            </div>
-                  <div className={styles.userBadge} style={{ background: '#e0e7ff', color: '#3730a3' }}>
-                    Company
-            </div>
-            </div>
+                <Card key={user.id} variant="elevated" hoverable padding="lg">
+                  <div className={styles.userCard}>
+                    <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
+                    <div className={styles.userInfo}>
+                      <div className={styles.userName}>{user.full_name || '—'}</div>
+                      <div className={styles.userEmail}>{user.email || '—'}</div>
+                      <div className={styles.userMeta}>
+                        {user.company?.name || 'No Company'}
+                      </div>
+                    </div>
+                    <div className={styles.userBadge} style={{ background: '#dcfce7', color: '#166534' }}>
+                      Company
+                    </div>
+                  </div>
+                </Card>
               ))}
-        </div>
-      </div>
+            </div>
+          </div>
 
           {/* Admins */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Administrators ({users.filter(u => u.user_type === 'admin').length})</h3>
             <div className={styles.userGrid}>
               {users.filter(u => u.user_type === 'admin').map((user) => (
-                <div key={user.id} className={styles.userCard}>
-                  <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userName}>{user.full_name || '—'}</div>
-                    <div className={styles.userEmail}>{user.email || '—'}</div>
-                    <div className={styles.userMeta}>System Administrator</div>
-        </div>
-                  <div className={styles.userBadge} style={{ background: '#fecaca', color: '#991b1b' }}>
-                    Admin
-      </div>
+                <Card key={user.id} variant="elevated" hoverable padding="lg">
+                  <div className={styles.userCard}>
+                    <div className={styles.userAvatar}>{user.full_name?.charAt(0) || '?'}</div>
+                    <div className={styles.userInfo}>
+                      <div className={styles.userName}>{user.full_name || '—'}</div>
+                      <div className={styles.userEmail}>{user.email || '—'}</div>
+                      <div className={styles.userMeta}>System Administrator</div>
+                    </div>
+                    <div className={styles.userBadge} style={{ background: '#e0e7ff', color: '#3730a3' }}>
+                      Admin
+                    </div>
+                  </div>
+                </Card>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
         </>
       )}
     </div>
