@@ -2,6 +2,7 @@ import React from 'react';
 import { useResponsive } from '../../hooks/useResponsive';
 import { RoleBasedSidebar } from './RoleBasedSidebar';
 import { Header } from './Header';
+import { CriticalAnnouncementBanner } from '../announcements/CriticalAnnouncementBanner';
 import styles from './Layout.module.css';
 
 interface LayoutProps {
@@ -19,6 +20,9 @@ export const Layout: React.FC<LayoutProps> = ({ title, children }) => {
 
   return (
     <div className={styles.layout}>
+      {/* Critical Announcement Banner - Fixed at top of page */}
+      <CriticalAnnouncementBanner />
+
       {/* Role-Based Sidebar */}
       <RoleBasedSidebar 
         isOpen={isMobile ? sidebarOpen : true}

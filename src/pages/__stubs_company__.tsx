@@ -1,6 +1,8 @@
 // Company User stub pages
 import React from 'react';
 import CrewManagement from '../components/CrewManagement';
+import CreateAnnouncementPageComponent from './CreateAnnouncementPage';
+import CompanyAnnouncementsPageComponent from './CompanyAnnouncementsPage';
 
 export const CrewDirectoryPage = CrewManagement;
 
@@ -554,3 +556,7 @@ export const UserManagementPage: React.FC = () => {
     </div>
   );
 };
+
+export const AnnouncementsPage = CompanyAnnouncementsPageComponent;
+
+export const CreateAnnouncementPage = CreateAnnouncementPageComponent;

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Card } from '../components/ui';
 import styles from './AdminPages.module.css';
+import CreateAnnouncementPageComponent from './CreateAnnouncementPage';
+import CompanyAnnouncementsPageComponent from './CompanyAnnouncementsPage';
 
 // ==================== ALL USERS PAGE ====================
 export const AllUsersPage: React.FC = () => {
@@ -825,3 +827,9 @@ export const SystemUpdatesPage: React.FC = () => {
     </div>
   );
 };
+
+// ==================== ANNOUNCEMENTS PAGE ====================
+export const AnnouncementsPage = CompanyAnnouncementsPageComponent;
+
+// ==================== CREATE ANNOUNCEMENT PAGE ====================
+export const CreateAnnouncementPage = CreateAnnouncementPageComponent;

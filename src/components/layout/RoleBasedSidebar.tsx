@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { SidebarBase } from './SidebarBase';
 import { getNavigationForRole } from '../../utils/navigationConfig';
+import { useUnreadAnnouncements } from '../../hooks/useUnreadAnnouncements';
 
 interface RoleBasedSidebarProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   isCollapsed = false 
 }) => {
   const { user, profile, loading } = useAuth();
+  const unreadCount = useUnreadAnnouncements();
   
   // Don't render sidebar if no user
   if (!user) {
@@ -46,7 +48,24 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
     );
   }
 
-  const navigationSections = getNavigationForRole(profile.user_type);
+  // Get navigation sections and add unread badge to announcements
+  const navigationSections = useMemo(() => {
+    const sections = getNavigationForRole(profile.user_type);
+    
+    // Update announcements item with unread count badge
+    return sections.map(section => ({
+      ...section,
+      items: section.items.map(item => {
+        if (item.id === 'announcements') {
+          return {
+            ...item,
+            badge: unreadCount > 0 ? unreadCount : undefined
+          };
+        }
+        return item;
+      })
+    }));
+  }, [profile.user_type, unreadCount]);
 
   return (
     <SidebarBase
