@@ -31,7 +31,7 @@
   right: 0;
   width: 100%;
   background: var(--gradient-critical);
-  z-index: 1000;
+  z-index: 9999; /* Higher than sidebar (usually 1000-2000) */
   box-shadow: var(--shadow-lg);
   padding: var(--spacing-md);
   color: var(--color-text-inverse);

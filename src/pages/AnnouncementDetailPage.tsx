@@ -44,18 +44,22 @@ export const AnnouncementDetailPage: React.FC = () => {
   }, [id]);
 
   const fetchAnnouncement = async () => {
-    if (!id) return;
+    if (!id || id === 'undefined') {
+      navigate('/announcements');
+      return;
+    }
 
     try {
       setLoading(true);
 
-      // Fetch the specific broadcast
-      const { data, error } = await supabase
-        .rpc('get_my_broadcasts')
-        .eq('id', id)
-        .single();
+      // Fetch all broadcasts and filter by ID (since RPC returns multiple)
+      const { data: allData, error } = await supabase
+        .rpc('get_my_broadcasts');
 
       if (error) throw error;
+
+      // Find the specific broadcast by ID
+      const data = allData?.find((b: any) => b.id === id);
 
       if (!data) {
         addToast({
