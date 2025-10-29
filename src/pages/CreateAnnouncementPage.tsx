@@ -22,7 +22,7 @@ interface FormData {
   priority: BroadcastPriority;
   targetType: BroadcastTargetType;
   targetIds: string[];
-  message: string;
+  description: string;
   attachments: File[];
   pinned: boolean;
   requiresAcknowledgment: boolean;
@@ -49,7 +49,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     priority: 'normal',
     targetType: 'all',
     targetIds: [],
-    message: '',
+    description: '',
     attachments: [],
     pinned: false,
     requiresAcknowledgment: false,
@@ -101,7 +101,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Warning',
-        message: 'Failed to load some dropdown options',
+        description: 'Failed to load some dropdown options',
         type: 'error'
       });
     } finally {
@@ -159,7 +159,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     if (!validateForm()) {
       addToast({
         title: 'Validation Error',
-        message: 'Please fix the errors in the form',
+        description: 'Please fix the errors in the form',
         type: 'error'
       });
       return;
@@ -170,7 +170,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     try {
       await createBroadcast({
         title: formData.title,
-        message: formData.message,
+        description: formData.message,
         priority: formData.priority,
         target_type: formData.targetType,
         target_ids: formData.targetIds.length > 0 ? formData.targetIds : undefined,
@@ -182,7 +182,7 @@ export const CreateAnnouncementPage: React.FC = () => {
 
       addToast({
         title: 'Success!',
-        message: 'Announcement sent successfully',
+        description: 'Announcement sent successfully',
         type: 'success'
       });
 
@@ -190,7 +190,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to send announcement',
+        description: 'Failed to send announcement',
         type: 'error'
       });
     } finally {
@@ -427,7 +427,7 @@ export const CreateAnnouncementPage: React.FC = () => {
             <textarea
               id="message"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
               placeholder="Enter your announcement message..."
               rows={8}

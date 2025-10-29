@@ -112,7 +112,7 @@ export const CriticalAnnouncementBanner: React.FC = () => {
     if (!criticalAnnouncement) return;
     
     // Navigate to announcement detail page
-    navigate(`/announcements/${criticalAnnouncement.broadcast_id}`);
+    navigate(`/announcements/${criticalAnnouncement.id}`);
   };
 
   const handleAcknowledge = async () => {
@@ -120,11 +120,11 @@ export const CriticalAnnouncementBanner: React.FC = () => {
 
     setIsAcknowledging(true);
     try {
-      await acknowledgeBroadcast(criticalAnnouncement.broadcast_id);
+      await acknowledgeBroadcast(criticalAnnouncement.id);
 
       addToast({
         title: 'Acknowledged',
-        message: 'Critical announcement acknowledged',
+        description: 'Critical announcement acknowledged',
         type: 'success'
       });
 
@@ -136,7 +136,7 @@ export const CriticalAnnouncementBanner: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to acknowledge announcement',
+        description: 'Failed to acknowledge announcement',
         type: 'error'
       });
     } finally {
@@ -149,7 +149,7 @@ export const CriticalAnnouncementBanner: React.FC = () => {
 
     try {
       // Mark as read (soft dismiss - will still show in list but not in banner)
-      await markBroadcastAsRead(criticalAnnouncement.broadcast_id);
+      await markBroadcastAsRead(criticalAnnouncement.id);
 
       // Hide banner with animation
       setIsVisible(false);
@@ -161,7 +161,7 @@ export const CriticalAnnouncementBanner: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to dismiss announcement',
+        description: 'Failed to dismiss announcement',
         type: 'error'
       });
     }

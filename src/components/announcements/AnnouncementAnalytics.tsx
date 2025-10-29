@@ -83,7 +83,7 @@ export const AnnouncementAnalytics: React.FC<AnnouncementAnalyticsProps> = ({
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to load analytics',
+        description: 'Failed to load analytics',
         type: 'error'
       });
     } finally {
@@ -163,13 +163,13 @@ export const AnnouncementAnalytics: React.FC<AnnouncementAnalyticsProps> = ({
 
       addToast({
         title: 'Exported',
-        message: 'Analytics exported to CSV',
+        description: 'Analytics exported to CSV',
         type: 'success'
       });
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to export CSV',
+        description: 'Failed to export CSV',
         type: 'error'
       });
     } finally {
@@ -187,7 +187,7 @@ export const AnnouncementAnalytics: React.FC<AnnouncementAnalyticsProps> = ({
       if (unreadRecipients.length === 0) {
         addToast({
           title: 'No Action Needed',
-          message: 'All recipients have read this announcement',
+          description: 'All recipients have read this announcement',
           type: 'info'
         });
         return;
@@ -197,13 +197,13 @@ export const AnnouncementAnalytics: React.FC<AnnouncementAnalyticsProps> = ({
       // This would require a backend function to send emails
       addToast({
         title: 'Coming Soon',
-        message: `Would send reminder to ${unreadRecipients.length} unread recipient(s)`,
+        description: `Would send reminder to ${unreadRecipients.length} unread recipient(s)`,
         type: 'info'
       });
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to send reminder',
+        description: 'Failed to send reminder',
         type: 'error'
       });
     } finally {

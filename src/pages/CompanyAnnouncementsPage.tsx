@@ -63,7 +63,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
       setError(err.message || 'Failed to load announcements');
       addToast({
         title: 'Error',
-        message: 'Failed to load announcements',
+        description: 'Failed to load announcements',
         type: 'error'
       });
     } finally {
@@ -130,7 +130,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
       setError(err.message || 'Failed to load your broadcasts');
       addToast({
         title: 'Error',
-        message: 'Failed to load your broadcasts',
+        description: 'Failed to load your broadcasts',
         type: 'error'
       });
     } finally {
@@ -178,7 +178,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
   if (activeTab === 'analytics' && selectedBroadcast) {
     return (
       <AnnouncementAnalytics
-        broadcastId={selectedBroadcast.broadcast_id}
+        broadcastId={selectedBroadcast.id}
         broadcastTitle={selectedBroadcast.title}
         requiresAcknowledgment={selectedBroadcast.requires_acknowledgment}
         onBack={handleBackFromAnalytics}
@@ -256,9 +256,9 @@ export const CompanyAnnouncementsPage: React.FC = () => {
               <div className={styles.broadcastsList}>
                 {broadcasts.map((broadcast) => (
                   <div 
-                    key={broadcast.broadcast_id} 
+                    key={broadcast.id} 
                     className={styles.broadcastCard}
-                    onClick={() => navigate(`/announcements/${broadcast.broadcast_id}`)}
+                    onClick={() => navigate(`/announcements/${broadcast.id}`)}
                   >
                     <div className={`${styles.priorityBadge} ${getPriorityColor(broadcast.priority)}`}>
                       {broadcast.priority}
@@ -289,7 +289,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
             ) : (
               <div className={styles.myBroadcastsList}>
                 {myBroadcasts.map((broadcast) => (
-                  <div key={broadcast.broadcast_id} className={styles.myBroadcastCard}>
+                  <div key={broadcast.id} className={styles.myBroadcastCard}>
                     <div className={styles.myBroadcastHeader}>
                       <div>
                         <div className={`${styles.priorityBadge} ${getPriorityColor(broadcast.priority)}`}>

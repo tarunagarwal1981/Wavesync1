@@ -62,7 +62,7 @@ export const AnnouncementDetailPage: React.FC = () => {
       if (!data) {
         addToast({
           title: 'Not Found',
-          message: 'Announcement not found',
+          description: 'Announcement not found',
           type: 'error'
         });
         navigate('/announcements');
@@ -78,7 +78,7 @@ export const AnnouncementDetailPage: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to load announcement',
+        description: 'Failed to load announcement',
         type: 'error'
       });
       navigate('/announcements');
@@ -122,7 +122,7 @@ export const AnnouncementDetailPage: React.FC = () => {
 
       addToast({
         title: 'Acknowledged',
-        message: 'You have acknowledged this announcement',
+        description: 'You have acknowledged this announcement',
         type: 'success'
       });
 
@@ -130,7 +130,7 @@ export const AnnouncementDetailPage: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to acknowledge announcement',
+        description: 'Failed to acknowledge announcement',
         type: 'error'
       });
     } finally {
@@ -262,7 +262,7 @@ export const AnnouncementDetailPage: React.FC = () => {
 
           addToast({
             title: 'Download Started',
-            message: `Downloading ${attachment.filename}`,
+            description: `Downloading ${attachment.filename}`,
             type: 'success'
           });
         }
@@ -278,14 +278,14 @@ export const AnnouncementDetailPage: React.FC = () => {
 
         addToast({
           title: 'Download Started',
-          message: `Downloading ${attachment.filename}`,
+          description: `Downloading ${attachment.filename}`,
           type: 'success'
         });
       }
     } catch (error) {
       addToast({
         title: 'Download Failed',
-        message: `Failed to download ${attachment.filename}`,
+        description: `Failed to download ${attachment.filename}`,
         type: 'error'
       });
     } finally {
@@ -316,7 +316,7 @@ export const AnnouncementDetailPage: React.FC = () => {
     } catch (error) {
       addToast({
         title: 'Preview Failed',
-        message: `Failed to preview ${attachment.filename}`,
+        description: `Failed to preview ${attachment.filename}`,
         type: 'error'
       });
     }
@@ -346,7 +346,7 @@ export const AnnouncementDetailPage: React.FC = () => {
       if (successCount > 0) {
         addToast({
           title: 'Downloads Complete',
-          message: `Successfully downloaded ${successCount} of ${announcement.attachments.length} file(s)`,
+          description: `Successfully downloaded ${successCount} of ${announcement.attachments.length} file(s)`,
           type: 'success'
         });
       }
@@ -354,14 +354,14 @@ export const AnnouncementDetailPage: React.FC = () => {
       if (failCount > 0) {
         addToast({
           title: 'Some Downloads Failed',
-          message: `${failCount} file(s) could not be downloaded`,
+          description: `${failCount} file(s) could not be downloaded`,
           type: 'error'
         });
       }
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to download all attachments',
+        description: 'Failed to download all attachments',
         type: 'error'
       });
     } finally {

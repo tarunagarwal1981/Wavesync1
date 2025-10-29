@@ -62,7 +62,7 @@ export const AnnouncementsPage: React.FC = () => {
       if (!loading) {
         addToast({
           title: 'Error',
-          message: 'Failed to load announcements',
+          description: 'Failed to load announcements',
           type: 'error'
         });
       }
@@ -92,7 +92,7 @@ export const AnnouncementsPage: React.FC = () => {
       // Update local state
       setBroadcasts(prev => 
         prev.map(b => 
-          b.broadcast_id === broadcastId 
+          b.id === broadcastId 
             ? { ...b, is_read: true, read_at: new Date().toISOString() }
             : b
         )
@@ -100,13 +100,13 @@ export const AnnouncementsPage: React.FC = () => {
       
       addToast({
         title: 'Marked as read',
-        message: 'Announcement marked as read',
+        description: 'Announcement marked as read',
         type: 'success'
       });
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to mark as read',
+        description: 'Failed to mark as read',
         type: 'error'
       });
     }
@@ -119,7 +119,7 @@ export const AnnouncementsPage: React.FC = () => {
       // Update local state
       setBroadcasts(prev => 
         prev.map(b => 
-          b.broadcast_id === broadcastId 
+          b.id === broadcastId 
             ? { ...b, is_acknowledged: true, acknowledged_at: new Date().toISOString(), is_read: true }
             : b
         )
@@ -127,13 +127,13 @@ export const AnnouncementsPage: React.FC = () => {
       
       addToast({
         title: 'Acknowledged',
-        message: 'Announcement acknowledged',
+        description: 'Announcement acknowledged',
         type: 'success'
       });
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to acknowledge',
+        description: 'Failed to acknowledge',
         type: 'error'
       });
     }
@@ -144,7 +144,7 @@ export const AnnouncementsPage: React.FC = () => {
       const unreadBroadcasts = broadcasts.filter(b => !b.is_read);
       
       await Promise.all(
-        unreadBroadcasts.map(b => markBroadcastAsRead(b.broadcast_id))
+        unreadBroadcasts.map(b => markBroadcastAsRead(b.id))
       );
       
       // Update local state
@@ -154,13 +154,13 @@ export const AnnouncementsPage: React.FC = () => {
       
       addToast({
         title: 'All read',
-        message: 'All announcements marked as read',
+        description: 'All announcements marked as read',
         type: 'success'
       });
     } catch (error) {
       addToast({
         title: 'Error',
-        message: 'Failed to mark all as read',
+        description: 'Failed to mark all as read',
         type: 'error'
       });
     }
@@ -356,7 +356,7 @@ export const AnnouncementsPage: React.FC = () => {
                 <div className={styles.broadcastList}>
                   {pinnedBroadcasts.map(broadcast => (
                     <AnnouncementCard
-                      key={broadcast.broadcast_id}
+                      key={broadcast.id}
                       broadcast={broadcast}
                       onMarkAsRead={handleMarkAsRead}
                       onAcknowledge={handleAcknowledge}
@@ -379,7 +379,7 @@ export const AnnouncementsPage: React.FC = () => {
                 <div className={styles.broadcastList}>
                   {regularBroadcasts.map(broadcast => (
                     <AnnouncementCard
-                      key={broadcast.broadcast_id}
+                      key={broadcast.id}
                       broadcast={broadcast}
                       onMarkAsRead={handleMarkAsRead}
                       onAcknowledge={handleAcknowledge}
@@ -416,7 +416,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/announcements/${broadcast.broadcast_id}`);
+    navigate(`/announcements/${broadcast.id}`);
   };
 
   return (
@@ -484,7 +484,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onMarkAsRead(broadcast.broadcast_id);
+              onMarkAsRead(broadcast.id);
             }}
             className={styles.actionButton}
           >
@@ -496,7 +496,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onAcknowledge(broadcast.broadcast_id);
+              onAcknowledge(broadcast.id);
             }}
             className={styles.acknowledgeButton}
           >
