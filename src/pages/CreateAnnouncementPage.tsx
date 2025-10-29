@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../hooks/useToast';
-import { useAuth } from '../contexts/SupabaseAuthContext';
 import { supabase } from '../lib/supabase';
 import { 
   Megaphone, 
@@ -17,12 +16,12 @@ import styles from './CreateAnnouncementPage.module.css';
 import { createBroadcast } from '../services/broadcast.service';
 import type { BroadcastPriority, BroadcastTargetType } from '../types/broadcast.types';
 
-interface FormData {
+interface CreateAnnouncementFormData {
   title: string;
   priority: BroadcastPriority;
   targetType: BroadcastTargetType;
   targetIds: string[];
-  description: string;
+  message: string;
   attachments: File[];
   pinned: boolean;
   requiresAcknowledgment: boolean;
@@ -42,14 +41,13 @@ interface ValidationErrors {
 export const CreateAnnouncementPage: React.FC = () => {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { user } = useAuth();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<CreateAnnouncementFormData>({
     title: '',
     priority: 'normal',
     targetType: 'all',
     targetIds: [],
-    description: '',
+    message: '',
     attachments: [],
     pinned: false,
     requiresAcknowledgment: false,
@@ -170,7 +168,7 @@ export const CreateAnnouncementPage: React.FC = () => {
     try {
       await createBroadcast({
         title: formData.title,
-        description: formData.message,
+        message: formData.message,
         priority: formData.priority,
         target_type: formData.targetType,
         target_ids: formData.targetIds.length > 0 ? formData.targetIds : undefined,
@@ -427,7 +425,7 @@ export const CreateAnnouncementPage: React.FC = () => {
             <textarea
               id="message"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
               placeholder="Enter your announcement message..."
               rows={8}

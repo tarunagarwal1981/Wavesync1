@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../hooks/useToast';
 import { supabase } from '../../lib/supabase';
 import {
@@ -46,7 +45,6 @@ export const AnnouncementAnalytics: React.FC<AnnouncementAnalyticsProps> = ({
   requiresAcknowledgment,
   onBack
 }) => {
-  const navigate = useNavigate();
   const { addToast } = useToast();
 
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);

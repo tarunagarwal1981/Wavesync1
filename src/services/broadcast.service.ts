@@ -239,6 +239,22 @@ export async function getCompanyBroadcasts(): Promise<Broadcast[]> {
     return [];
   }
 
+  // First, get all user IDs in the company
+  const { data: companyUsers, error: usersError } = await supabase
+    .from('user_profiles')
+    .select('id')
+    .eq('company_id', profile.company_id);
+
+  if (usersError) {
+    throw new Error(`Failed to get company users: ${usersError.message}`);
+  }
+
+  if (!companyUsers || companyUsers.length === 0) {
+    return [];
+  }
+
+  const userIds = companyUsers.map(u => u.id);
+
   // Get all broadcasts from users in the same company
   const { data: broadcasts, error } = await supabase
     .from('broadcasts')
@@ -249,12 +265,7 @@ export async function getCompanyBroadcasts(): Promise<Broadcast[]> {
         email
       )
     `)
-    .in('sender_id', 
-      supabase
-        .from('user_profiles')
-        .select('id')
-        .eq('company_id', profile.company_id)
-    )
+    .in('sender_id', userIds)
     .order('created_at', { ascending: false });
 
   if (error) {

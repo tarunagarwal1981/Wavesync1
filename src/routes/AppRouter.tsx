@@ -47,7 +47,7 @@ const CommunicationsPage = lazy(() => import("../pages/__stubs_company__").then(
 const CompanySettingsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompanySettingsPage })));
 const CompliancePage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompliancePage })));
 const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
-const CompanyAnnouncementsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.AnnouncementsPage })));
+// const CompanyAnnouncementsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.AnnouncementsPage })));
 const CreateAnnouncementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CreateAnnouncementPage })));
 
 const AllUsersPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AllUsersPage })));
@@ -64,8 +64,8 @@ const ReportsExportsPage = lazy(() => import("../pages/__stubs_admin__").then(m 
 const SupportTicketsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SupportTicketsPage })));
 const DocumentationPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.DocumentationPage })));
 const SystemUpdatesPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemUpdatesPage })));
-const AdminAnnouncementsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AnnouncementsPage })));
-const AdminCreateAnnouncementPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.CreateAnnouncementPage })));
+// const AdminAnnouncementsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AnnouncementsPage })));
+// const AdminCreateAnnouncementPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.CreateAnnouncementPage })));
 
 // Helper component to wrap routes with Suspense
 const SuspenseRoute: React.FC<{ children: React.ReactNode; loadingText?: string }> = ({ 

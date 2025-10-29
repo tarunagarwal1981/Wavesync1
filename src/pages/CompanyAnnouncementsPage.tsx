@@ -32,7 +32,7 @@ interface BroadcastStats {
 
 export const CompanyAnnouncementsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<TabType>('all');
@@ -178,7 +178,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
   if (activeTab === 'analytics' && selectedBroadcast) {
     return (
       <AnnouncementAnalytics
-        broadcastId={selectedBroadcast.id}
+        broadcastId={selectedBroadcast.broadcast_id}
         broadcastTitle={selectedBroadcast.title}
         requiresAcknowledgment={selectedBroadcast.requires_acknowledgment}
         onBack={handleBackFromAnalytics}
@@ -289,7 +289,7 @@ export const CompanyAnnouncementsPage: React.FC = () => {
             ) : (
               <div className={styles.myBroadcastsList}>
                 {myBroadcasts.map((broadcast) => (
-                  <div key={broadcast.id} className={styles.myBroadcastCard}>
+                  <div key={broadcast.broadcast_id} className={styles.myBroadcastCard}>
                     <div className={styles.myBroadcastHeader}>
                       <div>
                         <div className={`${styles.priorityBadge} ${getPriorityColor(broadcast.priority)}`}>

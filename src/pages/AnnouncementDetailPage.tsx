@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/SupabaseAuthContext';
 import { useToast } from '../hooks/useToast';
 import { 
   ArrowLeft,
@@ -29,7 +28,6 @@ import type { BroadcastWithStatus, BroadcastPriority } from '../types/broadcast.
 export const AnnouncementDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { profile } = useAuth();
   const { addToast } = useToast();
 
   const [announcement, setAnnouncement] = useState<BroadcastWithStatus | null>(null);
@@ -54,7 +52,7 @@ export const AnnouncementDetailPage: React.FC = () => {
       // Fetch the specific broadcast
       const { data, error } = await supabase
         .rpc('get_my_broadcasts')
-        .eq('broadcast_id', id)
+        .eq('id', id)
         .single();
 
       if (error) throw error;
@@ -69,10 +67,10 @@ export const AnnouncementDetailPage: React.FC = () => {
         return;
       }
 
-      setAnnouncement(data);
+      setAnnouncement(data as BroadcastWithStatus);
 
       // Auto-mark as read if unread
-      if (!data.is_read) {
+      if (!(data as BroadcastWithStatus).is_read) {
         markAsReadSilently(id);
       }
     } catch (error) {
@@ -192,15 +190,6 @@ export const AnnouncementDetailPage: React.FC = () => {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
   };
 
   // File type detection

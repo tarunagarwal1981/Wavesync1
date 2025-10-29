@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/SupabaseAuthContext';
 import { useToast } from '../hooks/useToast';
 import { 
   Megaphone, 
@@ -22,8 +21,6 @@ import type { BroadcastPriority } from '../types/broadcast.types';
 type FilterType = 'all' | BroadcastPriority;
 
 export const AnnouncementsPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { profile } = useAuth();
   const { addToast } = useToast();
 
   const [broadcasts, setBroadcasts] = useState<BroadcastWithStatus[]>([]);
