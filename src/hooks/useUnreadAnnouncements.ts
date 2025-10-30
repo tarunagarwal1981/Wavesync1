@@ -12,20 +12,30 @@ export const useUnreadAnnouncements = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user || !isAvailable) {
+    if (!user) {
       setUnreadCount(0);
       return;
     }
+
+    if (!isAvailable) {
+      setUnreadCount(0);
+      return;
+    }
+
+    let isMounted = true;
 
     const fetchUnreadCount = async () => {
       try {
         // Call the RPC function to get unread broadcasts count
         const { data, error } = await supabase.rpc('get_unread_broadcasts_count');
 
+        if (!isMounted) return;
+
         // If RPC function doesn't exist (404), disable the hook
         if (error) {
-          if (error.message?.includes('404') || error.code === '42883') {
+          if (error.message?.includes('404') || error.code === '42883' || error.code === 'PGRST202') {
             setIsAvailable(false);
+            setUnreadCount(0);
           }
           return;
         }
@@ -33,6 +43,10 @@ export const useUnreadAnnouncements = () => {
         setUnreadCount(data || 0);
       } catch (error) {
         // Fail silently - will retry on next poll
+        if (isMounted) {
+          setIsAvailable(false);
+          setUnreadCount(0);
+        }
       }
     };
 
@@ -90,6 +104,7 @@ export const useUnreadAnnouncements = () => {
 
     // Cleanup
     return () => {
+      isMounted = false;
       clearInterval(pollInterval);
       if (broadcastsChannel) {
         supabase.removeChannel(broadcastsChannel);

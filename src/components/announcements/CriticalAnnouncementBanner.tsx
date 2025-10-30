@@ -20,10 +20,17 @@ export const CriticalAnnouncementBanner: React.FC = () => {
   const [isAvailable, setIsAvailable] = useState(true);
 
   useEffect(() => {
-    if (!user || !isAvailable) {
+    if (!user) {
       setCriticalAnnouncement(null);
       return;
     }
+
+    if (!isAvailable) {
+      setCriticalAnnouncement(null);
+      return;
+    }
+
+    let isMounted = true;
 
     const fetchCriticalAnnouncement = async () => {
       try {
@@ -31,10 +38,13 @@ export const CriticalAnnouncementBanner: React.FC = () => {
         const { data, error } = await supabase
           .rpc('get_my_broadcasts');
 
+        if (!isMounted) return;
+
         // If RPC function doesn't exist (404), disable the component
         if (error) {
-          if (error.message?.includes('404') || error.code === '42883') {
+          if (error.message?.includes('404') || error.code === '42883' || error.code === 'PGRST202') {
             setIsAvailable(false);
+            setCriticalAnnouncement(null);
           }
           return;
         }
@@ -60,6 +70,10 @@ export const CriticalAnnouncementBanner: React.FC = () => {
         }
       } catch (error) {
         // Fail silently
+        if (isMounted) {
+          setIsAvailable(false);
+          setCriticalAnnouncement(null);
+        }
       }
     };
 
@@ -118,6 +132,7 @@ export const CriticalAnnouncementBanner: React.FC = () => {
 
     // Cleanup
     return () => {
+      isMounted = false;
       clearInterval(pollInterval);
       if (broadcastsChannel) {
         supabase.removeChannel(broadcastsChannel);
