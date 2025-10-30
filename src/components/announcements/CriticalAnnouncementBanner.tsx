@@ -17,9 +17,10 @@ export const CriticalAnnouncementBanner: React.FC = () => {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isAcknowledging, setIsAcknowledging] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !isAvailable) {
       setCriticalAnnouncement(null);
       return;
     }
@@ -30,7 +31,11 @@ export const CriticalAnnouncementBanner: React.FC = () => {
         const { data, error } = await supabase
           .rpc('get_my_broadcasts');
 
+        // If RPC function doesn't exist (404), disable the component
         if (error) {
+          if (error.message?.includes('404') || error.code === '42883') {
+            setIsAvailable(false);
+          }
           return;
         }
 
@@ -64,49 +69,64 @@ export const CriticalAnnouncementBanner: React.FC = () => {
     // Poll every 30 seconds
     const pollInterval = setInterval(fetchCriticalAnnouncement, 30000);
 
-    // Real-time subscription to broadcasts table for critical announcements
-    const broadcastsChannel = supabase
-      .channel('critical-broadcasts-banner')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'broadcasts'
-        },
-        (payload) => {
-          // Refresh if a critical broadcast is involved
-          if (payload.new && (payload.new as any).priority === 'critical') {
-            fetchCriticalAnnouncement();
-          }
-        }
-      )
-      .subscribe();
+    // Only subscribe to real-time if feature is available
+    let broadcastsChannel: any;
+    let readsChannel: any;
 
-    // Subscribe to reads changes for the current user
-    const readsChannel = supabase
-      .channel('critical-reads-banner')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'broadcast_reads',
-          filter: `user_id=eq.${user.id}`
-        },
-        () => {
-          fetchCriticalAnnouncement();
-        }
-      )
-      .subscribe();
+    if (isAvailable) {
+      try {
+        // Real-time subscription to broadcasts table for critical announcements
+        broadcastsChannel = supabase
+          .channel('critical-broadcasts-banner')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'broadcasts'
+            },
+            (payload) => {
+              // Refresh if a critical broadcast is involved
+              if (payload.new && (payload.new as any).priority === 'critical') {
+                fetchCriticalAnnouncement();
+              }
+            }
+          )
+          .subscribe();
+
+        // Subscribe to reads changes for the current user
+        readsChannel = supabase
+          .channel('critical-reads-banner')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'broadcast_reads',
+              filter: `user_id=eq.${user.id}`
+            },
+            () => {
+              fetchCriticalAnnouncement();
+            }
+          )
+          .subscribe();
+      } catch (error) {
+        // Real-time subscriptions failed, disable them
+        setIsAvailable(false);
+      }
+    }
 
     // Cleanup
     return () => {
       clearInterval(pollInterval);
-      supabase.removeChannel(broadcastsChannel);
-      supabase.removeChannel(readsChannel);
+      if (broadcastsChannel) {
+        supabase.removeChannel(broadcastsChannel);
+      }
+      if (readsChannel) {
+        supabase.removeChannel(readsChannel);
+      }
     };
-  }, [user]);
+  }, [user, isAvailable]);
 
   const handleViewDetails = () => {
     if (!criticalAnnouncement) return;
