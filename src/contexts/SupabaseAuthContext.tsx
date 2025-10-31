@@ -241,9 +241,24 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut()
+      // Clear local state first
+      setUser(null)
+      setProfile(null)
+      setSession(null)
+      
+      // Sign out with local scope (not global which requires special permissions)
+      const { error } = await supabase.auth.signOut({ scope: 'local' })
+      
+      // Clear any stored session data
+      localStorage.removeItem('supabase.auth.token')
+      sessionStorage.clear()
+      
       return { error }
     } catch (error) {
+      // Even if signOut fails, clear local state
+      setUser(null)
+      setProfile(null)
+      setSession(null)
       return { error: error as AuthError }
     }
   }
