@@ -43,6 +43,7 @@ const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<UserFormData>({
@@ -289,19 +290,40 @@ const UserManagement: React.FC = () => {
     );
   }
 
+  const filteredUsers = users.filter(u => {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      u.full_name.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) ||
+      (u.company?.name?.toLowerCase().includes(q) ?? false) ||
+      (u.seafarer_profile?.rank?.toLowerCase().includes(q) ?? false)
+    );
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>User Management</h1>
-        <button
-          className={styles.createButton}
-          onClick={() => setShowCreateForm(true)}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          Create User
-        </button>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search users by name, email, company, rank"
+            className={styles.searchInput}
+            aria-label="Search users"
+          />
+          <button
+            className={styles.createButton}
+            onClick={() => setShowCreateForm(true)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            Create User
+          </button>
+        </div>
       </div>
 
       {showCreateForm && (
@@ -493,7 +515,7 @@ const UserManagement: React.FC = () => {
       )}
 
       <div className={styles.usersGrid}>
-        {users.length === 0 ? (
+        {filteredUsers.length === 0 ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyIcon}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -502,7 +524,7 @@ const UserManagement: React.FC = () => {
               </svg>
             </div>
             <h3>No Users Found</h3>
-            <p>Get started by creating your first user.</p>
+            <p>{search ? 'Try a different search term.' : 'Get started by creating your first user.'}</p>
             <button
               className={styles.createButton}
               onClick={() => setShowCreateForm(true)}
@@ -511,7 +533,7 @@ const UserManagement: React.FC = () => {
             </button>
           </div>
         ) : (
-          users.map((user) => (
+          filteredUsers.map((user) => (
             <div key={user.id} className={styles.userCard}>
               <div className={styles.userHeader}>
                 <div className={styles.userInfo}>

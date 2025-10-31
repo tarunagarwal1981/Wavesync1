@@ -81,33 +81,32 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: var(--space-4);
+  padding: 2rem;
 }
 
 .formCard {
-  background: var(--bg-surface);
-  border-radius: var(--radius-16);
-  box-shadow: var(--shadow-xl);
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
   width: 100%;
-  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  animation: slideIn var(--transition-base) ease-out;
 }
 
 .formHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-6);
-  border-bottom: 1px solid var(--border-light);
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .formHeader h2 {
-  font-size: var(--font-20);
-  font-weight: var(--font-semibold);
-  color: var(--text-primary);
   margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .closeButton {
@@ -115,52 +114,80 @@
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: var(--space-2);
-  border-radius: var(--radius-8);
-  transition: all var(--transition-base);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
 }
 
 .closeButton:hover {
-  background: var(--bg-surface-2);
+  background: var(--color-background);
   color: var(--text-primary);
 }
 
 .form {
-  padding: var(--space-6);
+  padding: 2rem;
+}
+
+.formSubtitle {
+  margin: 0 0 1.5rem 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.required {
+  color: #ef4444;
 }
 
 .formGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-  margin-bottom: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
 .formGroup:last-of-type {
   grid-column: 1 / -1;
 }
 
+.formGroupFull {
+  grid-column: 1 / -1 !important;
+}
+
+/* Ensure full-width spanning applies regardless of other styles */
+.formGrid > .formGroupFull {
+  grid-column: 1 / -1 !important;
+}
+
+.formGroupFull input,
+.formGroupFull textarea,
+.formGrid > .formGroupFull input,
+.formGrid > .formGroupFull textarea {
+  width: 100%;
+}
+
+/* Force all fields after the first row (>=3rd child) to full width */
+.formGrid > :nth-child(n+3) {
+  grid-column: 1 / -1 !important;
+}
+
 .formGroup label {
-  font-size: var(--font-14);
-  font-weight: var(--font-medium);
+  font-weight: 600;
   color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
 .formGroup input,
 .formGroup textarea {
-  padding: var(--space-3);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-8);
-  font-size: var(--font-14);
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  transition: all var(--transition-base);
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
 }
 
 .formGroup input:focus,
@@ -177,40 +204,40 @@
 
 .formActions {
   display: flex;
-  gap: var(--space-3);
+  gap: 1rem;
   justify-content: flex-end;
-  margin-top: var(--space-6);
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .cancelButton {
-  padding: var(--space-3) var(--space-5);
-  background: var(--bg-surface);
+  padding: 0.75rem 1.5rem;
+  background: var(--color-background);
   color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-8);
-  font-weight: var(--font-medium);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all 0.2s ease;
 }
 
 .cancelButton:hover {
-  background: var(--bg-surface-2);
+  background: var(--color-border);
 }
 
 .submitButton {
-  padding: var(--space-3) var(--space-5);
-  background: var(--gradient-primary);
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
   color: white;
   border: none;
-  border-radius: var(--radius-8);
-  font-weight: var(--font-medium);
+  border-radius: 0.5rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all 0.2s ease;
 }
 
 .submitButton:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background: var(--color-primary-dark);
 }
 
 /* Companies Grid - Modern Responsive */
@@ -466,6 +493,7 @@
   
   .formActions {
     flex-direction: column;
+    justify-content: center;
   }
   
   .cancelButton,

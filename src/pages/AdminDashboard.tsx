@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/SupabaseAuthContext';
 import { supabase } from '../lib/supabase';
 import CompanyManagement from '../components/CompanyManagement';
@@ -16,6 +17,7 @@ interface DashboardStats {
 
 const AdminDashboard = () => {
   const { profile } = useAuth();
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<'dashboard' | 'companies' | 'users'>('dashboard');
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
@@ -143,7 +145,7 @@ const AdminDashboard = () => {
               <div className={styles.actionsGrid}>
                 <button 
                   className={`${styles.actionButton} ${styles.primary}`}
-                  onClick={() => setActiveView('users')}
+                  onClick={() => navigate('/users')}
                 >
                   Manage Users
                 </button>

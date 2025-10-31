@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/useToast';
 import { useAuth } from '../contexts/SupabaseAuthContext';
@@ -452,7 +453,7 @@ const AssignmentManagement: React.FC = () => {
         </button>
       </div>
 
-      {showCreateForm && (
+      {showCreateForm && createPortal((
         <div className={styles.formContainer}>
           <div className={styles.formCard}>
             <div className={styles.formHeader}>
@@ -617,7 +618,7 @@ const AssignmentManagement: React.FC = () => {
             </form>
           </div>
         </div>
-      )}
+      ), document.body)}
 
       <div className={styles.assignmentsGrid}>
         {assignments.length === 0 ? (

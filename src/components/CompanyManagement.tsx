@@ -41,6 +41,18 @@ const CompanyManagement: React.FC = () => {
     fetchCompanies();
   }, []);
 
+  // Close modal on ESC key
+  useEffect(() => {
+    if (!showCreateForm) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        resetForm();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showCreateForm]);
+
   const fetchCompanies = async () => {
     try {
       setLoading(true);
@@ -219,11 +231,11 @@ const CompanyManagement: React.FC = () => {
       </div>
 
       {showCreateForm && (
-        <div className={styles.formContainer}>
-          <div className={styles.formCard}>
+        <div className={styles.formContainer} onClick={resetForm}>
+          <div className={styles.formCard} onClick={(e) => e.stopPropagation()}>
             <div className={styles.formHeader}>
               <h2>{editingCompany ? 'Edit Company' : 'Create New Company'}</h2>
-              <button className={styles.closeButton} onClick={resetForm}>
+              <button className={styles.closeButton} onClick={resetForm} aria-label="Close modal">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
@@ -231,9 +243,10 @@ const CompanyManagement: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className={styles.form}>
+              <p className={styles.formSubtitle}>Provide the company details below. Fields marked with <span className={styles.required}>*</span> are required.</p>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="name">Company Name *</label>
+                  <label htmlFor="name">Company Name <span className={styles.required}>*</span></label>
                   <input
                     type="text"
                     id="name"
@@ -246,7 +259,7 @@ const CompanyManagement: React.FC = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="email">Email *</label>
+                  <label htmlFor="email">Email <span className={styles.required}>*</span></label>
                   <input
                     type="email"
                     id="email"
@@ -258,7 +271,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                   <label htmlFor="phone">Phone</label>
                   <input
                     type="tel"
@@ -270,7 +283,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                   <label htmlFor="website">Website</label>
                   <input
                     type="url"
@@ -283,7 +296,7 @@ const CompanyManagement: React.FC = () => {
                 </div>
               </div>
 
-              <div className={styles.formGroup}>
+              <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                 <label htmlFor="address">Address</label>
                 <textarea
                   id="address"

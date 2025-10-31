@@ -44,42 +44,55 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
     return (
       <li key={item.id} className={styles.navItem}>
         <div className={styles.navItemContainer}>
-          <NavLink
-            to={item.href}
-            end={item.href === '/admin' || item.href === '/dashboard'}
-            className={({ isActive }) => {
-              // For travel route, only highlight the planning section by default
-              let shouldBeActive = isActive;
-              
-              if (item.href === '/travel' && isActive) {
-                shouldBeActive = item.dataSection === 'planning' || !item.dataSection;
-              }
-              
-              return `${styles.navLink} ${shouldBeActive ? styles.active : ''} ${level > 0 ? styles.nested : ''}`;
-            }}
-            onClick={(e) => {
-              if (isComingSoon) {
-                e.preventDefault();
-                e.stopPropagation();
-              } else {
+          {isComingSoon ? (
+            <span
+              className={`${styles.navLink} ${level > 0 ? styles.nested : ''} ${styles.comingSoon}`}
+              aria-disabled={"true"}
+              tabIndex={-1}
+              title={isCollapsed ? `${item.title} — Coming soon` : undefined}
+              data-ai={item.href === '/ai-assignments' ? 'true' : undefined}
+            >
+              <IconComponent size={20} className={styles.navIcon} />
+              {!isCollapsed && (
+                <>
+                  <span className={styles.navLabel}>{item.title}</span>
+                  {item.badge && (
+                    <span className={styles.badge}>{item.badge}</span>
+                  )}
+                </>
+              )}
+            </span>
+          ) : (
+            <NavLink
+              to={item.href}
+              end={item.href === '/admin' || item.href === '/dashboard'}
+              className={({ isActive }) => {
+                // For travel route, only highlight the planning section by default
+                let shouldBeActive = isActive;
+                
+                if (item.href === '/travel' && isActive) {
+                  shouldBeActive = item.dataSection === 'planning' || !item.dataSection;
+                }
+                
+                return `${styles.navLink} ${shouldBeActive ? styles.active : ''} ${level > 0 ? styles.nested : ''}`;
+              }}
+              onClick={() => {
                 onClose();
-              }
-            }}
-            aria-disabled={isComingSoon ? true : undefined}
-            style={isComingSoon ? { opacity: 0.7, pointerEvents: 'auto', cursor: 'not-allowed' } : undefined}
-            title={isCollapsed ? item.title : (isComingSoon ? 'Coming soon' : undefined)}
-            data-ai={item.href === '/ai-assignments' ? 'true' : undefined}
-          >
-            <IconComponent size={20} className={styles.navIcon} />
-            {!isCollapsed && (
-              <>
-                <span className={styles.navLabel}>{item.title}</span>
-                {item.badge && (
-                  <span className={styles.badge}>{item.badge}</span>
-                )}
-              </>
-            )}
-          </NavLink>
+              }}
+              title={isCollapsed ? item.title : undefined}
+              data-ai={item.href === '/ai-assignments' ? 'true' : undefined}
+            >
+              <IconComponent size={20} className={styles.navIcon} />
+              {!isCollapsed && (
+                <>
+                  <span className={styles.navLabel}>{item.title}</span>
+                  {item.badge && (
+                    <span className={styles.badge}>{item.badge}</span>
+                  )}
+                </>
+              )}
+            </NavLink>
+          )}
           
           {hasChildren && !isCollapsed && (
             <button
