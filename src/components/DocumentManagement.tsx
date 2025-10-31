@@ -115,10 +115,16 @@ const DocumentManagement: React.FC = () => {
   }, [profile?.company_id]);
 
   useEffect(() => {
-    if (users.length > 0 || profile?.user_type === 'seafarer') {
+    // For seafarers, fetch immediately. For company users, fetch after users are loaded (even if empty)
+    if (profile?.user_type === 'seafarer') {
       fetchDocuments();
+    } else if (profile?.user_type === 'company' || profile?.user_type === 'company_user') {
+      // For company users, wait for users to be fetched (may be empty array), then fetch documents
+      if (profile?.company_id) {
+        fetchDocuments();
+      }
     }
-  }, [users, profile?.id]);
+  }, [users, profile?.id, profile?.user_type, profile?.company_id]);
 
   const fetchDocuments = async () => {
     if (!profile?.company_id) {
@@ -140,14 +146,15 @@ const DocumentManagement: React.FC = () => {
       if (profile.user_type === 'seafarer') {
         // Seafarers can only see their own documents
         query = query.eq('user_id', profile.id);
-      } else {
+      } else if (profile.user_type === 'company' || profile.user_type === 'company_user') {
         // Company users can see documents for all seafarers in their company
         const seafarerIds = users.map(u => u.id);
         if (seafarerIds.length > 0) {
           query = query.in('user_id', seafarerIds);
         } else {
-          // No seafarers found, return empty array
+          // No seafarers found, return empty array but ensure loading is set to false
           setDocuments([]);
+          setLoading(false);
           return;
         }
       }
@@ -170,7 +177,10 @@ const DocumentManagement: React.FC = () => {
   };
 
   const fetchUsers = async () => {
-    if (!profile?.company_id) return;
+    if (!profile?.company_id) {
+      setLoading(false);
+      return;
+    }
 
     try {
       // For company users: show all seafarers in their company
@@ -194,6 +204,11 @@ const DocumentManagement: React.FC = () => {
       setUsers(data || []);
     } catch (error) {
       console.error('Error fetching users:', error);
+      setUsers([]);
+      // For company users, still try to fetch documents (will be empty)
+      if (profile?.user_type === 'company' || profile?.user_type === 'company_user') {
+        setLoading(false);
+      }
     }
   };
 

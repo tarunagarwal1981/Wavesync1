@@ -4,16 +4,21 @@ import CompanyDashboard from '../pages/CompanyDashboard';
 import AdminDashboard from '../pages/AdminDashboard';
 
 const DashboardRouter = () => {
-  const { profile } = useAuth();
+  const { profile, loading } = useAuth();
   
   console.log('🎯 DashboardRouter - user type:', profile?.user_type);
   
-  if (profile?.user_type === 'company') {
+  if (loading || !profile?.user_type) {
+    // Avoid rendering wrong dashboard while profile is hydrating
+    return null;
+  }
+
+  if (profile.user_type === 'company') {
     console.log('🎯 Rendering CompanyDashboard');
     return <CompanyDashboard />;
   }
   
-  if (profile?.user_type === 'admin') {
+  if (profile.user_type === 'admin') {
     console.log('🎯 Rendering AdminDashboard');
     return <AdminDashboard />;
   }

@@ -138,6 +138,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Vessel Information",
         icon: Ship,
         href: "/vessel",
+        badge: "Soon",
         permissions: [UserRole.SEAFARER],
         description: "Current vessel details"
       },
@@ -146,6 +147,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Port Information",
         icon: MapPin,
         href: "/ports",
+        badge: "Soon",
         permissions: [UserRole.SEAFARER],
         description: "Port details and facilities"
       }
@@ -159,6 +161,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Emergency Contact",
         icon: Phone,
         href: "/emergency",
+        badge: "Soon",
         permissions: [UserRole.SEAFARER],
         description: "Emergency contacts and procedures"
       },
@@ -167,6 +170,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Help & Support",
         icon: HelpCircle,
         href: "/support",
+        badge: "Soon",
         permissions: [UserRole.SEAFARER],
         description: "Get help and support"
       },
@@ -200,7 +204,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "AI Assignments",
         icon: Brain,
         href: "/ai-assignments",
-        badge: "NEW",
+        badge: "Soon",
         permissions: [UserRole.COMPANY_USER],
         description: "AI-powered assignment matching"
       },
@@ -276,7 +280,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Training Programs",
         icon: GraduationCap,
         href: "/training",
-        badge: 3,
+        badge: "Soon",
         permissions: [UserRole.COMPANY_USER],
         description: "Manage training programs"
       },
@@ -305,7 +309,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Budget & Expenses",
         icon: DollarSign,
         href: "/budget",
-        badge: 2,
+        badge: "Soon",
         permissions: [UserRole.COMPANY_USER],
         description: "Manage budgets and expenses"
       },
@@ -314,7 +318,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Scheduling",
         icon: Calendar,
         href: "/schedule",
-        badge: 9,
+        badge: "Soon",
         permissions: [UserRole.COMPANY_USER],
         description: "Crew scheduling and planning"
       }

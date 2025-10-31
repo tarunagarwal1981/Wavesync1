@@ -12,6 +12,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer
 } from 'recharts';
 import {
@@ -289,29 +290,17 @@ export const AnalyticsDashboard: React.FC = () => {
     );
   }
 
-  if (!analytics) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.error}>
-          <AlertCircle size={48} />
-          <p>Failed to load analytics data</p>
-          <button onClick={fetchAnalytics} className={styles.retryButton}>
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Do not early-return on missing analytics; render placeholders instead
 
   // Prepare chart data
-  const crewByRank = analytics.crew.by_rank
+  const crewByRank = analytics?.crew?.by_rank
     ? Object.entries(analytics.crew.by_rank).map(([name, value]) => ({
         name,
         value
       }))
     : [];
 
-  const tasksByPriority = analytics.tasks.by_priority
+  const tasksByPriority = analytics?.tasks?.by_priority
     ? Object.entries(analytics.tasks.by_priority).map(([name, value]) => ({
         name,
         value
@@ -319,16 +308,16 @@ export const AnalyticsDashboard: React.FC = () => {
     : [];
 
   const crewStatusData = [
-    { name: 'Available', value: analytics.crew.available || 0, color: COLORS.success },
-    { name: 'On Assignment', value: analytics.crew.on_assignment || 0, color: COLORS.info },
-    { name: 'On Leave', value: analytics.crew.on_leave || 0, color: COLORS.warning }
+    { name: 'Available', value: analytics?.crew?.available || 0, color: COLORS.success },
+    { name: 'On Assignment', value: analytics?.crew?.on_assignment || 0, color: COLORS.info },
+    { name: 'On Leave', value: analytics?.crew?.on_leave || 0, color: COLORS.warning }
   ];
 
   const documentComplianceData = [
-    { name: 'Valid', value: analytics.documents.valid || 0, color: COLORS.success },
-    { name: 'Expiring Soon', value: analytics.documents.expiring_soon || 0, color: COLORS.warning },
-    { name: 'Expiring Urgent', value: analytics.documents.expiring_urgent || 0, color: COLORS.error },
-    { name: 'Expired', value: analytics.documents.expired || 0, color: '#DC2626' }
+    { name: 'Valid', value: analytics?.documents?.valid || 0, color: COLORS.success },
+    { name: 'Expiring Soon', value: analytics?.documents?.expiring_soon || 0, color: COLORS.warning },
+    { name: 'Expiring Urgent', value: analytics?.documents?.expiring_urgent || 0, color: COLORS.error },
+    { name: 'Expired', value: analytics?.documents?.expired || 0, color: '#DC2626' }
   ];
 
   return (
@@ -366,29 +355,29 @@ export const AnalyticsDashboard: React.FC = () => {
         <StatCard
           icon={Users}
           title="Total Crew"
-          value={analytics.crew.total_crew || 0}
-          subtitle={`${analytics.crew.available || 0} available`}
+          value={analytics?.crew?.total_crew ?? '-'}
+          subtitle={analytics?.crew ? `${analytics.crew.available || 0} available` : undefined}
           color={COLORS.primary}
         />
         <StatCard
           icon={FileText}
           title="Documents"
-          value={analytics.documents.total_documents || 0}
-          subtitle={`${analytics.documents.compliance_rate || 0}% compliant`}
+          value={analytics?.documents?.total_documents ?? '-'}
+          subtitle={analytics?.documents ? `${analytics.documents.compliance_rate || 0}% compliant` : undefined}
           color={COLORS.success}
         />
         <StatCard
           icon={CheckSquare}
           title="Tasks"
-          value={analytics.tasks.total_tasks || 0}
-          subtitle={`${analytics.tasks.completion_rate || 0}% completed`}
+          value={analytics?.tasks?.total_tasks ?? '-'}
+          subtitle={analytics?.tasks ? `${analytics.tasks.completion_rate || 0}% completed` : undefined}
           color={COLORS.info}
         />
         <StatCard
           icon={Ship}
           title="Vessels"
-          value={analytics.vessels.total_vessels || 0}
-          subtitle={`${analytics.vessels.active || 0} active`}
+          value={analytics?.vessels?.total_vessels ?? '-'}
+          subtitle={analytics?.vessels ? `${analytics.vessels.active || 0} active` : undefined}
           color={COLORS.secondary}
         />
       </div>
@@ -398,55 +387,65 @@ export const AnalyticsDashboard: React.FC = () => {
         {/* Crew Status Distribution */}
         <div className={styles.chartCard}>
           <h3 className={styles.chartTitle}>👥 Crew Status Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={crewStatusData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {crewStatusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          {crewStatusData.reduce((s, d) => s + (d.value as number), 0) > 0 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 24, left: 8 }}>
+                <Pie
+                  data={crewStatusData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {crewStatusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ paddingTop: 8 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
         </div>
 
         {/* Document Compliance */}
         <div className={styles.chartCard}>
           <h3 className={styles.chartTitle}>📄 Document Compliance Status</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={documentComplianceData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {documentComplianceData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          {documentComplianceData.reduce((s, d) => s + (d.value as number), 0) > 0 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 24, left: 8 }}>
+                <Pie
+                  data={documentComplianceData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {documentComplianceData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ paddingTop: 8 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
         </div>
 
         {/* Crew by Rank */}
-        {crewByRank.length > 0 && (
-          <div className={styles.chartCard}>
-            <h3 className={styles.chartTitle}>👔 Crew by Rank</h3>
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>👔 Crew by Rank</h3>
+          {crewByRank.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={crewByRank}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -456,13 +455,15 @@ export const AnalyticsDashboard: React.FC = () => {
                 <Bar dataKey="value" fill={COLORS.primary} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        )}
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
+        </div>
 
         {/* Tasks by Priority */}
-        {tasksByPriority.length > 0 && (
-          <div className={styles.chartCard}>
-            <h3 className={styles.chartTitle}>⚡ Tasks by Priority</h3>
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>⚡ Tasks by Priority</h3>
+          {tasksByPriority.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={tasksByPriority}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -472,8 +473,10 @@ export const AnalyticsDashboard: React.FC = () => {
                 <Bar dataKey="value" fill={COLORS.warning} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        )}
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
+        </div>
       </div>
 
       {/* Additional Stats Tables */}
@@ -485,36 +488,36 @@ export const AnalyticsDashboard: React.FC = () => {
             <tbody>
               <tr>
                 <td>Total Tasks</td>
-                <td className={styles.tableValue}>{analytics.tasks.total_tasks || 0}</td>
+                <td className={styles.tableValue}>{analytics?.tasks?.total_tasks ?? '-'}</td>
               </tr>
               <tr>
                 <td>Completed</td>
                 <td className={styles.tableValue} style={{ color: COLORS.success }}>
-                  {analytics.tasks.completed || 0}
+                  {analytics?.tasks?.completed ?? '-'}
                 </td>
               </tr>
               <tr>
                 <td>In Progress</td>
                 <td className={styles.tableValue} style={{ color: COLORS.info }}>
-                  {analytics.tasks.in_progress || 0}
+                  {analytics?.tasks?.in_progress ?? '-'}
                 </td>
               </tr>
               <tr>
                 <td>Pending</td>
                 <td className={styles.tableValue} style={{ color: COLORS.warning }}>
-                  {analytics.tasks.pending || 0}
+                  {analytics?.tasks?.pending ?? '-'}
                 </td>
               </tr>
               <tr>
                 <td>Overdue</td>
                 <td className={styles.tableValue} style={{ color: COLORS.error }}>
-                  {analytics.tasks.overdue || 0}
+                  {analytics?.tasks?.overdue ?? '-'}
                 </td>
               </tr>
               <tr className={styles.tableHighlight}>
                 <td>Completion Rate</td>
                 <td className={styles.tableValue}>
-                  {analytics.tasks.completion_rate || 0}%
+                  {analytics?.tasks?.completion_rate != null ? `${analytics.tasks.completion_rate}%` : '-'}
                 </td>
               </tr>
             </tbody>
@@ -528,30 +531,30 @@ export const AnalyticsDashboard: React.FC = () => {
             <tbody>
               <tr>
                 <td>Total Assignments</td>
-                <td className={styles.tableValue}>{analytics.assignments.total_assignments || 0}</td>
+                <td className={styles.tableValue}>{analytics?.assignments?.total_assignments ?? '-'}</td>
               </tr>
               <tr>
                 <td>Accepted</td>
                 <td className={styles.tableValue} style={{ color: COLORS.success }}>
-                  {analytics.assignments.accepted || 0}
+                  {analytics?.assignments?.accepted ?? '-'}
                 </td>
               </tr>
               <tr>
                 <td>Pending</td>
                 <td className={styles.tableValue} style={{ color: COLORS.warning }}>
-                  {analytics.assignments.pending || 0}
+                  {analytics?.assignments?.pending ?? '-'}
                 </td>
               </tr>
               <tr>
                 <td>Rejected</td>
                 <td className={styles.tableValue} style={{ color: COLORS.error }}>
-                  {analytics.assignments.rejected || 0}
+                  {analytics?.assignments?.rejected ?? '-'}
                 </td>
               </tr>
               <tr className={styles.tableHighlight}>
                 <td>Acceptance Rate</td>
                 <td className={styles.tableValue}>
-                  {analytics.assignments.acceptance_rate || 0}%
+                  {analytics?.assignments?.acceptance_rate != null ? `${analytics.assignments.acceptance_rate}%` : '-'}
                 </td>
               </tr>
             </tbody>
@@ -563,7 +566,7 @@ export const AnalyticsDashboard: React.FC = () => {
       <div className={styles.footer}>
         <p>
           <Calendar size={16} />
-          Last updated: {new Date(analytics.generated_at).toLocaleString()}
+          Last updated: {analytics?.generated_at ? new Date(analytics.generated_at).toLocaleString() : '-'}
         </p>
       </div>
     </div>
