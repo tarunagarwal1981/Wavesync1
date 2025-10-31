@@ -51,6 +51,7 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   }
 
   // Get navigation sections and add unread badge to announcements
+  // Profile is guaranteed to exist at this point due to earlier checks
   const navigationSections = useMemo(() => {
     const sections = getNavigationForRole(profile.user_type);
     
