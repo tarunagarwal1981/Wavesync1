@@ -30,13 +30,15 @@
   left: 0;
   right: 0;
   width: 100%;
-  background: var(--gradient-critical);
+  /* Subtle light gradient */
+  background: linear-gradient(135deg, var(--color-error-light), var(--color-warning-light));
   z-index: 9999; /* Higher than sidebar (usually 1000-2000) */
-  box-shadow: var(--shadow-lg);
-  padding: var(--spacing-md);
-  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-primary);
   transform: translateY(-100%);
   opacity: 0;
+  border-bottom: 1px solid var(--color-border);
   transition: all 300ms ease-out;
 }
 
@@ -69,9 +71,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-full);
   flex-shrink: 0;
   animation: pulse 2s ease-in-out infinite;
@@ -97,9 +99,9 @@
 }
 
 .title {
-  font-size: var(--font-16);
-  font-weight: var(--font-bold);
-  color: var(--color-text-inverse);
+  font-size: var(--font-14);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -117,8 +119,8 @@
 }
 
 .subtitle {
-  font-size: var(--font-14);
-  color: rgba(255, 255, 255, 0.95);
+  font-size: var(--font-12);
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 
@@ -126,7 +128,7 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-2xs);
   flex-shrink: 0;
 }
 
@@ -136,11 +138,11 @@
 .dismissButton {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: 4px;
+  padding: var(--spacing-2xs) var(--spacing-sm);
   border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-14);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-12);
   font-weight: var(--font-semibold);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -149,9 +151,9 @@
 
 /* View Button */
 .viewButton {
-  background: rgba(255, 255, 255, 0.25);
-  color: var(--color-text-inverse);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
 }
 
 .viewButton:hover {
@@ -162,8 +164,8 @@
 
 /* Acknowledge Button */
 .acknowledgeButton {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--color-error-dark);
+  background: var(--color-error);
+  color: var(--color-text-inverse);
   border: none;
 }
 
@@ -180,10 +182,10 @@
 
 /* Dismiss Button */
 .dismissButton {
-  background: transparent;
-  color: var(--color-text-inverse);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: var(--spacing-sm);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-xs) var(--spacing-sm);
   min-width: auto;
 }
 

@@ -83,10 +83,14 @@ export const AnnouncementsPage: React.FC = () => {
   };
 
   const handleMarkAsRead = async (broadcastId: string) => {
+    console.log('🔔 AnnouncementsPage: handleMarkAsRead called with broadcastId:', broadcastId);
     try {
+      console.log('⏳ Calling markBroadcastAsRead...');
       await markBroadcastAsRead(broadcastId);
+      console.log('✅ markBroadcastAsRead completed successfully');
       
       // Update local state
+      console.log('🔄 Updating local state...');
       setBroadcasts(prev => 
         prev.map(b => 
           b.id === broadcastId 
@@ -100,20 +104,27 @@ export const AnnouncementsPage: React.FC = () => {
         description: 'Announcement marked as read',
         type: 'success'
       });
+      console.log('✅ Toast notification shown');
     } catch (error) {
+      console.error('❌ AnnouncementsPage: Error marking as read:', error);
       addToast({
         title: 'Error',
         description: 'Failed to mark as read',
         type: 'error'
       });
     }
+    console.log('🏁 handleMarkAsRead finished');
   };
 
   const handleAcknowledge = async (broadcastId: string) => {
+    console.log('🔔 AnnouncementsPage: handleAcknowledge called with broadcastId:', broadcastId);
     try {
+      console.log('⏳ Calling acknowledgeBroadcast...');
       await acknowledgeBroadcast(broadcastId);
+      console.log('✅ acknowledgeBroadcast completed successfully');
       
       // Update local state
+      console.log('🔄 Updating local state...');
       setBroadcasts(prev => 
         prev.map(b => 
           b.id === broadcastId 
@@ -127,13 +138,16 @@ export const AnnouncementsPage: React.FC = () => {
         description: 'Announcement acknowledged',
         type: 'success'
       });
+      console.log('✅ Toast notification shown');
     } catch (error) {
+      console.error('❌ AnnouncementsPage: Error acknowledging:', error);
       addToast({
         title: 'Error',
         description: 'Failed to acknowledge',
         type: 'error'
       });
     }
+    console.log('🏁 handleAcknowledge finished');
   };
 
   const handleMarkAllAsRead = async () => {

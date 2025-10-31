@@ -119,7 +119,15 @@ export async function getMyBroadcasts(): Promise<BroadcastWithStatus[]> {
     throw new Error(`Failed to get broadcasts: ${error.message}`);
   }
 
-  return data || [];
+  if (!data) {
+    return [];
+  }
+
+  // Transform broadcast_id to id to match TypeScript types
+  return data.map((b: any) => ({
+    ...b,
+    id: b.broadcast_id || b.id, // Use broadcast_id if present, fallback to id
+  })) as BroadcastWithStatus[];
 }
 
 /**
@@ -152,27 +160,193 @@ export async function getBroadcastsRequiringAcknowledgment(): Promise<BroadcastW
 
 /**
  * Mark a broadcast as read
+ * Uses direct table insert/update instead of RPC function for reliability
  */
 export async function markBroadcastAsRead(broadcastId: string): Promise<void> {
-  const { error } = await supabase.rpc('mark_broadcast_as_read', {
-    p_broadcast_id: broadcastId,
-  });
+  console.log('📖 markBroadcastAsRead called with broadcastId:', broadcastId);
+  
+  // Validate broadcastId
+  if (!broadcastId || broadcastId === 'undefined' || broadcastId === 'null') {
+    console.error('❌ Invalid broadcast ID:', broadcastId);
+    throw new Error('Invalid broadcast ID');
+  }
 
-  if (error) {
-    throw new Error(`Failed to mark broadcast as read: ${error.message}`);
+  const { data: user } = await supabase.auth.getUser();
+  
+  if (!user.user) {
+    console.error('❌ User not authenticated');
+    throw new Error('User not authenticated');
+  }
+
+  console.log('✅ User authenticated:', user.user.id);
+
+  const readAt = new Date().toISOString();
+  console.log('🕐 Setting read_at to:', readAt);
+
+  // Try to update first (if record exists)
+  console.log('🔄 Attempting to update existing record...');
+  const { data: updateData, error: updateError } = await supabase
+    .from('broadcast_reads')
+    .update({ read_at: readAt })
+    .eq('broadcast_id', broadcastId)
+    .eq('user_id', user.user.id)
+    .select()
+    .maybeSingle(); // Use maybeSingle() instead of single() to avoid error if not found
+
+  console.log('📊 Update result:', { updateData, updateError: updateError?.message });
+
+  // If update returned data, we're done
+  if (updateData && !updateError) {
+    console.log('✅ Successfully updated existing record');
+    return;
+  }
+
+  // If update failed or no rows updated, try insert
+  console.log('➕ Attempting to insert new record...');
+  const { error: insertError } = await supabase
+    .from('broadcast_reads')
+    .insert({
+      broadcast_id: broadcastId,
+      user_id: user.user.id,
+      read_at: readAt,
+    });
+
+  console.log('📊 Insert result:', { insertError: insertError?.message, insertErrorCode: insertError?.code });
+
+  if (insertError) {
+    // If insert fails due to duplicate, try update again (race condition handling)
+    if (insertError.code === '23505') { // Unique violation
+      console.log('⚠️ Duplicate key detected, retrying update...');
+      const { error: retryUpdateError } = await supabase
+        .from('broadcast_reads')
+        .update({ read_at: readAt })
+        .eq('broadcast_id', broadcastId)
+        .eq('user_id', user.user.id);
+
+      if (retryUpdateError) {
+        console.error('❌ Retry update failed:', retryUpdateError.message);
+        throw new Error(`Failed to mark broadcast as read: ${retryUpdateError.message}`);
+      }
+      console.log('✅ Retry update succeeded');
+    } else {
+      console.error('❌ Insert failed:', insertError.message);
+      throw new Error(`Failed to mark broadcast as read: ${insertError.message}`);
+    }
+  } else {
+    console.log('✅ Successfully inserted new record');
   }
 }
 
 /**
  * Acknowledge a broadcast
+ * Uses direct table insert/update instead of RPC function for reliability
  */
 export async function acknowledgeBroadcast(broadcastId: string): Promise<void> {
-  const { error } = await supabase.rpc('acknowledge_broadcast', {
-    p_broadcast_id: broadcastId,
-  });
+  console.log('✅ acknowledgeBroadcast called with broadcastId:', broadcastId);
+  
+  // Validate broadcastId
+  if (!broadcastId || broadcastId === 'undefined' || broadcastId === 'null') {
+    console.error('❌ Invalid broadcast ID:', broadcastId);
+    throw new Error('Invalid broadcast ID');
+  }
 
-  if (error) {
-    throw new Error(`Failed to acknowledge broadcast: ${error.message}`);
+  const { data: user } = await supabase.auth.getUser();
+  
+  if (!user.user) {
+    console.error('❌ User not authenticated');
+    throw new Error('User not authenticated');
+  }
+
+  console.log('✅ User authenticated:', user.user.id);
+
+  // Check if broadcast requires acknowledgment
+  console.log('🔍 Checking if broadcast requires acknowledgment...');
+  const { data: broadcast, error: broadcastError } = await supabase
+    .from('broadcasts')
+    .select('requires_acknowledgment')
+    .eq('id', broadcastId)
+    .maybeSingle(); // Use maybeSingle() to avoid error if not found
+
+  console.log('📊 Broadcast check result:', { broadcast, broadcastError: broadcastError?.message });
+
+  if (broadcastError) {
+    console.error('❌ Broadcast fetch error:', broadcastError.message);
+    throw new Error(`Broadcast not found: ${broadcastError.message}`);
+  }
+
+  if (!broadcast) {
+    console.error('❌ Broadcast not found');
+    throw new Error('Broadcast not found');
+  }
+
+  if (!broadcast.requires_acknowledgment) {
+    console.error('❌ Broadcast does not require acknowledgment');
+    throw new Error('This broadcast does not require acknowledgment');
+  }
+
+  console.log('✅ Broadcast requires acknowledgment, proceeding...');
+
+  const now = new Date().toISOString();
+  console.log('🕐 Setting acknowledged_at and read_at to:', now);
+
+  // Try to update first (if record exists)
+  console.log('🔄 Attempting to update existing record...');
+  const { data: updateData, error: updateError } = await supabase
+    .from('broadcast_reads')
+    .update({
+      acknowledged_at: now,
+      read_at: now, // Also mark as read
+    })
+    .eq('broadcast_id', broadcastId)
+    .eq('user_id', user.user.id)
+    .select()
+    .maybeSingle(); // Use maybeSingle() instead of single() to avoid error if not found
+
+  console.log('📊 Update result:', { updateData, updateError: updateError?.message });
+
+  // If update returned data, we're done
+  if (updateData && !updateError) {
+    console.log('✅ Successfully updated existing record');
+    return;
+  }
+
+  // If update failed, try insert
+  console.log('➕ Attempting to insert new record...');
+  const { error: insertError } = await supabase
+    .from('broadcast_reads')
+    .insert({
+      broadcast_id: broadcastId,
+      user_id: user.user.id,
+      read_at: now,
+      acknowledged_at: now,
+    });
+
+  console.log('📊 Insert result:', { insertError: insertError?.message, insertErrorCode: insertError?.code });
+
+  if (insertError) {
+    // If insert fails due to duplicate, try update again (race condition handling)
+    if (insertError.code === '23505') { // Unique violation
+      console.log('⚠️ Duplicate key detected, retrying update...');
+      const { error: retryUpdateError } = await supabase
+        .from('broadcast_reads')
+        .update({
+          acknowledged_at: now,
+          read_at: now,
+        })
+        .eq('broadcast_id', broadcastId)
+        .eq('user_id', user.user.id);
+
+      if (retryUpdateError) {
+        console.error('❌ Retry update failed:', retryUpdateError.message);
+        throw new Error(`Failed to acknowledge broadcast: ${retryUpdateError.message}`);
+      }
+      console.log('✅ Retry update succeeded');
+    } else {
+      console.error('❌ Insert failed:', insertError.message);
+      throw new Error(`Failed to acknowledge broadcast: ${insertError.message}`);
+    }
+  } else {
+    console.log('✅ Successfully inserted new record');
   }
 }
 

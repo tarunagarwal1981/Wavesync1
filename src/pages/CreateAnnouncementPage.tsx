@@ -166,6 +166,11 @@ export const CreateAnnouncementPage: React.FC = () => {
     setSubmitting(true);
 
     try {
+      // Convert date-only to end-of-day ISO if provided
+      const expiresIso = formData.expiresAt
+        ? new Date(`${formData.expiresAt}T23:59:59`).toISOString()
+        : undefined;
+
       await createBroadcast({
         title: formData.title,
         message: formData.message,
@@ -174,7 +179,7 @@ export const CreateAnnouncementPage: React.FC = () => {
         target_ids: formData.targetIds.length > 0 ? formData.targetIds : undefined,
         pinned: formData.pinned,
         requires_acknowledgment: formData.requiresAcknowledgment,
-        expires_at: formData.expiresAt || undefined,
+        expires_at: expiresIso,
         // TODO: Add attachments when file upload is implemented
       });
 
@@ -316,7 +321,7 @@ export const CreateAnnouncementPage: React.FC = () => {
                   }}
                   className={styles.checkbox}
                 />
-                <span>All Seafarers</span>
+                <span className={styles.checkboxText}>All Seafarers</span>
               </label>
 
               {/* Additional target options (disabled if "All" is selected) */}
@@ -330,10 +335,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                         setFormData({ ...formData, targetType: 'vessel', targetIds: [] });
                       }
                     }}
-                    disabled={formData.targetType === 'all'}
                     className={styles.checkbox}
+                    disabled
                   />
-                  <span>By Vessel</span>
+                  <span className={styles.checkboxText}>By Vessel <span className={styles.optionHint}>(Coming soon)</span></span>
                 </label>
                 {formData.targetType === 'vessel' && (
                   <select 
@@ -360,10 +365,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                         setFormData({ ...formData, targetType: 'rank', targetIds: [] });
                       }
                     }}
-                    disabled={formData.targetType === 'all'}
                     className={styles.checkbox}
+                    disabled
                   />
-                  <span>By Rank</span>
+                  <span className={styles.checkboxText}>By Rank <span className={styles.optionHint}>(Coming soon)</span></span>
                 </label>
                 {formData.targetType === 'rank' && (
                   <select 
@@ -390,10 +395,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                         setFormData({ ...formData, targetType: 'status', targetIds: [] });
                       }
                     }}
-                    disabled={formData.targetType === 'all'}
                     className={styles.checkbox}
+                    disabled
                   />
-                  <span>By Status</span>
+                  <span className={styles.checkboxText}>By Status <span className={styles.optionHint}>(Coming soon)</span></span>
                 </label>
                 {formData.targetType === 'status' && (
                   <select 
@@ -501,8 +506,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, pinned: e.target.checked })}
                   className={styles.checkbox}
                 />
-                <span>Pin announcement</span>
-                <span className={styles.optionHint}>Show at the top of the feed</span>
+                <span className={styles.checkboxText}>
+                  <span>Pin announcement</span>
+                  <span className={styles.optionHint}>Show at the top of the feed</span>
+                </span>
               </label>
 
               <label className={styles.checkboxLabel}>
@@ -512,8 +519,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, requiresAcknowledgment: e.target.checked })}
                   className={styles.checkbox}
                 />
-                <span>Require acknowledgment</span>
-                <span className={styles.optionHint}>Users must acknowledge this announcement</span>
+                <span className={styles.checkboxText}>
+                  <span>Require acknowledgment</span>
+                  <span className={styles.optionHint}>Users must acknowledge this announcement</span>
+                </span>
               </label>
 
               <label className={styles.checkboxLabel}>
@@ -524,8 +533,10 @@ export const CreateAnnouncementPage: React.FC = () => {
                   className={styles.checkbox}
                   disabled
                 />
-                <span>Send email notification</span>
-                <span className={styles.optionHint}>(Coming soon)</span>
+                <span className={styles.checkboxText}>
+                  <span>Send email notification</span>
+                  <span className={styles.optionHint}>(Coming soon)</span>
+                </span>
               </label>
             </div>
           </div>
@@ -537,7 +548,7 @@ export const CreateAnnouncementPage: React.FC = () => {
             </label>
             <input
               id="expiresAt"
-              type="datetime-local"
+              type="date"
               value={formData.expiresAt}
               onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })}
               className={`${styles.input} ${errors.expiresAt ? styles.inputError : ''}`}

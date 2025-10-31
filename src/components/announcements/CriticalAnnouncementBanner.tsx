@@ -147,15 +147,26 @@ export const CriticalAnnouncementBanner: React.FC = () => {
     if (!criticalAnnouncement) return;
     
     // Navigate to announcement detail page
-    navigate(`/announcements/${criticalAnnouncement.id}`);
+    const targetId = (criticalAnnouncement as any).id || (criticalAnnouncement as any).broadcast_id;
+    navigate(`/announcements/${targetId}`);
   };
 
   const handleAcknowledge = async () => {
-    if (!criticalAnnouncement) return;
+    console.log('🔔 CriticalAnnouncementBanner: handleAcknowledge called');
+    console.log('📋 criticalAnnouncement:', criticalAnnouncement);
+    
+    if (!criticalAnnouncement) {
+      console.error('❌ CriticalAnnouncementBanner: No critical announcement');
+      return;
+    }
 
+    const targetId = (criticalAnnouncement as any).id || (criticalAnnouncement as any).broadcast_id;
+    console.log('✅ CriticalAnnouncementBanner: Proceeding with acknowledge, id:', targetId);
     setIsAcknowledging(true);
     try {
-      await acknowledgeBroadcast(criticalAnnouncement.id);
+      console.log('⏳ Calling acknowledgeBroadcast...');
+      await acknowledgeBroadcast(targetId);
+      console.log('✅ acknowledgeBroadcast completed successfully');
 
       addToast({
         title: 'Acknowledged',
@@ -164,11 +175,14 @@ export const CriticalAnnouncementBanner: React.FC = () => {
       });
 
       // Hide banner
+      console.log('🎭 Hiding banner...');
       setIsVisible(false);
       setTimeout(() => {
         setCriticalAnnouncement(null);
+        console.log('✅ Banner hidden and cleared');
       }, 300); // Wait for slide-up animation
     } catch (error) {
+      console.error('❌ CriticalAnnouncementBanner: Error acknowledging:', error);
       addToast({
         title: 'Error',
         description: 'Failed to acknowledge announcement',
@@ -176,27 +190,41 @@ export const CriticalAnnouncementBanner: React.FC = () => {
       });
     } finally {
       setIsAcknowledging(false);
+      console.log('🏁 handleAcknowledge finished');
     }
   };
 
   const handleDismiss = async () => {
-    if (!criticalAnnouncement) return;
+    console.log('🔔 CriticalAnnouncementBanner: handleDismiss called');
+    console.log('📋 criticalAnnouncement:', criticalAnnouncement);
+    
+    if (!criticalAnnouncement) {
+      console.error('❌ CriticalAnnouncementBanner: No critical announcement');
+      return;
+    }
 
+    const targetId = (criticalAnnouncement as any).id || (criticalAnnouncement as any).broadcast_id;
+    console.log('✅ CriticalAnnouncementBanner: Proceeding with dismiss, id:', targetId);
     try {
       // Mark as read (soft dismiss - will still show in list but not in banner)
-      await markBroadcastAsRead(criticalAnnouncement.id);
+      console.log('⏳ Calling markBroadcastAsRead...');
+      await markBroadcastAsRead(targetId);
+      console.log('✅ markBroadcastAsRead completed successfully');
 
       // Hide banner with animation
+      console.log('🎭 Hiding banner...');
       setIsVisible(false);
       setIsDismissed(true);
+      console.log('✅ Banner hidden');
 
       setTimeout(() => {
         setCriticalAnnouncement(null);
       }, 300); // Wait for slide-up animation
     } catch (error) {
+      console.error('❌ CriticalAnnouncementBanner: Error dismissing:', error);
       addToast({
         title: 'Error',
-        description: 'Failed to dismiss announcement',
+        description: 'Failed to dismiss banner',
         type: 'error'
       });
     }

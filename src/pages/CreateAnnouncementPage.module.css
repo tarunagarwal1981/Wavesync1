@@ -1,9 +1,10 @@
-/* Create Announcement Page - Ocean Breeze Theme */
+/* Create Announcement Page - Ocean Breeze Theme - Redesigned */
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-lg);
+  /* Reduced padding */
+  padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
@@ -53,7 +54,8 @@
 }
 
 .formBody {
-  padding: var(--spacing-2xl);
+  /* Reduced padding */
+  padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
@@ -209,68 +211,138 @@
   color: var(--color-text-secondary);
 }
 
-/* Target Selector */
+/* Target Selector - Redesigned for better contrast */
 .targetSelector {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-background-alt);
+  /* Better background contrast */
+  background: var(--color-surface);
 }
 
 .targetOptions {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-  padding-left: var(--spacing-lg);
+  gap: var(--spacing-md);
+  padding-left: 0;
   transition: opacity var(--transition-fast);
 }
 
 .targetOptions.disabled {
-  opacity: 0.4;
+  opacity: 0.6;
   pointer-events: none;
 }
 
 .checkboxLabel {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   cursor: pointer;
   font-size: var(--font-14);
   color: var(--color-text-primary);
   position: relative;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
 }
 
+.checkboxLabel:hover {
+  background: var(--color-surface-hover);
+}
+
+.checkboxLabel:has(input:disabled) {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.checkboxLabel:has(input:disabled):hover {
+  background: transparent;
+}
+
+/* Enhanced checkbox styling for better visibility */
 .checkbox {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   accent-color: var(--color-primary);
   flex-shrink: 0;
   margin-top: 2px;
+  /* Custom styling for better contrast */
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  transition: all var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+}
+
+.checkbox:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M10 2L4.5 7.5L2 5' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+
+.checkbox:not(:checked) {
+  background: var(--color-surface);
+  border-color: var(--color-text-secondary);
+}
+
+.checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
 .checkbox:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+  border-color: var(--color-text-muted);
+  background: var(--color-background-alt);
+}
+
+.checkboxText {
+  flex: 1;
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+.checkboxLabel:has(input:not(:checked)) .checkboxText {
+  color: var(--color-text-primary);
+}
+
+.checkboxLabel:has(input:disabled) .checkboxText {
+  color: var(--color-text-secondary);
 }
 
 .select {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: var(--font-14);
   color: var(--color-text-primary);
   background: var(--color-surface);
-  margin-top: var(--spacing-xs);
-  margin-left: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+  min-height: 44px;
+  transition: all var(--transition-fast);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
 .select:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  background: var(--color-background-alt);
 }
 
 /* File Upload */
@@ -344,32 +416,77 @@
   transform: scale(1.1);
 }
 
-/* Options Group */
+/* Options Group - Redesigned with proper alignment */
 .optionsGroup {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-background-alt);
+  background: var(--color-surface);
 }
 
+/* Options section uses the same checkboxLabel but with specific layout */
 .optionsGroup .checkboxLabel {
-  flex-direction: column;
+  display: flex;
   align-items: flex-start;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs);
+  position: relative;
+  min-height: 44px;
 }
 
-.optionsGroup .checkboxLabel > span:first-of-type {
-  margin-left: calc(18px + var(--spacing-sm));
-  margin-top: calc(-18px - 2px);
+.optionsGroup .checkbox {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.optionsGroup .checkboxText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  padding-top: 0;
+}
+
+.optionsGroup .checkboxText > span:first-child {
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  font-size: var(--font-14);
 }
 
 .optionHint {
   font-size: var(--font-12);
   color: var(--color-text-muted);
-  margin-left: calc(18px + var(--spacing-sm));
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.optionsGroup .checkboxLabel:has(input:disabled) .checkboxText > span:first-child {
+  color: var(--color-text-secondary);
+}
+
+.optionsGroup .checkboxLabel:has(input:disabled) .optionHint {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+/* Character Counter */
+.charCounter {
+  display: flex;
+  justify-content: flex-end;
+  font-size: var(--font-12);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xs);
+}
+
+.charCounter.warning {
+  color: var(--color-warning);
+}
+
+.charCounter.error {
+  color: var(--color-error);
 }
 
 /* Form Actions */
@@ -377,7 +494,7 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-md);
-  padding: var(--spacing-lg) var(--spacing-2xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
   border-top: 1px solid var(--color-border);
   background: var(--color-background-alt);
 }
@@ -501,4 +618,3 @@
     padding: var(--spacing-md);
   }
 }
-

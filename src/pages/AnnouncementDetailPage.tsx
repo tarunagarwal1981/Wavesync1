@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import styles from './AnnouncementDetailPage.module.css';
 import { supabase } from '../lib/supabase';
-import { markBroadcastAsRead, acknowledgeBroadcast } from '../services/broadcast.service';
+import { markBroadcastAsRead, acknowledgeBroadcast, getMyBroadcasts } from '../services/broadcast.service';
 import type { BroadcastWithStatus, BroadcastPriority } from '../types/broadcast.types';
 
 export const AnnouncementDetailPage: React.FC = () => {
@@ -52,14 +52,11 @@ export const AnnouncementDetailPage: React.FC = () => {
     try {
       setLoading(true);
 
-      // Fetch all broadcasts and filter by ID (since RPC returns multiple)
-      const { data: allData, error } = await supabase
-        .rpc('get_my_broadcasts');
-
-      if (error) throw error;
+      // Fetch all broadcasts using service function (handles broadcast_id to id transformation)
+      const allData = await getMyBroadcasts();
 
       // Find the specific broadcast by ID
-      const data = allData?.find((b: any) => b.id === id);
+      const data = allData?.find((b: BroadcastWithStatus) => b.id === id);
 
       if (!data) {
         addToast({
@@ -106,14 +103,24 @@ export const AnnouncementDetailPage: React.FC = () => {
   };
 
   const handleAcknowledge = async () => {
-    if (!id) return;
+    console.log('🔔 AnnouncementDetailPage: handleAcknowledge called');
+    console.log('📋 id:', id);
+    
+    if (!id) {
+      console.error('❌ AnnouncementDetailPage: No id');
+      return;
+    }
 
+    console.log('✅ AnnouncementDetailPage: Proceeding with acknowledge, id:', id);
     setAcknowledging(true);
     try {
+      console.log('⏳ Calling acknowledgeBroadcast...');
       await acknowledgeBroadcast(id);
+      console.log('✅ acknowledgeBroadcast completed successfully');
 
       // Update local state
       if (announcement) {
+        console.log('🔄 Updating local state...');
         setAnnouncement({
           ...announcement,
           is_acknowledged: true,
@@ -129,7 +136,9 @@ export const AnnouncementDetailPage: React.FC = () => {
       });
 
       setShowAckModal(false);
+      console.log('✅ Modal closed');
     } catch (error) {
+      console.error('❌ AnnouncementDetailPage: Error acknowledging:', error);
       addToast({
         title: 'Error',
         description: 'Failed to acknowledge announcement',
@@ -137,6 +146,7 @@ export const AnnouncementDetailPage: React.FC = () => {
       });
     } finally {
       setAcknowledging(false);
+      console.log('🏁 handleAcknowledge finished');
     }
   };
 
