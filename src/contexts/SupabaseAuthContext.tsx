@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null
   profile: UserProfile | null
   loading: boolean
-  authLoading: boolean // Separate loading state for auth operations
+  authLoading: boolean
   signUp: (email: string, password: string, userData: Partial<UserProfile>) => Promise<{ error: any | null }>
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<{ error: AuthError | null }>
@@ -32,21 +32,16 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true) // Loading state for initial session check
-  const [authLoading, setAuthLoading] = useState(false) // Loading state for auth operations
-  
-  // Cache to prevent duplicate fetches
-  const fetchingRef = React.useRef<{ [userId: string]: Promise<void> }>({})
-  const profileCacheRef = React.useRef<{ userId: string; timestamp: number } | null>(null)
-  // Debounce rapid auth events
+  const [loading, setLoading] = useState(true)
+  const [authLoading, setAuthLoading] = useState(false)
+
+  // Guards to prevent repeated profile fetches/timeouts
   const lastAuthEventRef = React.useRef<number>(0)
-  // Ensure we only flip loading false once after init
-  const initializedRef = React.useRef<boolean>(false)
+  const inFlightRef = React.useRef<boolean>(false)
+  const lastFetchRef = React.useRef<{ timestamp: number; succeeded: boolean } | null>(null)
 
   useEffect(() => {
     console.log('🚀 SupabaseAuthProvider: Initializing...')
-    
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('📋 Initial session check:', session ? 'Found session' : 'No session')
       setSession(session)
@@ -60,12 +55,9 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       }
     })
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 Auth state change:', event, session ? 'Session exists' : 'No session')
-      // Debounce bursts of events (e.g., SIGNED_IN firing multiple times)
+      // Debounce rapid duplicate events
       const nowTs = Date.now()
       if (nowTs - lastAuthEventRef.current < 1500) {
         console.log('⏳ Ignoring rapid duplicate auth event')
@@ -75,90 +67,78 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
       setSession(session)
       setUser(session?.user ?? null)
-      
+
       if (session?.user) {
         console.log('👤 User in auth change:', session.user.email)
-        // Skip fetch if we just fetched this profile (within 5 seconds)
-        const now = Date.now()
-        const cache = profileCacheRef.current
-        if (cache && cache.userId === session.user.id && now - cache.timestamp < 5000) {
-          console.log('⏭️ Skipping duplicate profile fetch (cached)')
-        } else if (profile && profile.id === session.user.id && now - (cache?.timestamp || 0) < 300000) {
-          // 5-minute cache if profile already present
-          console.log('⏭️ Profile already loaded recently, skipping fetch')
-          if (!initializedRef.current) {
-            setLoading(false)
-            initializedRef.current = true
-          }
-        } else {
-          await fetchUserProfile(session.user.id)
+
+        // If we already have the profile for this user, don't refetch
+        if (profile && (profile as any).id === session.user.id) {
+          console.log('⏭️ Using existing profile in state')
+          setLoading(false)
+          return
         }
+
+        // Cooldown after failed attempt to avoid retry loop
+        const last = lastFetchRef.current
+        if (last && !last.succeeded && (Date.now() - last.timestamp) < 30000) {
+          console.log('⏭️ Recent failed profile attempt, skipping to avoid retry loop')
+          setLoading(false)
+          return
+        }
+
+        // Prevent concurrent fetches
+        if (inFlightRef.current) {
+          console.log('⏳ Profile fetch already in-flight, skipping')
+          return
+        }
+
+        await fetchUserProfile(session.user.id)
       } else {
         console.log('❌ No user in auth change, clearing profile and setting loading to false')
         setProfile(null)
-        if (!initializedRef.current) {
-          setLoading(false)
-          initializedRef.current = true
-        }
+        setLoading(false)
       }
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [profile])
 
   const fetchUserProfile = async (userId: string, retryCount = 0) => {
-    // If already fetching for this user, return existing promise
-    if (fetchingRef.current[userId] !== undefined) {
-      console.log('⏳ Already fetching profile for:', userId)
-      return fetchingRef.current[userId]
-    }
+    try {
+      console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
+      inFlightRef.current = true
+      lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
 
-    // Create fetch promise
-    const fetchPromise = (async () => {
-      try {
-        console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
-        
-        // Increase timeout to 15 seconds for more reliability
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Profile fetch timeout')), 15000)
-        )
-        
-        const dbFetchPromise = supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('id', userId)
-          .single()
+      // 30s timeout for resilience
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Profile fetch timeout')), 30000))
+      const dbFetchPromise = supabase.from('user_profiles').select('*').eq('id', userId).single()
 
-        const { data, error } = await Promise.race([dbFetchPromise, timeoutPromise]) as any
+      const { data, error } = await Promise.race([dbFetchPromise, timeoutPromise]) as any
 
-        if (error) {
-          console.error('❌ Error fetching user profile:', error)
-          console.warn('⚠️ Could not fetch profile, continuing without profile data')
-          setProfile(null)
-        } else {
-          console.log('✅ User profile loaded:', data)
-          setProfile(data)
-          // Update cache
-          profileCacheRef.current = { userId, timestamp: Date.now() }
+      if (error) {
+        console.error('❌ Error fetching user profile:', error)
+        // single retry for timeout/network
+        if (retryCount < 1 && (error.message?.includes('timeout') || (error as any).code === 'PGRST301')) {
+          console.log('🔄 Retrying profile fetch...')
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return fetchUserProfile(userId, retryCount + 1)
         }
-      } catch (error) {
-        console.error('❌ Error fetching user profile:', error instanceof Error ? error.message : 'Unknown error')
-        console.warn('⚠️ Could not fetch profile, continuing without profile data')
         setProfile(null)
-      } finally {
-        console.log('🔄 Setting loading to false (fetchUserProfile)')
-        if (!initializedRef.current) {
-          setLoading(false)
-          initializedRef.current = true
-        }
-        // Clear from fetching ref
-        delete fetchingRef.current[userId]
+        lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
+      } else {
+        console.log('✅ User profile loaded:', data)
+        setProfile(data)
+        lastFetchRef.current = { timestamp: Date.now(), succeeded: true }
       }
-    })()
-
-    // Store in fetching ref
-    fetchingRef.current[userId] = fetchPromise
-    return fetchPromise
+    } catch (error) {
+      console.error('❌ Error fetching user profile:', error)
+      setProfile(null)
+      lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
+    } finally {
+      console.log('🔄 Setting loading to false')
+      setLoading(false)
+      inFlightRef.current = false
+    }
   }
 
   const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
@@ -197,7 +177,6 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
             .from('seafarer_profiles')
             .insert({
               user_id: data.user.id,
-              // For Partial<UserProfile>, these fields are not defined; use safe defaults or omit
               rank: 'Cadet',
               certificate_number: null,
               experience_years: 0,
