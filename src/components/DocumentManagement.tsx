@@ -79,9 +79,11 @@ const DOCUMENT_TYPES = [
 const DocumentManagement: React.FC = () => {
   const { profile } = useAuth();
   const { addToast } = useToast();
+  const userType = profile?.user_type as string | undefined;
   const [documents, setDocuments] = useState<Document[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usersLoaded, setUsersLoaded] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [editingDocument, setEditingDocument] = useState<Document | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -105,26 +107,29 @@ const DocumentManagement: React.FC = () => {
 
   // Auto-set user_id for seafarers
   useEffect(() => {
-    if (profile?.user_type === 'seafarer' && profile?.id) {
+    if (userType === 'seafarer' && profile?.id) {
       setFormData(prev => ({ ...prev, user_id: profile.id }));
     }
-  }, [profile?.id, profile?.user_type]);
+  }, [profile?.id, userType]);
 
   useEffect(() => {
     fetchUsers();
   }, [profile?.company_id]);
 
+  // Seafarers: fetch documents immediately when profile becomes available
   useEffect(() => {
-    // For seafarers, fetch immediately. For company users, fetch after users are loaded (even if empty)
-    if (profile?.user_type === 'seafarer') {
+    if (userType === 'seafarer' && profile?.id) {
       fetchDocuments();
-    } else if (profile?.user_type === 'company' || profile?.user_type === 'company_user') {
-      // For company users, wait for users to be fetched (may be empty array), then fetch documents
-      if (profile?.company_id) {
-        fetchDocuments();
-      }
     }
-  }, [users, profile?.id, profile?.user_type, profile?.company_id]);
+  }, [profile?.id, userType]);
+
+  // Company/Company user: wait until users list has finished loading
+  useEffect(() => {
+    const isCompanyUser = String(userType) === 'company' || String(userType) === 'company_user';
+    if (isCompanyUser && profile?.company_id && usersLoaded) {
+      fetchDocuments();
+    }
+  }, [profile?.company_id, userType, usersLoaded]);
 
   const fetchDocuments = async () => {
     if (!profile?.company_id) {
@@ -143,10 +148,10 @@ const DocumentManagement: React.FC = () => {
           user:user_profiles!user_id(full_name, email)
         `);
 
-      if (profile.user_type === 'seafarer') {
+      if (userType === 'seafarer') {
         // Seafarers can only see their own documents
         query = query.eq('user_id', profile.id);
-      } else if (profile.user_type === 'company' || profile.user_type === 'company_user') {
+      } else if (String(userType) === 'company' || String(userType) === 'company_user') {
         // Company users can see documents for all seafarers in their company
         const seafarerIds = users.map(u => u.id);
         if (seafarerIds.length > 0) {
@@ -157,8 +162,13 @@ const DocumentManagement: React.FC = () => {
           setLoading(false);
           return;
         }
+      } else {
+        // Unexpected user type - return empty and log warning
+        console.warn(`Unexpected user_type in fetchDocuments: ${profile.user_type}`);
+        setDocuments([]);
+        setLoading(false);
+        return;
       }
-
       const { data, error } = await query.order('uploaded_at', { ascending: false });
 
       if (error) throw error;
@@ -177,8 +187,13 @@ const DocumentManagement: React.FC = () => {
   };
 
   const fetchUsers = async () => {
+    // Reset usersLoaded when starting a new fetch cycle
+    setUsersLoaded(false);
+
     if (!profile?.company_id) {
       setLoading(false);
+      setUsers([]);
+      setUsersLoaded(true);
       return;
     }
 
@@ -190,7 +205,7 @@ const DocumentManagement: React.FC = () => {
         .select('id, full_name, email, user_type')
         .eq('company_id', profile.company_id);
 
-      if (profile.user_type === 'seafarer') {
+      if (userType === 'seafarer') {
         // Seafarers can only see their own documents
         query = query.eq('id', profile.id);
       } else {
@@ -206,9 +221,11 @@ const DocumentManagement: React.FC = () => {
       console.error('Error fetching users:', error);
       setUsers([]);
       // For company users, still try to fetch documents (will be empty)
-      if (profile?.user_type === 'company' || profile?.user_type === 'company_user') {
+      if (String(userType) === 'company' || String(userType) === 'company_user') {
         setLoading(false);
       }
+    } finally {
+      setUsersLoaded(true);
     }
   };
 

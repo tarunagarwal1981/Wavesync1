@@ -88,7 +88,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
         // If we already have the profile for this user, don't refetch
         const currentProfile = profileRef.current
-        if (currentProfile && (currentProfile as any).id === session.user.id) {
+        if (currentProfile && currentProfile.id === session.user.id) {
           console.log('⏭️ Using existing profile in state')
           setLoading(false)
           return

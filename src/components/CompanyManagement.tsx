@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/useToast';
 import styles from './CompanyManagement.module.css';
+import Modal from './ui/Modal';
 
 interface Company {
   id: string;
@@ -40,6 +41,18 @@ const CompanyManagement: React.FC = () => {
   useEffect(() => {
     fetchCompanies();
   }, []);
+
+  // Close modal on ESC key
+  useEffect(() => {
+    if (!showCreateForm) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        resetForm();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showCreateForm]);
 
   const fetchCompanies = async () => {
     try {
@@ -220,20 +233,26 @@ const CompanyManagement: React.FC = () => {
 
       {showCreateForm && (
         <div className={styles.formContainer}>
-          <div className={styles.formCard}>
-            <div className={styles.formHeader}>
-              <h2>{editingCompany ? 'Edit Company' : 'Create New Company'}</h2>
-              <button className={styles.closeButton} onClick={resetForm}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className={styles.form}>
+          <Modal
+            open={showCreateForm}
+            onClose={resetForm}
+            title={editingCompany ? 'Edit Company' : 'Create New Company'}
+            ariaDescription={'Provide the company details below. Fields marked with * are required.'}
+            width={880}
+            footer={(
+              <>
+                <button type="button" className={styles.cancelButton} onClick={resetForm}>Cancel</button>
+                <button form="company-form" type="submit" className={styles.submitButton}>
+                  {editingCompany ? 'Update Company' : 'Create Company'}
+                </button>
+              </>
+            )}
+          >
+            <form id="company-form" onSubmit={handleSubmit} className={styles.form}>
+              <p className={styles.formSubtitle}>Provide the company details below. Fields marked with <span className={styles.required}>*</span> are required.</p>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="name">Company Name *</label>
+                  <label htmlFor="name">Company Name <span className={styles.required}>*</span></label>
                   <input
                     type="text"
                     id="name"
@@ -246,7 +265,7 @@ const CompanyManagement: React.FC = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="email">Email *</label>
+                  <label htmlFor="email">Email <span className={styles.required}>*</span></label>
                   <input
                     type="email"
                     id="email"
@@ -295,16 +314,8 @@ const CompanyManagement: React.FC = () => {
                 />
               </div>
 
-              <div className={styles.formActions}>
-                <button type="button" className={styles.cancelButton} onClick={resetForm}>
-                  Cancel
-                </button>
-                <button type="submit" className={styles.submitButton}>
-                  {editingCompany ? 'Update Company' : 'Create Company'}
-                </button>
-              </div>
             </form>
-          </div>
+          </Modal>
         </div>
       )}
 
