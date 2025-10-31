@@ -851,4 +851,10 @@ export interface DocumentUploadForm {
   documentNumber?: string;
 }
 
+// ============================================================================
+// BROADCAST TYPES
+// ============================================================================
+
+export * from './broadcast.types';
+
 // All types are already exported as interfaces above

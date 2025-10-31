@@ -17,7 +17,6 @@ const Profile = lazy(() => import("../pages/Profile"));
 const Notifications = lazy(() => import("../pages/Notifications"));
 const CrewDirectory = lazy(() => import("../components/CrewDirectory"));
 const CompanyManagement = lazy(() => import("../components/CompanyManagement"));
-const UserManagement = lazy(() => import("../components/UserManagement"));
 const VesselManagement = lazy(() => import("../components/VesselManagement"));
 const AssignmentManagement = lazy(() => import("../components/AssignmentManagement"));
 const DocumentManagement = lazy(() => import("../components/DocumentManagement"));
@@ -39,6 +38,8 @@ const VesselInfoPage = lazy(() => import("../pages/__stubs__").then(m => ({ defa
 const PortInfoPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.PortInfoPage })));
 const EmergencyContactPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.EmergencyContactPage })));
 const HelpSupportPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.HelpSupportPage })));
+const AnnouncementsPage = lazy(() => import("../pages/__stubs__").then(m => ({ default: m.AnnouncementsPage })));
+const AnnouncementDetailPage = lazy(() => import("../pages/AnnouncementDetailPage"));
 
 const BudgetPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.BudgetPage })));
 const SchedulingPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.SchedulingPage })));
@@ -46,6 +47,8 @@ const CommunicationsPage = lazy(() => import("../pages/__stubs_company__").then(
 const CompanySettingsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompanySettingsPage })));
 const CompliancePage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompliancePage })));
 const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
+// const CompanyAnnouncementsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.AnnouncementsPage })));
+const CreateAnnouncementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CreateAnnouncementPage })));
 
 const AllUsersPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AllUsersPage })));
 const AdminAnalyticsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AdminAnalyticsPage })));
@@ -61,6 +64,8 @@ const ReportsExportsPage = lazy(() => import("../pages/__stubs_admin__").then(m 
 const SupportTicketsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SupportTicketsPage })));
 const DocumentationPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.DocumentationPage })));
 const SystemUpdatesPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemUpdatesPage })));
+// const AdminAnnouncementsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AnnouncementsPage })));
+// const AdminCreateAnnouncementPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.CreateAnnouncementPage })));
 
 // Helper component to wrap routes with Suspense
 const SuspenseRoute: React.FC<{ children: React.ReactNode; loadingText?: string }> = ({ 
@@ -185,6 +190,24 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="Messages">
               <PageTransition><MessagingPage /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+          </SuspenseRoute>
+        } />
+        <Route path="/announcements" element={
+          <SuspenseRoute loadingText="Loading announcements...">
+          <SupabaseProtectedRoute>
+            <Layout title="Announcements">
+              <PageTransition><AnnouncementsPage /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+          </SuspenseRoute>
+        } />
+        <Route path="/announcements/:id" element={
+          <SuspenseRoute loadingText="Loading announcement...">
+          <SupabaseProtectedRoute>
+            <Layout title="Announcement Details">
+              <PageTransition><AnnouncementDetailPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
           </SuspenseRoute>
@@ -354,6 +377,15 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="User Management">
               <PageTransition><UserManagementPage /></PageTransition>
+            </Layout>
+          </SupabaseProtectedRoute>
+          </SuspenseRoute>
+        } />
+        <Route path="/announcements/create" element={
+          <SuspenseRoute loadingText="Loading create announcement...">
+          <SupabaseProtectedRoute>
+            <Layout title="Create Announcement">
+              <PageTransition><CreateAnnouncementPage /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
           </SuspenseRoute>

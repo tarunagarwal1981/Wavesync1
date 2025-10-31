@@ -38,6 +38,10 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   // Cache to prevent duplicate fetches
   const fetchingRef = React.useRef<{ [userId: string]: Promise<void> }>({})
   const profileCacheRef = React.useRef<{ userId: string; timestamp: number } | null>(null)
+  // Debounce rapid auth events
+  const lastAuthEventRef = React.useRef<number>(0)
+  // Ensure we only flip loading false once after init
+  const initializedRef = React.useRef<boolean>(false)
 
   useEffect(() => {
     console.log('🚀 SupabaseAuthProvider: Initializing...')
@@ -61,6 +65,14 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 Auth state change:', event, session ? 'Session exists' : 'No session')
+      // Debounce bursts of events (e.g., SIGNED_IN firing multiple times)
+      const nowTs = Date.now()
+      if (nowTs - lastAuthEventRef.current < 1500) {
+        console.log('⏳ Ignoring rapid duplicate auth event')
+        return
+      }
+      lastAuthEventRef.current = nowTs
+
       setSession(session)
       setUser(session?.user ?? null)
       
@@ -71,13 +83,23 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         const cache = profileCacheRef.current
         if (cache && cache.userId === session.user.id && now - cache.timestamp < 5000) {
           console.log('⏭️ Skipping duplicate profile fetch (cached)')
+        } else if (profile && profile.id === session.user.id && now - (cache?.timestamp || 0) < 300000) {
+          // 5-minute cache if profile already present
+          console.log('⏭️ Profile already loaded recently, skipping fetch')
+          if (!initializedRef.current) {
+            setLoading(false)
+            initializedRef.current = true
+          }
         } else {
           await fetchUserProfile(session.user.id)
         }
       } else {
         console.log('❌ No user in auth change, clearing profile and setting loading to false')
         setProfile(null)
-        setLoading(false)
+        if (!initializedRef.current) {
+          setLoading(false)
+          initializedRef.current = true
+        }
       }
     })
 
@@ -86,7 +108,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
   const fetchUserProfile = async (userId: string, retryCount = 0) => {
     // If already fetching for this user, return existing promise
-    if (fetchingRef.current[userId]) {
+    if (fetchingRef.current[userId] !== undefined) {
       console.log('⏳ Already fetching profile for:', userId)
       return fetchingRef.current[userId]
     }
@@ -124,8 +146,11 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         console.warn('⚠️ Could not fetch profile, continuing without profile data')
         setProfile(null)
       } finally {
-        console.log('🔄 Setting loading to false')
-        setLoading(false)
+        console.log('🔄 Setting loading to false (fetchUserProfile)')
+        if (!initializedRef.current) {
+          setLoading(false)
+          initializedRef.current = true
+        }
         // Clear from fetching ref
         delete fetchingRef.current[userId]
       }

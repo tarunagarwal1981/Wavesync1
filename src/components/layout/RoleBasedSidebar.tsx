@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { SidebarBase } from './SidebarBase';
 import { getNavigationForRole } from '../../utils/navigationConfig';
+import { useUnreadAnnouncements } from '../../hooks/useUnreadAnnouncements';
 
 interface RoleBasedSidebarProps {
   isOpen: boolean;
@@ -14,8 +15,36 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   onClose, 
   isCollapsed = false 
 }) => {
+  // CRITICAL: ALL hooks must be called BEFORE any conditional returns
+  // This prevents "Rendered more/fewer hooks than expected" errors
   const { user, profile, loading } = useAuth();
+  const unreadCount = useUnreadAnnouncements();
   
+  // Calculate navigation sections with useMemo BEFORE any returns
+  // Use null check to handle loading states
+  const navigationSections = useMemo(() => {
+    if (!profile || !profile.user_type) {
+      return [];
+    }
+    
+    const sections = getNavigationForRole(profile.user_type);
+    
+    // Update announcements item with unread count badge
+    return sections.map(section => ({
+      ...section,
+      items: section.items.map(item => {
+        if (item.id === 'announcements') {
+          return {
+            ...item,
+            badge: unreadCount > 0 ? unreadCount : undefined
+          };
+        }
+        return item;
+      })
+    }));
+  }, [profile?.user_type, unreadCount]);
+  
+  // NOW we can do conditional returns - AFTER all hooks
   // Don't render sidebar if no user
   if (!user) {
     return null;
@@ -45,8 +74,6 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
       </div>
     );
   }
-
-  const navigationSections = getNavigationForRole(profile.user_type);
 
   return (
     <SidebarBase

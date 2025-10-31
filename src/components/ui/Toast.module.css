@@ -41,6 +41,17 @@
   line-height: 1.4;
 }
 
+.texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .closeButton {
   background: transparent;
   border: none;

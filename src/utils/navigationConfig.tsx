@@ -16,18 +16,15 @@ import {
   FileCheck,
   Calendar,
   DollarSign,
-  Clock,
   Shield,
-  Database,
-  Activity,
   AlertTriangle,
-  Cog,
   Key,
-  FileBarChart,
   HelpCircle,
   Phone,
   MapPin,
-  Brain
+  Brain,
+  Megaphone,
+  Plus
 } from "lucide-react";
 import { UserRole } from "../types";
 
@@ -113,6 +110,15 @@ export const seafarerNavigation: NavigationSection[] = [
         badge: 3,
         permissions: [UserRole.SEAFARER],
         description: "Communication with company"
+      },
+      {
+        id: "announcements",
+        title: "Announcements",
+        icon: Megaphone,
+        href: "/announcements",
+        badge: undefined,
+        permissions: [UserRole.SEAFARER],
+        description: "Company announcements and broadcasts"
       }
     ]
   },
@@ -326,6 +332,23 @@ export const companyNavigation: NavigationSection[] = [
         description: "Direct messaging with crew"
       },
       {
+        id: "announcements",
+        title: "Announcements",
+        icon: Megaphone,
+        href: "/announcements",
+        badge: undefined,
+        permissions: [UserRole.COMPANY_USER],
+        description: "Company announcements and broadcasts"
+      },
+      {
+        id: "create-announcement",
+        title: "Create Announcement",
+        icon: Plus,
+        href: "/announcements/create",
+        permissions: [UserRole.COMPANY_USER],
+        description: "Create new announcement"
+      },
+      {
         id: "company-settings",
         title: "Company Settings",
         icon: Settings,
@@ -434,6 +457,23 @@ export const adminNavigation: NavigationSection[] = [
         href: "/admin/permissions",
         permissions: [UserRole.ADMIN],
         description: "Manage user permissions and roles"
+      },
+      {
+        id: "announcements",
+        title: "Announcements",
+        icon: Megaphone,
+        href: "/announcements",
+        badge: undefined,
+        permissions: [UserRole.ADMIN],
+        description: "Platform-wide announcements and broadcasts"
+      },
+      {
+        id: "create-announcement",
+        title: "Create Announcement",
+        icon: Plus,
+        href: "/announcements/create",
+        permissions: [UserRole.ADMIN],
+        description: "Create new announcement"
       }
       // Commented out - User Analytics
       // {

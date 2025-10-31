@@ -1,4 +1,5 @@
 import React from "react";
+import AnnouncementsPageComponent from './AnnouncementsPage';
 
 export const Assignments: React.FC = () => {
   return (
@@ -228,3 +229,5 @@ export const HelpSupportPage: React.FC = () => {
     </div>
   );
 };
+
+export const AnnouncementsPage = AnnouncementsPageComponent;

@@ -54,7 +54,8 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
         <div key={toast.id} style={{ pointerEvents: 'auto' }}>
           <Toast 
             type={toast.type}
-            message={toast.message || ''}
+            title={toast.title}
+            description={toast.message}
             duration={toast.duration}
             onClose={() => onRemove(toast.id)}
           />
