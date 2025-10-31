@@ -39,6 +39,7 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
     const IconComponent = item.icon;
+    const isComingSoon = (item as any).badge === 'Soon' || item.id === 'ai-assignments' || item.id === 'budget-expenses' || item.id === 'scheduling' || item.id === 'training-programs';
 
     return (
       <li key={item.id} className={styles.navItem}>
@@ -56,8 +57,17 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
               
               return `${styles.navLink} ${shouldBeActive ? styles.active : ''} ${level > 0 ? styles.nested : ''}`;
             }}
-            onClick={onClose}
-            title={isCollapsed ? item.title : undefined}
+            onClick={(e) => {
+              if (isComingSoon) {
+                e.preventDefault();
+                e.stopPropagation();
+              } else {
+                onClose();
+              }
+            }}
+            aria-disabled={isComingSoon ? true : undefined}
+            style={isComingSoon ? { opacity: 0.7, pointerEvents: 'auto', cursor: 'not-allowed' } : undefined}
+            title={isCollapsed ? item.title : (isComingSoon ? 'Coming soon' : undefined)}
             data-ai={item.href === '/ai-assignments' ? 'true' : undefined}
           >
             <IconComponent size={20} className={styles.navIcon} />

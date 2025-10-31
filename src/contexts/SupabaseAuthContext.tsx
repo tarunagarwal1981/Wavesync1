@@ -40,6 +40,10 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const inFlightRef = React.useRef<boolean>(false)
   const lastFetchRef = React.useRef<{ timestamp: number; succeeded: boolean } | null>(null)
 
+  // Keep a ref mirror of profile to safely read inside effects without re-subscribing
+  const profileRef = React.useRef<UserProfile | null>(null)
+  useEffect(() => { profileRef.current = profile }, [profile])
+
   useEffect(() => {
     console.log('🚀 SupabaseAuthProvider: Initializing...')
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -48,6 +52,17 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       setUser(session?.user ?? null)
       if (session?.user) {
         console.log('👤 User found in session:', session.user.email)
+        // Optimistic hydration: use cached profile to render sidebar immediately
+        try {
+          const cached = localStorage.getItem('ws_profile_cache')
+          if (cached) {
+            const parsed = JSON.parse(cached)
+            if (parsed && parsed.id === session.user.id) {
+              setProfile(parsed)
+              setLoading(false)
+            }
+          }
+        } catch {}
         fetchUserProfile(session.user.id)
       } else {
         console.log('❌ No user in session, setting loading to false')
@@ -72,7 +87,8 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         console.log('👤 User in auth change:', session.user.email)
 
         // If we already have the profile for this user, don't refetch
-        if (profile && (profile as any).id === session.user.id) {
+        const currentProfile = profileRef.current
+        if (currentProfile && (currentProfile as any).id === session.user.id) {
           console.log('⏭️ Using existing profile in state')
           setLoading(false)
           return
@@ -101,7 +117,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     })
 
     return () => subscription.unsubscribe()
-  }, [profile])
+  }, [])
 
   const fetchUserProfile = async (userId: string, retryCount = 0) => {
     try {
@@ -128,6 +144,9 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       } else {
         console.log('✅ User profile loaded:', data)
         setProfile(data)
+        try {
+          localStorage.setItem('ws_profile_cache', JSON.stringify(data))
+        } catch {}
         lastFetchRef.current = { timestamp: Date.now(), succeeded: true }
       }
     } catch (error) {
