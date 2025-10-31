@@ -32,6 +32,10 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  // Guards to prevent repeated profile fetches/timeouts
+  const lastAuthEventRef = React.useRef<number>(0)
+  const inFlightRef = React.useRef<boolean>(false)
+  const lastFetchRef = React.useRef<{ timestamp: number; succeeded: boolean } | null>(null)
 
   useEffect(() => {
     console.log('🚀 SupabaseAuthProvider: Initializing...')
@@ -55,11 +59,39 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 Auth state change:', event, session ? 'Session exists' : 'No session')
+      // Debounce rapid duplicate events
+      const nowTs = Date.now()
+      if (nowTs - lastAuthEventRef.current < 1500) {
+        console.log('⏳ Ignoring rapid duplicate auth event')
+        return
+      }
+      lastAuthEventRef.current = nowTs
+
       setSession(session)
       setUser(session?.user ?? null)
       
       if (session?.user) {
         console.log('👤 User in auth change:', session.user.email)
+        // If we already have the profile for this user, don't refetch
+        if (profile && (profile as any).id === session.user.id) {
+          console.log('⏭️ Using existing profile in state')
+          setLoading(false)
+          return
+        }
+
+        // Cooldown after failed attempt to avoid retry loop
+        const last = lastFetchRef.current
+        if (last && !last.succeeded && (Date.now() - last.timestamp) < 30000) {
+          console.log('⏭️ Recent failed profile attempt, skipping to avoid retry loop')
+          setLoading(false)
+          return
+        }
+
+        // Prevent concurrent fetches
+        if (inFlightRef.current) {
+          console.log('⏳ Profile fetch already in-flight, skipping')
+          return
+        }
         await fetchUserProfile(session.user.id)
       } else {
         console.log('❌ No user in auth change, clearing profile and setting loading to false')
@@ -74,6 +106,8 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
   const fetchUserProfile = async (userId: string, retryCount = 0) => {
     try {
       console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
+      inFlightRef.current = true
+      lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
       
       // Increase timeout to 30 seconds and add retry logic
       const timeoutPromise = new Promise((_, reject) => 
@@ -101,9 +135,11 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         
         console.warn('⚠️ Could not fetch profile, continuing without profile data')
         setProfile(null)
+        lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
       } else {
         console.log('✅ User profile loaded:', data)
         setProfile(data)
+        lastFetchRef.current = { timestamp: Date.now(), succeeded: true }
       }
     } catch (error) {
       console.error('❌ Error fetching user profile:', error)
@@ -122,6 +158,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     } finally {
       console.log('🔄 Setting loading to false')
       setLoading(false)
+      inFlightRef.current = false
     }
   }
 
