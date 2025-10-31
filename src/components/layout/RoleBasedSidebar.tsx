@@ -15,6 +15,8 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   onClose, 
   isCollapsed = false 
 }) => {
+  // IMPORTANT: All hooks must be called BEFORE any conditional returns
+  // This prevents "Rendered fewer hooks than expected" errors
   const { user, profile, loading } = useAuth();
   const unreadCount = useUnreadAnnouncements();
   
