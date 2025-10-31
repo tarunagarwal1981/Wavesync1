@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/useToast';
 import styles from './CompanyManagement.module.css';
-import Modal from './ui/Modal';
 
 interface Company {
   id: string;
@@ -232,23 +231,18 @@ const CompanyManagement: React.FC = () => {
       </div>
 
       {showCreateForm && (
-        <div className={styles.formContainer}>
-          <Modal
-            open={showCreateForm}
-            onClose={resetForm}
-            title={editingCompany ? 'Edit Company' : 'Create New Company'}
-            ariaDescription={'Provide the company details below. Fields marked with * are required.'}
-            width={880}
-            footer={(
-              <>
-                <button type="button" className={styles.cancelButton} onClick={resetForm}>Cancel</button>
-                <button form="company-form" type="submit" className={styles.submitButton}>
-                  {editingCompany ? 'Update Company' : 'Create Company'}
-                </button>
-              </>
-            )}
-          >
-            <form id="company-form" onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formContainer} onClick={resetForm}>
+          <div className={styles.formCard} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.formHeader}>
+              <h2>{editingCompany ? 'Edit Company' : 'Create New Company'}</h2>
+              <button className={styles.closeButton} onClick={resetForm} aria-label="Close modal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className={styles.form}>
               <p className={styles.formSubtitle}>Provide the company details below. Fields marked with <span className={styles.required}>*</span> are required.</p>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
@@ -277,7 +271,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={`${styles.formGroup} ${styles.formGroupFull}`} style={{ gridColumn: '1 / -1' }}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                   <label htmlFor="phone">Phone</label>
                   <input
                     type="tel"
@@ -289,7 +283,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={`${styles.formGroup} ${styles.formGroupFull}`} style={{ gridColumn: '1 / -1' }}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                   <label htmlFor="website">Website</label>
                   <input
                     type="url"
@@ -302,7 +296,7 @@ const CompanyManagement: React.FC = () => {
                 </div>
               </div>
 
-              <div className={styles.formGroup}>
+              <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                 <label htmlFor="address">Address</label>
                 <textarea
                   id="address"
@@ -314,8 +308,16 @@ const CompanyManagement: React.FC = () => {
                 />
               </div>
 
+              <div className={styles.formActions}>
+                <button type="button" className={styles.cancelButton} onClick={resetForm}>
+                  Cancel
+                </button>
+                <button type="submit" className={styles.submitButton}>
+                  {editingCompany ? 'Update Company' : 'Create Company'}
+                </button>
+              </div>
             </form>
-          </Modal>
+          </div>
         </div>
       )}
 

@@ -1,7 +1,8 @@
 import React from 'react';
 
 interface ModalProps {
-  open: boolean;
+  open?: boolean; // primary prop
+  isOpen?: boolean; // backward-compatible alias
   title?: string;
   onClose: () => void;
   footer?: React.ReactNode;
@@ -12,6 +13,7 @@ interface ModalProps {
 
 export const Modal: React.FC<ModalProps> = ({
   open,
+  isOpen,
   title,
   onClose,
   footer,
@@ -19,7 +21,8 @@ export const Modal: React.FC<ModalProps> = ({
   ariaDescription,
   width = 800,
 }) => {
-  if (!open) return null;
+  const visible = typeof open === 'boolean' ? open : !!isOpen;
+  if (!visible) return null;
 
   return (
     <div
@@ -43,7 +46,9 @@ export const Modal: React.FC<ModalProps> = ({
           boxShadow: 'var(--shadow-xl)', border: '1px solid rgba(226,232,240,0.7)'
         }}
       >
-        {(title || onClose) && (
+        {(
+          title !== undefined
+        ) && (
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '24px', borderBottom: '1px solid var(--border-light)',
