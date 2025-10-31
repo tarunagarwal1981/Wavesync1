@@ -277,7 +277,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`} style={{ gridColumn: '1 / -1' }}>
                   <label htmlFor="phone">Phone</label>
                   <input
                     type="tel"
@@ -289,7 +289,7 @@ const CompanyManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`} style={{ gridColumn: '1 / -1' }}>
                   <label htmlFor="website">Website</label>
                   <input
                     type="url"

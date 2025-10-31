@@ -145,7 +145,7 @@
 
 .formGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   column-gap: var(--space-5);
   row-gap: var(--space-6);
   margin-top: var(--space-2);
@@ -160,6 +160,27 @@
 
 .formGroup:last-of-type {
   grid-column: 1 / -1;
+}
+
+.formGroupFull {
+  grid-column: 1 / -1 !important;
+}
+
+/* Ensure full-width spanning applies regardless of other styles */
+.formGrid > .formGroupFull {
+  grid-column: 1 / -1 !important;
+}
+
+.formGroupFull input,
+.formGroupFull textarea,
+.formGrid > .formGroupFull input,
+.formGrid > .formGroupFull textarea {
+  width: 100%;
+}
+
+/* Force all fields after the first row (>=3rd child) to full width */
+.formGrid > :nth-child(n+3) {
+  grid-column: 1 / -1 !important;
 }
 
 .formGroup label {
