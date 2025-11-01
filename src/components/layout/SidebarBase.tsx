@@ -131,11 +131,11 @@ export const SidebarBase: React.FC<SidebarBaseProps> = ({
         <div className={styles.branding}>
           <div className={styles.logo}>
             <div className={styles.logoIconWrapper}>
-              <NeuralCrewLogo width={50} height={50} variant="cyan" animated />
+              <NeuralCrewLogo width={60} height={60} variant="cyan" animated />
             </div>
             {!isCollapsed && (
               <div className={styles.logoText}>
-                <BrandText size="md" variant="gradient" />
+                <BrandText size="lg" variant="gradient" />
                 <span className={styles.brandTagline}>Maritime Platform</span>
               </div>
             )}

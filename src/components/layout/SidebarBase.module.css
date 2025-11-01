@@ -51,7 +51,7 @@
   background: var(--color-surface);
   position: relative;
   overflow: hidden;
-  min-height: 80px;
+  min-height: 90px;
   display: flex;
   align-items: center;
 }
@@ -91,8 +91,8 @@
 }
 
 .logoIcon {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-lg);
   display: flex;
@@ -112,7 +112,7 @@
 }
 
 .brandName {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1.2;

@@ -493,6 +493,7 @@
 @media (max-width: 768px) {
   .container {
     padding: 16px;
+    min-height: auto;
   }
   
   .headerContent {
@@ -538,6 +539,14 @@
   
   .actionBtn {
     flex: none;
+    min-height: 44px;
+  }
+
+  button,
+  .exportButton,
+  .addButton,
+  .actionButton {
+    min-height: 44px;
   }
 }
 

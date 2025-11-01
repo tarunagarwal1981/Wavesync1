@@ -119,4 +119,17 @@
     max-height: 100%;
     border-radius: 0;
   }
+
+  .header {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .closeButton {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

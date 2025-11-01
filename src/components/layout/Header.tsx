@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { 
   Search, 
@@ -19,6 +20,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
+  const navigate = useNavigate();
   // Safely get auth context with fallback
   let user, profile, signOut;
   try {
@@ -31,14 +33,26 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
     console.warn('Header: useAuth not available, using fallback values');
     user = null;
     profile = null;
-    signOut = () => Promise.resolve();
+    signOut = () => Promise.resolve({ error: null });
   }
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogout = async () => {
-    await signOut();
-    setShowUserMenu(false);
+    try {
+      const { error } = await signOut();
+      if (error) {
+        console.error('Logout error:', error);
+        // Still navigate to login even if there's an error
+      }
+      setShowUserMenu(false);
+      // Navigate to login page
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Logout exception:', error);
+      // Still navigate to login even if there's an exception
+      navigate('/login', { replace: true });
+    }
   };
 
 

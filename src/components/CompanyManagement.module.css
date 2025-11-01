@@ -461,6 +461,7 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--space-4);
+    min-height: auto;
   }
   
   .header {
@@ -472,6 +473,12 @@
   .title {
     font-size: var(--font-24);
     text-align: center;
+  }
+  
+  .createButton {
+    min-height: 44px;
+    width: 100%;
+    justify-content: center;
   }
   
   .formGrid {
@@ -491,6 +498,12 @@
     align-self: flex-end;
   }
   
+  .editButton,
+  .deleteButton {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
   .formActions {
     flex-direction: column;
     justify-content: center;
@@ -499,6 +512,27 @@
   .cancelButton,
   .submitButton {
     width: 100%;
+    min-height: 44px;
+  }
+  
+  .formContainer {
+    padding: 1rem;
+  }
+}
+
+/* Extra small mobile adjustments */
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 0.5rem;
+  }
+  
+  .formCard {
+    max-height: 98vh;
+    border-radius: 0.75rem;
+  }
+  
+  .form {
+    padding: 1.5rem;
   }
 }
 

@@ -313,6 +313,15 @@
 @media (max-width: 768px) {
   .dashboard {
     padding: 16px;
+    min-height: auto;
+  }
+  
+  .statCard {
+    overflow: visible;
+  }
+  
+  .statNumber {
+    font-size: clamp(24px, 5vw, 32px);
   }
   
   .actionsGrid {
@@ -322,6 +331,7 @@
   .actionButton {
     width: 100%;
     justify-content: center;
+    min-height: 44px;
   }
   
   .header {
@@ -332,6 +342,7 @@
   
   .backButton {
     width: 100%;
+    min-height: 44px;
   }
 }
 

@@ -236,6 +236,12 @@
   gap: 1.5rem;
 }
 
+@media (max-width: 768px) {
+  .usersGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Empty State */
 .emptyState {
   grid-column: 1 / -1;
@@ -378,6 +384,7 @@
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
+    min-height: auto;
   }
   
   .header {
@@ -398,12 +405,18 @@
     grid-template-columns: 1fr;
   }
   
-  .usersGrid {
-    grid-template-columns: 1fr;
-  }
-  
   .formActions {
     flex-direction: column;
+  }
+  
+  .cancelButton,
+  .submitButton {
+    min-height: 44px;
+    width: 100%;
+  }
+  
+  .createButton {
+    min-height: 44px;
   }
   
   .userHeader {
@@ -415,10 +428,28 @@
     align-self: flex-end;
   }
   
+  .editButton,
+  .deleteButton {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
   .userFooter {
     flex-direction: column;
     gap: 0.5rem;
     align-items: stretch;
+  }
+}
+
+/* Extra small mobile adjustments */
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 0.5rem;
+  }
+  
+  .formCard {
+    max-height: 98vh;
+    border-radius: 0.75rem;
   }
 }
 

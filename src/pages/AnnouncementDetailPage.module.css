@@ -641,6 +641,28 @@
   .modalButtonSecondary,
   .modalButtonPrimary {
     width: 100%;
+    min-height: 44px;
+  }
+
+  button,
+  .backButton,
+  .acknowledgeButton,
+  .previewButton,
+  .downloadButton,
+  .downloadAllButton {
+    min-height: 44px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .modalHeader {
+    padding: 16px;
+  }
+
+  .modalBody {
+    padding: 16px;
   }
 }
 

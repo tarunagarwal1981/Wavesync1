@@ -877,6 +877,7 @@
 @media (max-width: 768px) {
   .container {
     padding: 16px;
+    min-height: auto;
   }
   
   .headerContent {
@@ -915,5 +916,32 @@
   
   .statusActions {
     flex-direction: column;
+  }
+
+  .modalOverlay {
+    padding: 16px;
+  }
+
+  .approvalModal {
+    padding: 16px;
+  }
+
+  .approvalModalHeader {
+    padding: 16px;
+  }
+
+  .approvalModalBody {
+    padding: 16px;
+  }
+
+  .approvalModalFooter {
+    padding: 16px;
+  }
+
+  button,
+  .actionButton,
+  .approveButton,
+  .rejectButton {
+    min-height: 44px;
   }
 }

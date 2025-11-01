@@ -47,11 +47,11 @@ const SchedulingPage = lazy(() => import("../pages/__stubs_company__").then(m =>
 const CommunicationsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CommunicationsPage })));
 const CompanySettingsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompanySettingsPage })));
 const CompliancePage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CompliancePage })));
-const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
+// const UserManagementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.UserManagementPage })));
 // const CompanyAnnouncementsPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.AnnouncementsPage })));
 const CreateAnnouncementPage = lazy(() => import("../pages/__stubs_company__").then(m => ({ default: m.CreateAnnouncementPage })));
 
-const AllUsersPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AllUsersPage })));
+// const AllUsersPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AllUsersPage })));
 const AdminAnalyticsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.AdminAnalyticsPage })));
 const PerformanceMonitorPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.PerformanceMonitorPage })));
 const SystemAlertsPage = lazy(() => import("../pages/__stubs_admin__").then(m => ({ default: m.SystemAlertsPage })));

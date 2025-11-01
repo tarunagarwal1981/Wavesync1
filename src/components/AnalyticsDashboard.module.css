@@ -305,6 +305,7 @@
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
+    min-height: auto;
   }
 
   .header {
@@ -335,6 +336,7 @@
   .refreshButton,
   .exportButton {
     flex: 1;
+    min-height: 44px;
   }
 }
 

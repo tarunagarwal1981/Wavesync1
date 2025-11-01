@@ -21,6 +21,7 @@ export const SupabaseLogin: React.FC = () => {
   const { addToast } = useToast()
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
+  const showDemoCredentials = (import.meta as any)?.env?.VITE_SHOW_DEMO_CREDENTIALS === 'true' || (import.meta as any)?.env?.MODE !== 'production'
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -32,6 +33,14 @@ export const SupabaseLogin: React.FC = () => {
     certificateNumber: '',
     experienceYears: 0
   })
+
+  const fillCredentials = (email: string, password: string) => {
+    setFormData(prev => ({
+      ...prev,
+      email,
+      password
+    }))
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -98,6 +107,7 @@ export const SupabaseLogin: React.FC = () => {
   }
 
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.loginCard}>
         <div className={styles.header}>
@@ -296,5 +306,31 @@ export const SupabaseLogin: React.FC = () => {
         </div>
       </div>
     </div>
+    {showDemoCredentials && (
+      <div style={{ maxWidth: 420, margin: '12px auto 0', padding: '12px 14px', background: '#F1F5F9', border: '1px solid #E2E8F0', borderRadius: 8 }}>
+        <div style={{ fontSize: 12, color: '#0F172A', fontWeight: 600, marginBottom: 8 }}>Test Accounts (for demo only)</div>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: '#334155' }}>
+              <span style={{ fontWeight: 600 }}>Admin</span>: admin@wavesync.com / password123
+            </div>
+            <button type="button" onClick={() => fillCredentials('admin@wavesync.com', 'password123')} style={{ fontSize: 12, padding: '6px 8px', background: '#3B82F6', color: 'white', border: 0, borderRadius: 6, cursor: 'pointer' }}>Fill</button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: '#334155' }}>
+              <span style={{ fontWeight: 600 }}>Company</span>: company1@wavesync.com / Company1
+            </div>
+            <button type="button" onClick={() => fillCredentials('company1@wavesync.com', 'Company1')} style={{ fontSize: 12, padding: '6px 8px', background: '#3B82F6', color: 'white', border: 0, borderRadius: 6, cursor: 'pointer' }}>Fill</button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: '#334155' }}>
+              <span style={{ fontWeight: 600 }}>Seafarer</span>: seafarer1@wavesync.com / Seafarer1
+            </div>
+            <button type="button" onClick={() => fillCredentials('seafarer1@wavesync.com', 'Seafarer1')} style={{ fontSize: 12, padding: '6px 8px', background: '#3B82F6', color: 'white', border: 0, borderRadius: 6, cursor: 'pointer' }}>Fill</button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

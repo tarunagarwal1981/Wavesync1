@@ -504,4 +504,23 @@
   .formRow {
     grid-template-columns: 1fr;
   }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .modalHeader {
+    padding: 16px;
+  }
+
+  .form {
+    padding: 16px;
+  }
+
+  button,
+  .createButton,
+  .editButton,
+  .deleteButton {
+    min-height: 44px;
+  }
 }
