@@ -557,4 +557,22 @@
   .cardDetails {
     grid-template-columns: 1fr;
   }
+
+  button,
+  .createButton,
+  .iconButton {
+    min-height: 44px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .modalHeader {
+    padding: 16px;
+  }
+
+  .form {
+    padding: 16px;
+  }
 }

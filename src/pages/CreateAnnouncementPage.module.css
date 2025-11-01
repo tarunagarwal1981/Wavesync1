@@ -589,6 +589,12 @@
   .buttonPrimary,
   .buttonSecondary {
     width: 100%;
+    min-height: 44px;
+  }
+
+  button,
+  .fileLabel {
+    min-height: 44px;
   }
 
   .header {

@@ -615,4 +615,21 @@
   .flightArrow {
     transform: rotate(90deg);
   }
+
+  button,
+  .viewButton {
+    min-height: 44px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .modalHeader {
+    padding: 16px;
+  }
+
+  .modalBody {
+    padding: 16px;
+  }
 }

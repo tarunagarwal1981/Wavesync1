@@ -9,7 +9,8 @@
     #7dd3fc 75%, 
     var(--color-primary-light) 100%);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -557,16 +558,20 @@
 @media (max-width: 1024px) {
   .loginContainer {
     flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto;
   }
   
   .brandingSection {
-    flex: 0 0 40vh;
+    flex: 0 0 auto;
+    min-height: auto;
     padding: 40px 20px;
   }
   
   .loginSection {
     flex: 1;
     padding: 20px;
+    min-height: auto;
   }
   
   .brandingTitle {
@@ -579,18 +584,28 @@
 }
 
 @media (max-width: 768px) {
+  .loginContainer {
+    overflow-y: auto;
+  }
+
   .brandingSection {
-    flex: 0 0 35vh;
+    flex: 0 0 auto;
+    min-height: auto;
     padding: 30px 20px;
   }
   
   .loginSection {
     padding: 20px;
+    min-height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
   }
   
   .loginCard {
     padding: 30px;
     transform: none;
+    max-width: 100%;
   }
   
   .loginCard:hover {
@@ -618,17 +633,25 @@
 }
 
 @media (max-width: 480px) {
+  .loginContainer {
+    overflow-y: auto;
+  }
+
   .brandingSection {
-    flex: 0 0 30vh;
+    flex: 0 0 auto;
+    min-height: auto;
     padding: 20px 15px;
   }
   
   .loginSection {
-    padding: 15px;
+    padding: 20px 15px;
+    min-height: auto;
+    align-items: flex-start;
   }
   
   .loginCard {
     padding: 24px;
+    max-width: 100%;
   }
   
   .logo {

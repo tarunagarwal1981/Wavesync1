@@ -48,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ navItems, isOpen, onClose }) =
         <div className={styles.branding}>
           <div className={styles.logo}>
             <div className={styles.logoIcon}>
-              <Anchor size={24} />
+              <Anchor size={36} />
             </div>
             <div className={styles.logoText}>
               <span className={styles.brandName}>WaveSync</span>

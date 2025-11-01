@@ -4,7 +4,15 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  padding: 0;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }
 
 .loginCard {
@@ -148,10 +156,15 @@
 @media (max-width: 640px) {
   .container {
     padding: 16px;
+    align-items: flex-start;
+    min-height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
   
   .loginCard {
     padding: 24px;
+    max-width: 100%;
   }
   
   .title {

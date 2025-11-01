@@ -573,6 +573,7 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--spacing-md);
+    min-height: auto;
   }
 
   .header {
@@ -631,6 +632,14 @@
   .acknowledgeButton {
     width: 100%;
     justify-content: center;
+    min-height: 44px;
+  }
+
+  button,
+  .markAllButton,
+  .refreshButton,
+  .filterButton {
+    min-height: 44px;
   }
 }
 

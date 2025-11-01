@@ -428,4 +428,25 @@
     gap: 0.5rem;
     align-items: stretch;
   }
+
+  .formContainer {
+    padding: 16px;
+  }
+
+  .form {
+    padding: 16px;
+  }
+
+  .formHeader {
+    padding: 16px;
+  }
+
+  button,
+  .createButton,
+  .editButton,
+  .deleteButton,
+  .cancelButton,
+  .submitButton {
+    min-height: 44px;
+  }
 }

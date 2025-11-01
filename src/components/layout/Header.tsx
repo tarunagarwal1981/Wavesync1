@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, title }) => {
     console.warn('Header: useAuth not available, using fallback values');
     user = null;
     profile = null;
-    signOut = () => Promise.resolve();
+    signOut = () => Promise.resolve({ error: null });
   }
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
