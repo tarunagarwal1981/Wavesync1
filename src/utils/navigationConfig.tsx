@@ -13,7 +13,6 @@ import {
   Ship,
   ClipboardList,
   BarChart3,
-  FileCheck,
   Calendar,
   DollarSign,
   Shield,
@@ -71,7 +70,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "My Assignments",
         icon: Briefcase,
         href: "/my-assignments",
-        badge: 2,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.SEAFARER],
         description: "Current and pending assignments"
       },
@@ -80,7 +79,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Tasks",
         icon: CheckSquare,
         href: "/tasks",
-        badge: 4,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.SEAFARER],
         description: "Assigned tasks and checklists"
       },
@@ -89,7 +88,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "My Documents",
         icon: FileText,
         href: "/my-documents",
-        badge: 1,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.SEAFARER],
         description: "Personal documents and certificates"
       },
@@ -98,7 +97,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Training",
         icon: GraduationCap,
         href: "/training",
-        badge: 2,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.SEAFARER],
         description: "Training courses and certifications"
       },
@@ -107,7 +106,7 @@ export const seafarerNavigation: NavigationSection[] = [
         title: "Messages",
         icon: MessageSquare,
         href: "/messages",
-        badge: 3,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.SEAFARER],
         description: "Communication with company"
       },
@@ -213,7 +212,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Crew Directory",
         icon: Users,
         href: "/crew",
-        badge: 12,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Manage crew members"
       },
@@ -222,7 +221,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Fleet Management",
         icon: Ship,
         href: "/fleet",
-        badge: 5,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Manage vessel fleet"
       },
@@ -231,7 +230,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Assignment Management",
         icon: ClipboardList,
         href: "/assignments",
-        badge: 8,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Create and manage assignments"
       },
@@ -240,7 +239,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Task Management",
         icon: CheckSquare,
         href: "/task-management",
-        badge: 15,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Create and manage crew tasks"
       },
@@ -262,7 +261,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Document Management",
         icon: FileText,
         href: "/company/documents",
-        badge: 7,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Manage crew documents and certificates"
       },
@@ -286,23 +285,13 @@ export const companyNavigation: NavigationSection[] = [
       },
       {
         id: "travel-planning",
-        title: "Travel Planning",
+        title: "Travel Management",
         icon: Plane,
         href: "/travel",
-        badge: 4,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
-        description: "Plan crew travel",
+        description: "Plan crew travel and manage travel documents",
         dataSection: "planning"
-      },
-      {
-        id: "travel-documents",
-        title: "Travel Documents",
-        icon: FileCheck,
-        href: "/travel",
-        badge: 6,
-        permissions: [UserRole.COMPANY_USER],
-        description: "Upload and manage travel documents",
-        dataSection: "documents"
       },
       {
         id: "budget-expenses",
@@ -365,7 +354,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "Compliance",
         icon: Shield,
         href: "/compliance",
-        badge: 1,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Regulatory compliance"
       },
@@ -374,7 +363,7 @@ export const companyNavigation: NavigationSection[] = [
         title: "User Management",
         icon: Users,
         href: "/users",
-        badge: 3,
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
         description: "Manage company users"
       }

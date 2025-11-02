@@ -10,41 +10,44 @@ interface ProfileCheckProps {
 const ProfileCompletionCheck: React.FC<ProfileCheckProps> = ({ children }) => {
   const { user, profile } = useAuth();
   const [isProfileComplete, setIsProfileComplete] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
-    checkProfileCompletion();
+    // Only check if we have both user and profile, and haven't checked yet
+    if (user && profile && isProfileComplete === null && profile.user_type === 'seafarer') {
+      checkProfileCompletion();
+    } else if (profile && profile.user_type !== 'seafarer') {
+      // Non-seafarer users don't need profile completion
+      setIsProfileComplete(true);
+    }
   }, [user, profile]);
 
   const checkProfileCompletion = async () => {
-    if (!user || !profile) {
-      setLoading(false);
+    if (!user || !profile || profile.user_type !== 'seafarer') {
       return;
     }
 
     try {
-      // Check if user is a seafarer
-      if (profile.user_type !== 'seafarer') {
-        setIsProfileComplete(true);
-        setLoading(false);
-        return;
-      }
+      setChecking(true);
 
       // Check if seafarer profile exists and has required fields
+      // Use .maybeSingle() instead of .single() to avoid 406 error when profile doesn't exist
       const { data: seafarerProfile, error } = await supabase
         .from('seafarer_profiles')
         .select('rank, experience_years, availability_status')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle(); // Returns null if not found instead of throwing 406 error
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
+      if (error) {
+        // Log error but don't block - allow dashboard to load
         console.error('Error checking seafarer profile:', error);
+        // If it's a network/RLS error, assume profile is incomplete
         setIsProfileComplete(false);
-        setLoading(false);
         return;
       }
 
       // Check if profile is complete
+      // Profile is complete if it exists and has required fields
       const isComplete = seafarerProfile && 
                         seafarerProfile.rank && 
                         seafarerProfile.availability_status;
@@ -54,47 +57,71 @@ const ProfileCompletionCheck: React.FC<ProfileCheckProps> = ({ children }) => {
       console.error('Error checking profile completion:', error);
       setIsProfileComplete(false);
     } finally {
-      setLoading(false);
+      setChecking(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        background: 'var(--bg-primary)'
-      }}>
+  // Only show profile completion form on dashboard route
+  // Don't block other routes
+  const isDashboardRoute = typeof window !== 'undefined' && window.location.pathname === '/dashboard';
+  
+  // If profile is not complete and user is a seafarer AND we're on dashboard, show completion form as modal/overlay
+  // Only show after we've finished checking (not while checking)
+  // IMPORTANT: Always render children first so dashboard loads immediately
+  const showCompletionModal = isDashboardRoute && !checking && isProfileComplete === false && profile?.user_type === 'seafarer';
+  
+  return (
+    <>
+      {children}
+      {showCompletionModal && (
         <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 9999,
           display: 'flex',
-          flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
-          gap: 'var(--space-4)',
-          color: 'var(--text-secondary)'
+          padding: '20px',
+          animation: 'fadeIn 0.2s ease-in'
         }}>
+          <style>{`
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes slideUp {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
           <div style={{
-            width: '40px',
-            height: '40px',
-            border: '4px solid var(--border-light)',
-            borderTop: '4px solid var(--color-primary)',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }}></div>
-          <p>Loading your profile...</p>
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '24px',
+            maxWidth: '600px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+            animation: 'slideUp 0.3s ease-out'
+          }}>
+            <SeafarerProfileCompletion />
+          </div>
         </div>
-      </div>
-    );
-  }
-
-  // If profile is not complete and user is a seafarer, show completion form
-  if (!isProfileComplete && profile?.user_type === 'seafarer') {
-    return <SeafarerProfileCompletion />;
-  }
-
-  // Otherwise, show the normal content
-  return <>{children}</>;
+      )}
+    </>
+  );
 };
 
 export default ProfileCompletionCheck;
+

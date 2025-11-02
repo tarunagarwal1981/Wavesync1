@@ -163,11 +163,14 @@ const SeafarerProfileCompletion: React.FC = () => {
       addToast({
         type: 'success',
         title: 'Profile completed successfully!',
+        description: 'Your profile has been updated. The dashboard will refresh.',
         duration: 5000
       });
 
-      // Refresh the page or redirect to dashboard
-      window.location.reload();
+      // Refresh the page to reload profile completion check
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Error updating profile:', error);
       addToast({
