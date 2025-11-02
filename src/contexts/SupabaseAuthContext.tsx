@@ -53,17 +53,29 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       if (session?.user) {
         console.log('👤 User found in session:', session.user.email)
         // Optimistic hydration: use cached profile to render sidebar immediately
+        let hasCachedProfile = false
         try {
           const cached = localStorage.getItem('ws_profile_cache')
           if (cached) {
             const parsed = JSON.parse(cached)
-            if (parsed && parsed.id === session.user.id) {
+            if (parsed && parsed.id === session.user.id && parsed.user_type) {
+              console.log('📦 Using cached profile for immediate render:', parsed)
               setProfile(parsed)
               setLoading(false)
+              hasCachedProfile = true
+              // Still fetch fresh profile in background, but don't block rendering
+              fetchUserProfile(session.user.id, 0, true).catch(() => {
+                // Silent fail if fetch fails, we already have cached profile
+              })
+              return
             }
           }
         } catch {}
-        fetchUserProfile(session.user.id)
+        
+        // No valid cached profile, fetch from database
+        if (!hasCachedProfile) {
+          fetchUserProfile(session.user.id)
+        }
       } else {
         console.log('❌ No user in session, setting loading to false')
         setLoading(false)
@@ -94,10 +106,21 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
           return
         }
 
-        // Cooldown after failed attempt to avoid retry loop
+        // Cooldown after failed attempt to avoid retry loop (reduced from 30s to 5s)
         const last = lastFetchRef.current
-        if (last && !last.succeeded && (Date.now() - last.timestamp) < 30000) {
+        if (last && !last.succeeded && (Date.now() - last.timestamp) < 5000) {
           console.log('⏭️ Recent failed profile attempt, skipping to avoid retry loop')
+          // Try to use cached profile if available
+          try {
+            const cached = localStorage.getItem('ws_profile_cache')
+            if (cached) {
+              const cachedProfile = JSON.parse(cached)
+              console.log('📦 Using cached profile:', cachedProfile)
+              setProfile(cachedProfile)
+              setLoading(false)
+              return
+            }
+          } catch {}
           setLoading(false)
           return
         }
@@ -119,14 +142,19 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
     return () => subscription.unsubscribe()
   }, [])
 
-  const fetchUserProfile = async (userId: string, retryCount = 0) => {
+  const fetchUserProfile = async (userId: string, retryCount = 0, isBackground = false) => {
     try {
-      console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '')
+      console.log('🔍 Fetching user profile for:', userId, retryCount > 0 ? `(retry ${retryCount})` : '', isBackground ? '(background)' : '')
       inFlightRef.current = true
       lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
 
-      // 30s timeout for resilience
-      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Profile fetch timeout')), 30000))
+      // Only set loading if not a background fetch
+      if (!isBackground) {
+        setLoading(true)
+      }
+
+      // 10s timeout for faster feedback (reduced from 30s)
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Profile fetch timeout')), 10000))
       const dbFetchPromise = supabase.from('user_profiles').select('*').eq('id', userId).single()
 
       const { data, error } = await Promise.race([dbFetchPromise, timeoutPromise]) as any
@@ -137,9 +165,26 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
         if (retryCount < 1 && (error.message?.includes('timeout') || (error as any).code === 'PGRST301')) {
           console.log('🔄 Retrying profile fetch...')
           await new Promise(resolve => setTimeout(resolve, 1000))
-          return fetchUserProfile(userId, retryCount + 1)
+          return fetchUserProfile(userId, retryCount + 1, isBackground)
         }
-        setProfile(null)
+        // Only clear profile if not a background fetch and we don't have cached profile
+        if (!isBackground) {
+          // Try cached profile before clearing
+          try {
+            const cached = localStorage.getItem('ws_profile_cache')
+            if (cached) {
+              const parsed = JSON.parse(cached)
+              if (parsed && parsed.id === userId) {
+                console.log('📦 Using cached profile after fetch error')
+                setProfile(parsed)
+                setLoading(false)
+                inFlightRef.current = false
+                return
+              }
+            }
+          } catch {}
+          setProfile(null)
+        }
         lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
       } else {
         console.log('✅ User profile loaded:', data)
@@ -151,11 +196,30 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       }
     } catch (error) {
       console.error('❌ Error fetching user profile:', error)
-      setProfile(null)
+      // Only clear profile if not a background fetch
+      if (!isBackground) {
+        // Try cached profile before clearing
+        try {
+          const cached = localStorage.getItem('ws_profile_cache')
+          if (cached) {
+            const parsed = JSON.parse(cached)
+            if (parsed && parsed.id === userId) {
+              console.log('📦 Using cached profile after exception')
+              setProfile(parsed)
+              setLoading(false)
+              inFlightRef.current = false
+              return
+            }
+          }
+        } catch {}
+        setProfile(null)
+      }
       lastFetchRef.current = { timestamp: Date.now(), succeeded: false }
     } finally {
-      console.log('🔄 Setting loading to false')
-      setLoading(false)
+      if (!isBackground) {
+        console.log('🔄 Setting loading to false')
+        setLoading(false)
+      }
       inFlightRef.current = false
     }
   }
@@ -174,6 +238,15 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
 
       if (data.user) {
         // Create user profile
+        console.log('📝 Creating user profile with data:', {
+          id: data.user.id,
+          email: data.user.email,
+          full_name: userData.full_name,
+          user_type: userData.user_type,
+          phone: userData.phone,
+          company_id: userData.company_id
+        });
+        
         const { error: profileError } = await supabase
           .from('user_profiles')
           .insert({
@@ -186,9 +259,11 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
           })
 
         if (profileError) {
-          console.error('Error creating user profile:', profileError)
+          console.error('❌ Error creating user profile:', profileError)
           return { error: profileError }
         }
+        
+        console.log('✅ User profile created successfully');
 
         // If user is a seafarer, create seafarer profile
         if (userData.user_type === 'seafarer') {
@@ -246,6 +321,9 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       setProfile(null)
       setSession(null)
       
+      // Clear cached profile
+      localStorage.removeItem('ws_profile_cache')
+      
       // Sign out with local scope (not global which requires special permissions)
       const { error } = await supabase.auth.signOut({ scope: 'local' })
       
@@ -259,6 +337,7 @@ export const SupabaseAuthProvider: React.FC<AuthProviderProps> = ({ children }) 
       setUser(null)
       setProfile(null)
       setSession(null)
+      localStorage.removeItem('ws_profile_cache')
       return { error: error as AuthError }
     }
   }

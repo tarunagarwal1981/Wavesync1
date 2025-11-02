@@ -11,7 +11,6 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ title, children }) => {
-  console.log('🏗️ Layout rendering with title:', title, 'children:', children);
   const { isMobile, sidebarOpen, toggleSidebar, closeSidebar } = useResponsive();
 
   const handleMenuClick = () => {
@@ -39,7 +38,6 @@ export const Layout: React.FC<LayoutProps> = ({ title, children }) => {
 
         {/* Page Content */}
         <div className={styles.pageContent}>
-          {(() => { console.log('🏗️ Layout - rendering children:', children); return null; })()}
           {children}
         </div>
       </main>

@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/SupabaseAuthContext';
 import { SidebarBase } from './SidebarBase';
 import { getNavigationForRole } from '../../utils/navigationConfig';
 import { useUnreadAnnouncements } from '../../hooks/useUnreadAnnouncements';
+import { useSidebarBadges } from '../../hooks/useSidebarBadges';
 
 interface RoleBasedSidebarProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
   // This prevents "Rendered more/fewer hooks than expected" errors
   const { user, profile, loading } = useAuth();
   const unreadCount = useUnreadAnnouncements();
+  const badges = useSidebarBadges();
   
   // Calculate navigation sections with useMemo BEFORE any returns
   // Use null check to handle loading states
@@ -29,20 +31,56 @@ export const RoleBasedSidebar: React.FC<RoleBasedSidebarProps> = ({
     
     const sections = getNavigationForRole(profile.user_type);
     
-    // Update announcements item with unread count badge
+    // Map item IDs to badge properties
+    const badgeMap: Record<string, keyof typeof badges> = {
+      // Seafarer badges
+      'assignments': 'assignments',
+      'tasks': 'tasks',
+      'documents': 'documents',
+      'training': 'training',
+      'messages': 'messages',
+      // Company badges
+      'crew-directory': 'crewDirectory',
+      'fleet-management': 'fleetManagement',
+      'assignment-management': 'assignmentManagement',
+      'task-management': 'taskManagement',
+      'document-management': 'documentManagement',
+      'travel-planning': 'travelManagement',
+      'compliance': 'compliance',
+      'user-management': 'userManagement',
+    };
+    
+    // Update items with real badge counts
     return sections.map(section => ({
       ...section,
       items: section.items.map(item => {
+        // Update announcements with unread count
         if (item.id === 'announcements') {
           return {
             ...item,
             badge: unreadCount > 0 ? unreadCount : undefined
           };
         }
+        
+        // Skip badges that are "Soon" or emojis - keep them as is
+        if (typeof item.badge === 'string' && (item.badge === 'Soon' || item.badge.startsWith('⚠️'))) {
+          return item;
+        }
+        
+        // Update with real badge count if available
+        const badgeKey = badgeMap[item.id];
+        if (badgeKey && badges[badgeKey] !== undefined) {
+          const count = badges[badgeKey];
+          return {
+            ...item,
+            badge: count && count > 0 ? count : undefined
+          };
+        }
+        
         return item;
       })
     }));
-  }, [profile?.user_type, unreadCount]);
+  }, [profile?.user_type, unreadCount, badges]);
   
   // NOW we can do conditional returns - AFTER all hooks
   // Don't render sidebar if no user

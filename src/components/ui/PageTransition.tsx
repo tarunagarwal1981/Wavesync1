@@ -7,7 +7,7 @@ interface PageTransitionProps {
 }
 
 export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
-  console.log('🔄 PageTransition rendering');
+  // PageTransition rendering
   const location = useLocation();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayLocation, setDisplayLocation] = useState(location);
