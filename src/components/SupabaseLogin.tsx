@@ -21,7 +21,7 @@ export const SupabaseLogin: React.FC = () => {
   const { addToast } = useToast()
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
-  const showDemoCredentials = (import.meta as any)?.env?.VITE_SHOW_DEMO_CREDENTIALS === 'true' || (import.meta as any)?.env?.MODE !== 'production'
+  // const showDemoCredentials = (import.meta as any)?.env?.VITE_SHOW_DEMO_CREDENTIALS === 'true' || (import.meta as any)?.env?.MODE !== 'production'
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -34,13 +34,13 @@ export const SupabaseLogin: React.FC = () => {
     experienceYears: 0
   })
 
-  const fillCredentials = (email: string, password: string) => {
-    setFormData(prev => ({
-      ...prev,
-      email,
-      password
-    }))
-  }
+  // const fillCredentials = (email: string, password: string) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     email,
+  //     password
+  //   }))
+  // }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -306,7 +306,7 @@ export const SupabaseLogin: React.FC = () => {
         </div>
       </div>
     </div>
-    {showDemoCredentials && (
+    {/* {showDemoCredentials && (
       <div style={{ maxWidth: 420, margin: '12px auto 0', padding: '12px 14px', background: '#F1F5F9', border: '1px solid #E2E8F0', borderRadius: 8 }}>
         <div style={{ fontSize: 12, color: '#0F172A', fontWeight: 600, marginBottom: 8 }}>Test Accounts (for demo only)</div>
         <div style={{ display: 'grid', gap: 8 }}>
@@ -330,7 +330,7 @@ export const SupabaseLogin: React.FC = () => {
           </div>
         </div>
       </div>
-    )}
+    )} */}
     </>
   )
 }
