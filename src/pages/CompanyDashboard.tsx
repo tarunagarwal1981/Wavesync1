@@ -1,319 +1,578 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/SupabaseAuthContext';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/SupabaseAuthContext';
+import { useToast } from '../hooks/useToast';
+import {
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
+import {
+  Users,
+  FileText,
+  CheckSquare,
+  Ship,
+  Download,
+  Calendar,
+  RefreshCw
+} from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import styles from './CompanyDashboard.module.css';
-import { Card, CardHeader, CardBody } from '../components/ui';
 
-interface CompanyDashboardStats {
-  activeCrew: number;
-  officersCount: number;
-  crewCount: number;
-  openPositions: number;
-  urgentPositions: number;
-  vessels: number;
-  activeVessels: number;
-  dryDockVessels: number;
-  pendingApprovals: number;
-  pendingContracts: number;
-  pendingDocuments: number;
+interface AnalyticsData {
+  crew: any;
+  documents: any;
+  tasks: any;
+  assignments: any;
+  vessels: any;
+  generated_at: string;
 }
+
+interface StatCardProps {
+  icon: React.ElementType;
+  title: string;
+  value: string | number;
+  subtitle?: string;
+  color: string;
+}
+
+const StatCard: React.FC<StatCardProps> = ({ icon: Icon, title, value, subtitle, color }) => (
+  <div className={styles.statCard} style={{ borderLeftColor: color }}>
+    <div className={styles.statIcon} style={{ backgroundColor: `${color}15` }}>
+      <Icon size={24} style={{ color }} />
+    </div>
+    <div className={styles.statContent}>
+      <div className={styles.statTitle}>{title}</div>
+      <div className={styles.statValue}>{value}</div>
+      {subtitle && <div className={styles.statSubtitle}>{subtitle}</div>}
+    </div>
+  </div>
+);
+
+const COLORS = {
+  primary: '#667eea',
+  secondary: '#764ba2',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  info: '#3b82f6',
+  purple: '#8b5cf6',
+  pink: '#ec4899'
+};
 
 const CompanyDashboard = () => {
   const { profile } = useAuth();
-  const [stats, setStats] = useState<CompanyDashboardStats>({
-    activeCrew: 0,
-    officersCount: 0,
-    crewCount: 0,
-    openPositions: 0,
-    urgentPositions: 0,
-    vessels: 0,
-    activeVessels: 0,
-    dryDockVessels: 0,
-    pendingApprovals: 0,
-    pendingContracts: 0,
-    pendingDocuments: 0
-  });
-  const [loading, setLoading] = useState(true);
+  const { addToast } = useToast();
 
-  // Officer ranks (common maritime officer ranks)
-  const officerRanks = [
-    'Captain', 'Master', 'Chief Engineer', 'Chief Officer', 'First Officer',
-    'Second Officer', 'Third Officer', 'Chief Mate', 'Officer', 'Engineer',
-    'Chief Engineer Officer', 'Second Engineer', 'Third Engineer'
-  ];
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    if (profile?.company_id) {
+      fetchAnalytics();
+    }
+  }, [profile]);
+
+  const fetchAnalytics = async () => {
+    try {
+      setLoading(true);
+
       if (!profile?.company_id) {
         setLoading(false);
         return;
       }
 
-      try {
-        setLoading(true);
+      const { data, error } = await supabase.rpc('get_dashboard_analytics', {
+        p_company_id: profile.company_id
+      });
 
-        console.log('🔍 CompanyDashboard: Fetching stats for company_id:', profile.company_id);
-
-        // First check all seafarers to debug
-        const { data: allSeafarers } = await supabase
-          .from('user_profiles')
-          .select('id, email, full_name, company_id')
-          .eq('user_type', 'seafarer')
-          .limit(10);
-        
-        console.log('🔍 CompanyDashboard: All seafarers (first 10):', allSeafarers);
-
-        // Fetch all crew (all seafarers with this company_id)
-        const { data: crewData, error: crewError } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('user_type', 'seafarer')
-          .eq('company_id', profile.company_id);
-
-        if (crewError) {
-          console.error('❌ CompanyDashboard: Error fetching crew:', crewError);
-        } else {
-          console.log('✅ CompanyDashboard: Fetched crew count:', crewData?.length || 0, crewData);
-        }
-
-        let officersCount = 0;
-        let crewCount = 0;
-
-        if (crewData && crewData.length > 0) {
-          // Get seafarer profiles to check ranks
-          const crewIds = crewData.map(c => c.id);
-          const { data: seafarerProfiles } = await supabase
-            .from('seafarer_profiles')
-            .select('rank')
-            .in('user_id', crewIds);
-
-          // Count officers vs crew (count all seafarers, regardless of availability status)
-          if (seafarerProfiles) {
-            seafarerProfiles.forEach(sp => {
-              const rank = sp.rank?.toLowerCase() || '';
-              const isOfficer = officerRanks.some(or => rank.includes(or.toLowerCase()));
-              if (isOfficer) {
-                officersCount++;
-              } else {
-                crewCount++;
-              }
-            });
-          }
-
-          // If no seafarer profiles found, assume all are crew
-          if (seafarerProfiles?.length === 0) {
-            crewCount = crewData.length;
-          }
-        }
-
-        // Fetch open positions (assignments with status 'pending' and no seafarer assigned)
-        const { data: positionsData } = await supabase
-          .from('assignments')
-          .select('id, start_date')
-          .eq('company_id', profile.company_id)
-          .eq('status', 'pending')
-          .is('seafarer_id', null);
-
-        // Count urgent positions (start_date within 7 days)
-        const today = new Date();
-        const sevenDaysFromNow = new Date();
-        sevenDaysFromNow.setDate(today.getDate() + 7);
-
-        let urgentPositions = 0;
-        if (positionsData) {
-          urgentPositions = positionsData.filter(p => {
-            if (!p.start_date) return false;
-            const startDate = new Date(p.start_date);
-            return startDate <= sevenDaysFromNow && startDate >= today;
-          }).length;
-        }
-
-        // Fetch vessels
-        const { data: vesselsData } = await supabase
-          .from('vessels')
-          .select('id, status')
-          .eq('company_id', profile.company_id);
-
-        let activeVessels = 0;
-        let dryDockVessels = 0;
-
-        if (vesselsData) {
-          vesselsData.forEach(v => {
-            const status = (v.status || '').toLowerCase();
-            if (status === 'active') {
-              activeVessels++;
-            } else if (status === 'dry_dock' || status === 'dry dock' || status === 'drydock') {
-              dryDockVessels++;
-            }
-          });
-        }
-
-        // Fetch pending approvals (documents with status 'pending' from seafarers in this company)
-        let documentsData = null;
-        if (crewData && crewData.length > 0) {
-          const crewIds = crewData.map(c => c.id);
-          const { data } = await supabase
-            .from('documents')
-            .select('id, document_type')
-            .eq('status', 'pending')
-            .in('user_id', crewIds);
-          documentsData = data;
-        }
-
-        let pendingContracts = 0;
-        let pendingDocuments = 0;
-
-        if (documentsData) {
-          documentsData.forEach(doc => {
-            const docType = (doc.document_type || '').toLowerCase();
-            if (docType === 'contract' || docType.includes('contract')) {
-              pendingContracts++;
-            } else {
-              pendingDocuments++;
-            }
-          });
-        }
-
-        setStats({
-          activeCrew: crewData?.length || 0, // Count all company seafarers
-          officersCount,
-          crewCount,
-          openPositions: positionsData?.length || 0,
-          urgentPositions,
-          vessels: vesselsData?.length || 0,
-          activeVessels,
-          dryDockVessels,
-          pendingApprovals: documentsData?.length || 0,
-          pendingContracts,
-          pendingDocuments
-        });
-      } catch (error) {
-        console.error('Error fetching dashboard stats:', error);
-      } finally {
-        setLoading(false);
+      if (error) {
+        throw error;
       }
-    };
 
-    fetchStats();
-  }, [profile?.company_id]);
-
-  const formatNumber = (num: number): string => {
-    if (num === 0) return '0';
-    if (!num && num !== 0) return '-';
-    return num.toString();
+      setAnalytics(data);
+    } catch (error: any) {
+      console.error('Error fetching analytics:', error);
+      addToast({
+        type: 'error',
+        title: 'Failed to load analytics',
+        description: error?.message || 'Please try again',
+        duration: 5000
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const exportToPDF = async () => {
+    if (!analytics) return;
+
+    try {
+      setExporting(true);
+
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+
+      // Header
+      doc.setFillColor(102, 126, 234);
+      doc.rect(0, 0, pageWidth, 40, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(24);
+      doc.text('⚓ WaveSync Analytics Report', pageWidth / 2, 25, { align: 'center' });
+
+      // Date
+      doc.setFontSize(10);
+      doc.setTextColor(240, 240, 240);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, 35, { align: 'center' });
+
+      let yPos = 50;
+
+      // Crew Statistics
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(16);
+      doc.text('👥 Crew Statistics', 14, yPos);
+      yPos += 10;
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [['Metric', 'Value']],
+        body: [
+          ['Total Crew', analytics.crew.total_crew || 0],
+          ['Available', analytics.crew.available || 0],
+          ['On Assignment', analytics.crew.on_assignment || 0],
+          ['On Leave', analytics.crew.on_leave || 0],
+          ['Avg Experience (Years)', analytics.crew.avg_experience_years?.toFixed(1) || 'N/A']
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [102, 126, 234] }
+      });
+
+      yPos = (doc as any).lastAutoTable.finalY + 15;
+
+      // Document Statistics
+      doc.setFontSize(16);
+      doc.text('📄 Document Compliance', 14, yPos);
+      yPos += 10;
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [['Metric', 'Value']],
+        body: [
+          ['Total Documents', analytics.documents.total_documents || 0],
+          ['Valid', analytics.documents.valid || 0],
+          ['Expiring Soon', analytics.documents.expiring_soon || 0],
+          ['Expiring Urgent', analytics.documents.expiring_urgent || 0],
+          ['Expired', analytics.documents.expired || 0],
+          ['Compliance Rate', `${analytics.documents.compliance_rate || 0}%`]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [102, 126, 234] }
+      });
+
+      yPos = (doc as any).lastAutoTable.finalY + 15;
+
+      // Task Statistics
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(16);
+      doc.text('✅ Task Management', 14, yPos);
+      yPos += 10;
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [['Metric', 'Value']],
+        body: [
+          ['Total Tasks', analytics.tasks.total_tasks || 0],
+          ['Completed', analytics.tasks.completed || 0],
+          ['In Progress', analytics.tasks.in_progress || 0],
+          ['Pending', analytics.tasks.pending || 0],
+          ['Overdue', analytics.tasks.overdue || 0],
+          ['Completion Rate', `${analytics.tasks.completion_rate || 0}%`],
+          ['Avg Completion Time', `${analytics.tasks.avg_completion_time_days || 0} days`]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [102, 126, 234] }
+      });
+
+      // Save PDF
+      doc.save(`wavesync-analytics-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      addToast({
+        type: 'success',
+        title: 'Report exported',
+        description: 'PDF downloaded successfully',
+        duration: 3000
+        });
+      } catch (error) {
+      console.error('Error exporting PDF:', error);
+      addToast({
+        type: 'error',
+        title: 'Export failed',
+        description: 'Please try again',
+        duration: 5000
+      });
+      } finally {
+      setExporting(false);
+    }
+  };
+
+  const exportToCSV = () => {
+    if (!analytics) return;
+
+    try {
+      let csvContent = 'WaveSync Analytics Report\n';
+      csvContent += `Generated: ${new Date().toLocaleString()}\n\n`;
+
+      // Crew Statistics
+      csvContent += 'CREW STATISTICS\n';
+      csvContent += 'Metric,Value\n';
+      csvContent += `Total Crew,${analytics.crew.total_crew || 0}\n`;
+      csvContent += `Available,${analytics.crew.available || 0}\n`;
+      csvContent += `On Assignment,${analytics.crew.on_assignment || 0}\n`;
+      csvContent += `On Leave,${analytics.crew.on_leave || 0}\n\n`;
+
+      // Document Statistics
+      csvContent += 'DOCUMENT STATISTICS\n';
+      csvContent += 'Metric,Value\n';
+      csvContent += `Total Documents,${analytics.documents.total_documents || 0}\n`;
+      csvContent += `Valid,${analytics.documents.valid || 0}\n`;
+      csvContent += `Expiring Soon,${analytics.documents.expiring_soon || 0}\n`;
+      csvContent += `Expired,${analytics.documents.expired || 0}\n`;
+      csvContent += `Compliance Rate,${analytics.documents.compliance_rate || 0}%\n\n`;
+
+      // Task Statistics
+      csvContent += 'TASK STATISTICS\n';
+      csvContent += 'Metric,Value\n';
+      csvContent += `Total Tasks,${analytics.tasks.total_tasks || 0}\n`;
+      csvContent += `Completed,${analytics.tasks.completed || 0}\n`;
+      csvContent += `Pending,${analytics.tasks.pending || 0}\n`;
+      csvContent += `Completion Rate,${analytics.tasks.completion_rate || 0}%\n\n`;
+
+      // Create download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `wavesync-analytics-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+
+      addToast({
+        type: 'success',
+        title: 'Report exported',
+        description: 'CSV downloaded successfully',
+        duration: 3000
+      });
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+      addToast({
+        type: 'error',
+        title: 'Export failed',
+        description: 'Please try again',
+        duration: 5000
+      });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loading}>
+          <RefreshCw className={styles.spinner} size={48} />
+          <p>Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Prepare chart data
+  const crewByRank = analytics?.crew?.by_rank
+    ? Object.entries(analytics.crew.by_rank).map(([name, value]) => ({
+        name,
+        value
+      }))
+    : [];
+
+  const tasksByPriority = analytics?.tasks?.by_priority
+    ? Object.entries(analytics.tasks.by_priority).map(([name, value]) => ({
+        name,
+        value
+      }))
+    : [];
+
+  const crewStatusData = [
+    { name: 'Available', value: analytics?.crew?.available || 0, color: COLORS.success },
+    { name: 'On Assignment', value: analytics?.crew?.on_assignment || 0, color: COLORS.info },
+    { name: 'On Leave', value: analytics?.crew?.on_leave || 0, color: COLORS.warning }
+  ];
+
+  const documentComplianceData = [
+    { name: 'Valid', value: analytics?.documents?.valid || 0, color: COLORS.success },
+    { name: 'Expiring Soon', value: analytics?.documents?.expiring_soon || 0, color: COLORS.warning },
+    { name: 'Expiring Urgent', value: analytics?.documents?.expiring_urgent || 0, color: COLORS.error },
+    { name: 'Expired', value: analytics?.documents?.expired || 0, color: '#DC2626' }
+  ];
 
   return (
-    <div className={styles.dashboard}>
-      <div className={styles.demoBanner}>
-        Welcome: {profile?.full_name} - {profile?.user_type}
+    <div className={styles.container}>
+      {/* Header */}
+      <div className={styles.header}>
+        <div>
+          <h1 className={styles.title}>📊 Dashboard</h1>
+          <p className={styles.subtitle}>
+            Comprehensive insights into your maritime operations
+          </p>
+        </div>
+        <div className={styles.headerActions}>
+          <button onClick={fetchAnalytics} className={styles.refreshButton}>
+            <RefreshCw size={18} />
+            Refresh
+          </button>
+          <button onClick={exportToCSV} className={styles.exportButton}>
+            <Download size={18} />
+            Export CSV
+          </button>
+          <button
+            onClick={exportToPDF}
+            className={styles.exportButton}
+            disabled={exporting}
+          >
+            <Download size={18} />
+            {exporting ? 'Exporting...' : 'Export PDF'}
+          </button>
+        </div>
       </div>
       
-      <h1 className={styles.title}>
-        Company Dashboard
-      </h1>
-      
+      {/* Summary Stats */}
       <div className={styles.statsGrid}>
-        <Card variant="elevated" hoverable padding="lg">
-          <div className={styles.statIcon}>
-            <div className={styles.iconContainer}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
-                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
-              </svg>
+        <StatCard
+          icon={Users}
+          title="Total Crew"
+          value={analytics?.crew?.total_crew ?? '-'}
+          subtitle={analytics?.crew ? `${analytics.crew.available || 0} available` : undefined}
+          color={COLORS.primary}
+        />
+        <StatCard
+          icon={FileText}
+          title="Documents"
+          value={analytics?.documents?.total_documents ?? '-'}
+          subtitle={analytics?.documents ? `${analytics.documents.compliance_rate || 0}% compliant` : undefined}
+          color={COLORS.success}
+        />
+        <StatCard
+          icon={CheckSquare}
+          title="Tasks"
+          value={analytics?.tasks?.total_tasks ?? '-'}
+          subtitle={analytics?.tasks ? `${analytics.tasks.completion_rate || 0}% completed` : undefined}
+          color={COLORS.info}
+        />
+        <StatCard
+          icon={Ship}
+          title="Vessels"
+          value={analytics?.vessels?.total_vessels ?? '-'}
+          subtitle={analytics?.vessels ? `${analytics.vessels.active || 0} active` : undefined}
+          color={COLORS.secondary}
+        />
+            </div>
+
+      {/* Charts Section */}
+      <div className={styles.chartsGrid}>
+        {/* Crew Status Distribution */}
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>👥 Crew Status Distribution</h3>
+          {crewStatusData.reduce((s, d) => s + (d.value as number), 0) > 0 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 24, left: 8 }}>
+                <Pie
+                  data={crewStatusData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {crewStatusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ paddingTop: 8 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
+          </div>
+
+        {/* Document Compliance */}
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>📄 Document Compliance Status</h3>
+          {documentComplianceData.reduce((s, d) => s + (d.value as number), 0) > 0 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 24, left: 8 }}>
+                <Pie
+                  data={documentComplianceData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={false}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {documentComplianceData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ paddingTop: 8 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
+          </div>
+
+        {/* Crew by Rank */}
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>👔 Crew by Rank</h3>
+          {crewByRank.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={crewByRank}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill={COLORS.primary} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
+          </div>
+
+        {/* Tasks by Priority */}
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>⚡ Tasks by Priority</h3>
+          {tasksByPriority.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={tasksByPriority}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill={COLORS.warning} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.emptyChart}>-</div>
+          )}
             </div>
           </div>
-          <div className={styles.statContent}>
-            <h3 className={styles.statTitle}>Active Crew</h3>
-            <p className={styles.statNumber}>{loading ? '...' : formatNumber(stats.activeCrew)}</p>
-            <p className={styles.statSubtext}>
-              {loading ? '...' : stats.activeCrew === 0 
-                ? '-' 
-                : `${formatNumber(stats.officersCount)} ${stats.officersCount === 1 ? 'officer' : 'officers'}, ${formatNumber(stats.crewCount)} ${stats.crewCount === 1 ? 'crew' : 'crew'}`}
-            </p>
+
+      {/* Additional Stats Tables */}
+      <div className={styles.tablesGrid}>
+        {/* Task Breakdown */}
+        <div className={styles.tableCard}>
+          <h3 className={styles.tableTitle}>✅ Task Breakdown</h3>
+          <table className={styles.table}>
+            <tbody>
+              <tr>
+                <td>Total Tasks</td>
+                <td className={styles.tableValue}>{analytics?.tasks?.total_tasks ?? '-'}</td>
+              </tr>
+              <tr>
+                <td>Completed</td>
+                <td className={styles.tableValue} style={{ color: COLORS.success }}>
+                  {analytics?.tasks?.completed ?? '-'}
+                </td>
+              </tr>
+              <tr>
+                <td>In Progress</td>
+                <td className={styles.tableValue} style={{ color: COLORS.info }}>
+                  {analytics?.tasks?.in_progress ?? '-'}
+                </td>
+              </tr>
+              <tr>
+                <td>Pending</td>
+                <td className={styles.tableValue} style={{ color: COLORS.warning }}>
+                  {analytics?.tasks?.pending ?? '-'}
+                </td>
+              </tr>
+              <tr>
+                <td>Overdue</td>
+                <td className={styles.tableValue} style={{ color: COLORS.error }}>
+                  {analytics?.tasks?.overdue ?? '-'}
+                </td>
+              </tr>
+              <tr className={styles.tableHighlight}>
+                <td>Completion Rate</td>
+                <td className={styles.tableValue}>
+                  {analytics?.tasks?.completion_rate != null ? `${analytics.tasks.completion_rate}%` : '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
           </div>
-        </Card>
-        
-        <Card variant="elevated" hoverable padding="lg">
-          <div className={styles.statIcon}>
-            <div className={`${styles.iconContainer} ${styles.success}`}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" strokeWidth="2"/>
-                <path d="M7 10H17" stroke="currentColor" strokeWidth="2"/>
-                <path d="M7 14H13" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-            </div>
+
+        {/* Assignment Stats */}
+        <div className={styles.tableCard}>
+          <h3 className={styles.tableTitle}>📋 Assignment Statistics</h3>
+          <table className={styles.table}>
+            <tbody>
+              <tr>
+                <td>Total Assignments</td>
+                <td className={styles.tableValue}>{analytics?.assignments?.total_assignments ?? '-'}</td>
+              </tr>
+              <tr>
+                <td>Accepted</td>
+                <td className={styles.tableValue} style={{ color: COLORS.success }}>
+                  {analytics?.assignments?.accepted ?? '-'}
+                </td>
+              </tr>
+              <tr>
+                <td>Pending</td>
+                <td className={styles.tableValue} style={{ color: COLORS.warning }}>
+                  {analytics?.assignments?.pending ?? '-'}
+                </td>
+              </tr>
+              <tr>
+                <td>Rejected</td>
+                <td className={styles.tableValue} style={{ color: COLORS.error }}>
+                  {analytics?.assignments?.rejected ?? '-'}
+                </td>
+              </tr>
+              <tr className={styles.tableHighlight}>
+                <td>Acceptance Rate</td>
+                <td className={styles.tableValue}>
+                  {analytics?.assignments?.acceptance_rate != null ? `${analytics.assignments.acceptance_rate}%` : '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
           </div>
-          <div className={styles.statContent}>
-            <h3 className={styles.statTitle}>Open Positions</h3>
-            <p className={styles.statNumber}>{loading ? '...' : formatNumber(stats.openPositions)}</p>
-            <p className={styles.statSubtext}>
-              {loading ? '...' : stats.urgentPositions > 0 ? `${formatNumber(stats.urgentPositions)} ${stats.urgentPositions === 1 ? 'urgent' : 'urgent'}` : '-'}
-            </p>
-          </div>
-        </Card>
-        
-        <Card variant="elevated" hoverable padding="lg">
-          <div className={styles.statIcon}>
-            <div className={`${styles.iconContainer} ${styles.warning}`}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M3 21H21L19 7H5L3 21Z" stroke="currentColor" strokeWidth="2"/>
-                <path d="M9 9V13" stroke="currentColor" strokeWidth="2"/>
-                <path d="M15 9V13" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-            </div>
-          </div>
-          <div className={styles.statContent}>
-            <h3 className={styles.statTitle}>Vessels</h3>
-            <p className={styles.statNumber}>{loading ? '...' : formatNumber(stats.vessels)}</p>
-            <p className={styles.statSubtext}>
-              {loading ? '...' : stats.vessels === 0 
-                ? '-' 
-                : `${formatNumber(stats.activeVessels)} active${stats.dryDockVessels > 0 ? `, ${formatNumber(stats.dryDockVessels)} ${stats.dryDockVessels === 1 ? 'dry dock' : 'dry dock'}` : ''}`}
-            </p>
-          </div>
-        </Card>
-        
-        <Card variant="elevated" hoverable padding="lg">
-          <div className={styles.statIcon}>
-            <div className={`${styles.iconContainer} ${styles.info}`}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2"/>
-                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-            </div>
-          </div>
-          <div className={styles.statContent}>
-            <h3 className={styles.statTitle}>Pending Approvals</h3>
-            <p className={styles.statNumber}>{loading ? '...' : formatNumber(stats.pendingApprovals)}</p>
-            <p className={styles.statSubtext}>
-              {loading ? '...' : stats.pendingApprovals > 0 
-                ? `${formatNumber(stats.pendingContracts)} ${stats.pendingContracts === 1 ? 'contract' : 'contracts'}, ${formatNumber(stats.pendingDocuments)} ${stats.pendingDocuments === 1 ? 'document' : 'documents'}` 
-                : '-'}
-            </p>
-          </div>
-        </Card>
       </div>
       
-      <Card variant="elevated" padding="none">
-        <CardHeader>
-          <h2 className={styles.actionsTitle}>Quick Actions</h2>
-        </CardHeader>
-        <CardBody>
-          <div className={styles.actionsGrid}>
-            <button className={`${styles.actionButton} ${styles.primary}`}>
-              Manage Crew
-            </button>
-            <button className={`${styles.actionButton} ${styles.success}`}>
-              Post Job
-            </button>
-            <button className={`${styles.actionButton} ${styles.secondary}`}>
-              View Reports
-            </button>
+      {/* Footer */}
+      <div className={styles.footer}>
+        <p>
+          <Calendar size={16} />
+          Last updated: {analytics?.generated_at ? new Date(analytics.generated_at).toLocaleString() : '-'}
+        </p>
           </div>
-        </CardBody>
-      </Card>
     </div>
   );
 };

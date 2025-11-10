@@ -88,19 +88,43 @@ export const AnalyticsDashboard: React.FC = () => {
     try {
       setLoading(true);
 
+      console.log('📊 AnalyticsDashboard: Starting fetch...');
+      console.log('📊 AnalyticsDashboard: Company ID:', profile?.company_id);
+      console.log('📊 AnalyticsDashboard: Profile:', profile);
+
+      if (!profile?.company_id) {
+        console.error('❌ AnalyticsDashboard: No company_id found');
+        setLoading(false);
+        return;
+      }
+
+      console.log('📊 AnalyticsDashboard: Calling RPC function...');
       const { data, error } = await supabase.rpc('get_dashboard_analytics', {
-        p_company_id: profile?.company_id
+        p_company_id: profile.company_id
       });
 
-      if (error) throw error;
+      console.log('📊 AnalyticsDashboard: RPC response:', { data, error });
 
+      if (error) {
+        console.error('❌ AnalyticsDashboard: RPC error:', error);
+        console.error('❌ AnalyticsDashboard: Error code:', error.code);
+        console.error('❌ AnalyticsDashboard: Error message:', error.message);
+        console.error('❌ AnalyticsDashboard: Error details:', error.details);
+        console.error('❌ AnalyticsDashboard: Error hint:', error.hint);
+        throw error;
+      }
+
+      console.log('✅ AnalyticsDashboard: Data received:', data);
       setAnalytics(data);
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
+    } catch (error: any) {
+      console.error('❌ AnalyticsDashboard: Error fetching analytics:', error);
+      console.error('❌ AnalyticsDashboard: Error type:', typeof error);
+      console.error('❌ AnalyticsDashboard: Error keys:', Object.keys(error || {}));
+      
       addToast({
         type: 'error',
         title: 'Failed to load analytics',
-        description: 'Please try again',
+        description: error?.message || 'Please try again',
         duration: 5000
       });
     } finally {

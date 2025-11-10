@@ -4,44 +4,67 @@
 -- This script creates database functions for advanced analytics and reporting
 -- ============================================================================
 
+-- Ensure functions are created in public schema
+SET search_path TO public;
+
 -- ============================================================================
 -- CREW ANALYTICS FUNCTIONS
 -- ============================================================================
 
 -- Get crew statistics
-CREATE OR REPLACE FUNCTION get_crew_statistics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_crew_statistics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
+  total_crew_count INTEGER;
+  available_count INTEGER;
+  on_assignment_count INTEGER;
+  on_leave_count INTEGER;
 BEGIN
+  -- Count total crew from user_profiles only (matching Crew Directory query)
+  SELECT COUNT(*) INTO total_crew_count
+  FROM user_profiles up
+  WHERE up.company_id = p_company_id AND up.user_type = 'seafarer';
+
+  -- Count availability status from seafarer_profiles (if exists)
+  SELECT 
+    COUNT(*) FILTER (WHERE sp.availability_status = 'available'),
+    COUNT(*) FILTER (WHERE sp.availability_status = 'on_contract'),
+    COUNT(*) FILTER (WHERE sp.availability_status = 'unavailable')
+  INTO available_count, on_assignment_count, on_leave_count
+  FROM user_profiles up
+  LEFT JOIN seafarer_profiles sp ON up.id = sp.user_id
+  WHERE up.company_id = p_company_id AND up.user_type = 'seafarer';
+
   SELECT json_build_object(
-    'total_crew', COUNT(*),
-    'available', COUNT(*) FILTER (WHERE sp.availability_status = 'available'),
-    'on_assignment', COUNT(*) FILTER (WHERE sp.availability_status = 'on_contract'),
-    'on_leave', COUNT(*) FILTER (WHERE sp.availability_status = 'unavailable'),
+    'total_crew', total_crew_count,
+    'available', COALESCE(available_count, 0),
+    'on_assignment', COALESCE(on_assignment_count, 0),
+    'on_leave', COALESCE(on_leave_count, 0),
     'by_rank', (
-      SELECT json_object_agg(rank, count)
+      SELECT json_object_agg(COALESCE(sp.rank, 'N/A'), count)
       FROM (
-        SELECT sp.rank, COUNT(*) as count
+        SELECT COALESCE(sp.rank, 'N/A') as rank, COUNT(*) as count
         FROM user_profiles up
-        JOIN seafarer_profiles sp ON up.id = sp.user_id
+        LEFT JOIN seafarer_profiles sp ON up.id = sp.user_id
         WHERE up.company_id = p_company_id AND up.user_type = 'seafarer'
-        GROUP BY sp.rank
+        GROUP BY COALESCE(sp.rank, 'N/A')
       ) rank_counts
     ),
-    'avg_experience_years', AVG(sp.experience_years)
-  )
-  INTO result
-  FROM user_profiles up
-  JOIN seafarer_profiles sp ON up.id = sp.user_id
-  WHERE up.company_id = p_company_id AND up.user_type = 'seafarer';
+    'avg_experience_years', (
+      SELECT AVG(sp.experience_years)
+      FROM user_profiles up
+      LEFT JOIN seafarer_profiles sp ON up.id = sp.user_id
+      WHERE up.company_id = p_company_id AND up.user_type = 'seafarer'
+    )
+  ) INTO result;
 
   RETURN result;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Get crew availability over time (last 12 months)
-CREATE OR REPLACE FUNCTION get_crew_availability_trend(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_crew_availability_trend(p_company_id UUID)
 RETURNS TABLE (
   month TEXT,
   available BIGINT,
@@ -65,7 +88,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Get document compliance statistics
-CREATE OR REPLACE FUNCTION get_document_statistics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_document_statistics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
@@ -121,7 +144,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Get document upload trend (last 12 months)
-CREATE OR REPLACE FUNCTION get_document_upload_trend(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_document_upload_trend(p_company_id UUID)
 RETURNS TABLE (
   month TEXT,
   uploads BIGINT
@@ -145,7 +168,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Get task statistics
-CREATE OR REPLACE FUNCTION get_task_statistics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_task_statistics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
@@ -186,7 +209,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Get task completion trend (last 12 months)
-CREATE OR REPLACE FUNCTION get_task_completion_trend(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_task_completion_trend(p_company_id UUID)
 RETURNS TABLE (
   month TEXT,
   created BIGINT,
@@ -214,7 +237,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Get assignment statistics
-CREATE OR REPLACE FUNCTION get_assignment_statistics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_assignment_statistics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
@@ -250,7 +273,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Get assignment trend (last 12 months)
-CREATE OR REPLACE FUNCTION get_assignment_trend(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_assignment_trend(p_company_id UUID)
 RETURNS TABLE (
   month TEXT,
   assignments BIGINT
@@ -273,7 +296,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Get vessel statistics
-CREATE OR REPLACE FUNCTION get_vessel_statistics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_vessel_statistics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
@@ -310,17 +333,17 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Get complete dashboard analytics
-CREATE OR REPLACE FUNCTION get_dashboard_analytics(p_company_id UUID)
+CREATE OR REPLACE FUNCTION public.get_dashboard_analytics(p_company_id UUID)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
 BEGIN
   SELECT json_build_object(
-    'crew', get_crew_statistics(p_company_id),
-    'documents', get_document_statistics(p_company_id),
-    'tasks', get_task_statistics(p_company_id),
-    'assignments', get_assignment_statistics(p_company_id),
-    'vessels', get_vessel_statistics(p_company_id),
+    'crew', public.get_crew_statistics(p_company_id),
+    'documents', public.get_document_statistics(p_company_id),
+    'tasks', public.get_task_statistics(p_company_id),
+    'assignments', public.get_assignment_statistics(p_company_id),
+    'vessels', public.get_vessel_statistics(p_company_id),
     'generated_at', NOW()
   ) INTO result;
 
@@ -333,16 +356,17 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================================================
 
 -- Grant execute permissions on analytics functions to authenticated users
-GRANT EXECUTE ON FUNCTION get_crew_statistics(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_crew_availability_trend(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_document_statistics(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_document_upload_trend(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_task_statistics(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_task_completion_trend(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_assignment_statistics(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_assignment_trend(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_vessel_statistics(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_dashboard_analytics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_crew_statistics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_crew_availability_trend(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_document_statistics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_document_upload_trend(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_task_statistics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_task_completion_trend(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_assignment_statistics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_assignment_trend(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_vessel_statistics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_dashboard_analytics(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_dashboard_analytics(UUID) TO anon;
 
 -- ============================================================================
 -- SUCCESS MESSAGE

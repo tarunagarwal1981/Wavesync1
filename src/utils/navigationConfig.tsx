@@ -12,11 +12,9 @@ import {
   Users,
   Ship,
   ClipboardList,
-  BarChart3,
   Calendar,
   DollarSign,
-  Shield,
-  AlertTriangle,
+  // Shield, // Commented out - not used right now
   Key,
   HelpCircle,
   Phone,
@@ -234,23 +232,6 @@ export const companyNavigation: NavigationSection[] = [
         permissions: [UserRole.COMPANY_USER],
         description: "Create and manage assignments"
       },
-      {
-        id: "task-management",
-        title: "Task Management",
-        icon: CheckSquare,
-        href: "/task-management",
-        badge: undefined, // Will be populated dynamically
-        permissions: [UserRole.COMPANY_USER],
-        description: "Create and manage crew tasks"
-      },
-      {
-        id: "analytics-reports",
-        title: "Analytics & Reports",
-        icon: BarChart3,
-        href: "/analytics",
-        permissions: [UserRole.COMPANY_USER],
-        description: "Performance analytics"
-      }
     ]
   },
   {
@@ -266,13 +247,13 @@ export const companyNavigation: NavigationSection[] = [
         description: "Manage crew documents and certificates"
       },
       {
-        id: "expiry-dashboard",
-        title: "Document Expiry",
-        icon: AlertTriangle,
-        href: "/expiry-dashboard",
-        badge: "⚠️",
+        id: "task-management",
+        title: "Task Management",
+        icon: CheckSquare,
+        href: "/task-management",
+        badge: undefined, // Will be populated dynamically
         permissions: [UserRole.COMPANY_USER],
-        description: "Monitor certificate expiration and compliance"
+        description: "Create and manage crew tasks"
       },
       {
         id: "training-programs",
@@ -341,32 +322,33 @@ export const companyNavigation: NavigationSection[] = [
         permissions: [UserRole.COMPANY_USER],
         description: "Create new announcement"
       },
-      {
-        id: "company-settings",
-        title: "Company Settings",
-        icon: Settings,
-        href: "/company/settings",
-        permissions: [UserRole.COMPANY_USER],
-        description: "Company configuration"
-      },
-      {
-        id: "compliance",
-        title: "Compliance",
-        icon: Shield,
-        href: "/compliance",
-        badge: undefined, // Will be populated dynamically
-        permissions: [UserRole.COMPANY_USER],
-        description: "Regulatory compliance"
-      },
-      {
-        id: "user-management",
-        title: "User Management",
-        icon: Users,
-        href: "/users",
-        badge: undefined, // Will be populated dynamically
-        permissions: [UserRole.COMPANY_USER],
-        description: "Manage company users"
-      }
+      // Commented out - not needed right now
+      // {
+      //   id: "company-settings",
+      //   title: "Company Settings",
+      //   icon: Settings,
+      //   href: "/company/settings",
+      //   permissions: [UserRole.COMPANY_USER],
+      //   description: "Company configuration"
+      // },
+      // {
+      //   id: "compliance",
+      //   title: "Compliance",
+      //   icon: Shield,
+      //   href: "/compliance",
+      //   badge: undefined, // Will be populated dynamically
+      //   permissions: [UserRole.COMPANY_USER],
+      //   description: "Regulatory compliance"
+      // },
+      // {
+      //   id: "user-management",
+      //   title: "User Management",
+      //   icon: Users,
+      //   href: "/users",
+      //   badge: undefined, // Will be populated dynamically
+      //   permissions: [UserRole.COMPANY_USER],
+      //   description: "Manage company users"
+      // }
     ]
   }
 ];

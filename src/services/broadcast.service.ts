@@ -180,6 +180,20 @@ export async function markBroadcastAsRead(broadcastId: string): Promise<void> {
 
   console.log('✅ User authenticated:', user.user.id);
 
+  // Check if user profile exists in user_profiles table
+  const { data: profile, error: profileError } = await supabase
+    .from('user_profiles')
+    .select('id')
+    .eq('id', user.user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error('❌ User profile not found in user_profiles:', profileError);
+    throw new Error('User profile not found. Please ensure your profile exists in the system.');
+  }
+
+  console.log('✅ User profile verified:', profile.id);
+
   const readAt = new Date().toISOString();
   console.log('🕐 Setting read_at to:', readAt);
 

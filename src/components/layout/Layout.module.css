@@ -13,13 +13,22 @@
   margin-left: 0;
   transition: margin-left 0.3s ease;
   height: 100vh;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .pageContent {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: transparent;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Desktop Layout */
