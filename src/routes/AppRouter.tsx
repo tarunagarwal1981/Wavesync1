@@ -24,8 +24,6 @@ const DocumentManagement = lazy(() => import("../components/DocumentManagement")
 const TravelManagement = lazy(() => import("../components/TravelManagement"));
 const MyTravel = lazy(() => import("../components/MyTravel"));
 const TaskManagement = lazy(() => import("../components/TaskManagement"));
-const ExpiryDashboard = lazy(() => import("../components/ExpiryDashboard"));
-const AnalyticsDashboard = lazy(() => import("../components/AnalyticsDashboard"));
 const MessagingPage = lazy(() => import("../components/MessagingPage"));
 const AIAgentSettings = lazy(() => import("../components/admin/AIAgentSettings"));
 const AIAssignmentQueue = lazy(() => import("../components/company/AIAssignmentQueue"));
@@ -305,25 +303,6 @@ export const AppRouter: React.FC = () => {
           <SupabaseProtectedRoute>
             <Layout title="Task Management">
               <PageTransition><TaskManagement /></PageTransition>
-            </Layout>
-          </SupabaseProtectedRoute>
-          </SuspenseRoute>
-        } />
-        {/* Document Expiry & Compliance Dashboard */}
-        <Route path="/expiry-dashboard" element={
-          <SuspenseRoute loadingText="Loading expiry dashboard...">
-          <SupabaseProtectedRoute>
-            <Layout title="Document Expiry & Compliance">
-              <PageTransition><ExpiryDashboard /></PageTransition>
-            </Layout>
-          </SupabaseProtectedRoute>
-          </SuspenseRoute>
-        } />
-        <Route path="/analytics" element={
-          <SuspenseRoute loadingText="Loading analytics...">
-          <SupabaseProtectedRoute>
-            <Layout title="Analytics & Reports">
-              <PageTransition><AnalyticsDashboard /></PageTransition>
             </Layout>
           </SupabaseProtectedRoute>
           </SuspenseRoute>

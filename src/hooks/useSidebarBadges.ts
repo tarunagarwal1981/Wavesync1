@@ -150,26 +150,51 @@ export const useSidebarBadges = (): SidebarBadges => {
 
           // Task Management: Pending/in-progress tasks for company
           try {
-            const [pendingCount, inProgressCount, overdueCount] = await Promise.all([
+            const [pendingCount, inProgressCount] = await Promise.all([
               supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('company_id', profile.company_id).eq('status', 'pending'),
-              supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('company_id', profile.company_id).eq('status', 'in_progress'),
-              supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('company_id', profile.company_id).eq('status', 'overdue')
+              supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('company_id', profile.company_id).eq('status', 'in_progress')
             ]);
 
-            newBadges.taskManagement = (pendingCount.count || 0) + (inProgressCount.count || 0) + (overdueCount.count || 0);
+            // Count overdue tasks (pending tasks with due_date < NOW())
+            const { count: overdueCount } = await supabase
+              .from('tasks')
+              .select('*', { count: 'exact', head: true })
+              .eq('company_id', profile.company_id)
+              .eq('status', 'pending')
+              .lt('due_date', new Date().toISOString());
+
+            newBadges.taskManagement = (pendingCount.count || 0) + (inProgressCount.count || 0) + (overdueCount || 0);
           } catch (error) {
             console.error('Error fetching task management count:', error);
             newBadges.taskManagement = 0;
           }
 
           // Document Management: Pending document approvals
-          const { count: documentCount } = await supabase
-            .from('documents')
-            .select('*', { count: 'exact', head: true })
-            .eq('company_id', profile.company_id)
-            .eq('status', 'pending');
+          // Documents table doesn't have company_id, need to query through user_profiles
+          try {
+            // First get all seafarer IDs for this company
+            const { data: seafarers } = await supabase
+              .from('user_profiles')
+              .select('id')
+              .eq('user_type', 'seafarer')
+              .eq('company_id', profile.company_id);
 
-          newBadges.documentManagement = documentCount || 0;
+            if (seafarers && seafarers.length > 0) {
+              const seafarerIds = seafarers.map(s => s.id);
+              const { count: documentCount } = await supabase
+                .from('documents')
+                .select('*', { count: 'exact', head: true })
+                .in('user_id', seafarerIds)
+                .eq('status', 'pending');
+
+              newBadges.documentManagement = documentCount || 0;
+            } else {
+              newBadges.documentManagement = 0;
+            }
+          } catch (error) {
+            console.error('Error fetching document management count:', error);
+            newBadges.documentManagement = 0;
+          }
 
           // Travel Management: Pending travel requests
           try {
@@ -185,17 +210,34 @@ export const useSidebarBadges = (): SidebarBadges => {
           }
 
           // Compliance: Count documents expiring in next 30 days
-          const thirtyDaysFromNow = new Date();
-          thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-          
-          const { count: complianceCount } = await supabase
-            .from('documents')
-            .select('*', { count: 'exact', head: true })
-            .eq('company_id', profile.company_id)
-            .lte('expiry_date', thirtyDaysFromNow.toISOString())
-            .gte('expiry_date', new Date().toISOString());
+          try {
+            // First get all seafarer IDs for this company
+            const { data: seafarers } = await supabase
+              .from('user_profiles')
+              .select('id')
+              .eq('user_type', 'seafarer')
+              .eq('company_id', profile.company_id);
 
-          newBadges.compliance = complianceCount || 0;
+            if (seafarers && seafarers.length > 0) {
+              const seafarerIds = seafarers.map(s => s.id);
+              const thirtyDaysFromNow = new Date();
+              thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
+              
+              const { count: complianceCount } = await supabase
+                .from('documents')
+                .select('*', { count: 'exact', head: true })
+                .in('user_id', seafarerIds)
+                .lte('expiry_date', thirtyDaysFromNow.toISOString())
+                .gte('expiry_date', new Date().toISOString());
+
+              newBadges.compliance = complianceCount || 0;
+            } else {
+              newBadges.compliance = 0;
+            }
+          } catch (error) {
+            console.error('Error fetching compliance count:', error);
+            newBadges.compliance = 0;
+          }
 
           // User Management: This could be pending invitations or active users
           // For now, let's use active company users (non-seafarers with company_id)
